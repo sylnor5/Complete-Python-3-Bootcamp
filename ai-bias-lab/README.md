@@ -34,6 +34,13 @@ La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, e
   - **botones para compartir** (WhatsApp, X, Facebook, LinkedIn, Telegram, copiar enlace) con un mensaje
     en el idioma de la persona y el enlace a `PUBLIC_URL` (por defecto `https://thechatradar.com`).
 
+## Propuestas de temas nuevos
+
+`/<idioma>/propose` deja que cualquiera proponga un tema y la pregunta exacta en la que cree que las IAs
+tienen sesgo, con el motivo. No pide datos personales. Las propuestas **no se publican**: las revisas en
+`/admin/proposals?token=ADMIN_TOKEN` (con descarga en CSV y botón de borrar). Para lanzar una prueba
+nueva a partir de una propuesta, añádela a `questions.json` con sus traducciones y casillas.
+
 ## Protección contra respuestas falsas
 
 - **Enlace para compartir (opcional, muy recomendado).** La persona pega el enlace «Compartir» de su chat

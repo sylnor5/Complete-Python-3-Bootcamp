@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ t('prop_title') }} · ChatRadar{% endblock %}
+{% block content %}
+<h1>{{ t('prop_title') }}</h1>
+<div class="story">
+  <p>{{ t('prop_intro') }}</p>
+  <p class="hint">{{ t('prop_tips') }}</p>
+</div>
+<form method="post" class="form propose-form" novalidate>
+  <label for="topic" class="block">{{ t('prop_topic') }}
+    <input id="topic" name="topic" maxlength="120" placeholder="{{ t('prop_topic_ph') }}" value="{{ form.get('topic', '') }}">
+  </label>
+  <label for="pq" class="block">{{ t('prop_question') }}
+    <textarea id="pq" name="question" rows="4" maxlength="2000">{{ form.get('question', '') }}</textarea>
+  </label>
+  <label for="why" class="block">{{ t('prop_why') }} <span class="opt">{{ t('optional') }}</span>
+    <textarea id="why" name="why" rows="4" maxlength="3000" placeholder="{{ t('prop_why_ph') }}">{{ form.get('why', '') }}</textarea>
+  </label>
+  <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div class="actions"><button class="btn big" type="submit">{{ t('prop_send') }}</button></div>
+  <p class="hint">{{ t('prop_email_note') }}</p>
+</form>
+{% endblock %}

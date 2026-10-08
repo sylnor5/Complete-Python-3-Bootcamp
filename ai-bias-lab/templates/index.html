@@ -28,4 +28,8 @@
     {% for s in t('how_steps') %}<li>{{ s }}</li>{% endfor %}
   </ol>
 </section>
+<section class="how">
+  <h2>{{ t('prop_cta') }}</h2>
+  <p><a class="btn ghost" href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a></p>
+</section>
 {% endblock %}

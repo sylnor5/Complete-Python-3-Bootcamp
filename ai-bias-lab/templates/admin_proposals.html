@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Propuestas · ChatRadar{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<h1>Propuestas de temas</h1>
+<p class="hint">{{ rows|length }} propuestas. Solo tú ves esta página. <a href="?token={{ token }}&amp;format=csv">Descargar CSV</a></p>
+<div class="answers">
+{% for r in rows %}
+  <article class="answer">
+    <p class="meta"><strong>{{ r.topic }}</strong><span>{{ langs.get(r.lang, r.lang) }}</span><span>{{ flag(r.country) }} {{ r.country or '?' }}</span><time>{{ r.created_at[:10] }}</time></p>
+    <blockquote>{{ r.question }}</blockquote>
+    {% if r.why %}<p class="hint">{{ r.why }}</p>{% endif %}
+    <form method="post" action="{{ url_for('admin_delete_proposal', pid=r.id) }}"><input type="hidden" name="token" value="{{ token }}"><button class="btn ghost small">Borrar</button></form>
+  </article>
+{% else %}
+  <p>Todavía no hay propuestas.</p>
+{% endfor %}
+</div>
+{% endblock %}

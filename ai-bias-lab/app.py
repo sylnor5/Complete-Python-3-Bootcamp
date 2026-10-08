@@ -196,6 +196,17 @@ def init_db():
                 lang TEXT NOT NULL,
                 consent_date TEXT NOT NULL
             )""")
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS proposals (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lang TEXT NOT NULL,
+                country TEXT,
+                topic TEXT NOT NULL,
+                question TEXT NOT NULL,
+                why TEXT,
+                ip_hash TEXT,
+                created_at TEXT NOT NULL
+            )""")
         cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0")]:
@@ -448,6 +459,65 @@ def admin_check(rid):
     db.commit()
     qid = row["question_id"] if row else QUESTIONS[0]["id"]
     return redirect(url_for("results", lang="es", qid=qid, token=ADMIN_TOKEN))
+
+
+@app.route("/<lang>/propose", methods=["GET", "POST"])
+def propose():
+    lang = g.lang
+    form = {}
+    if request.method == "POST":
+        form = request.form
+        if form.get("website"):  # honeypot
+            return redirect(url_for("propose"))
+        topic = form.get("topic", "").strip()[:120]
+        question_text = form.get("question", "").strip()[:2000]
+        why = form.get("why", "").strip()[:3000]
+        db = get_db()
+        since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
+        recent = db.execute("SELECT COUNT(*) FROM proposals WHERE ip_hash = ? AND created_at > ?",
+                            (ip_hash(), since)).fetchone()[0]
+        if len(topic) < 2 or len(question_text) < 15:
+            flash(T["prop_err"][lang], "error")
+        elif recent >= MAX_PER_HOUR:
+            flash(T["err_rate"][lang], "error")
+        else:
+            db.execute(
+                "INSERT INTO proposals (lang, country, topic, question, why, ip_hash, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (lang, detect_country(), topic, question_text, why, ip_hash(),
+                 datetime.now(timezone.utc).isoformat()))
+            db.commit()
+            flash(T["prop_thanks"][lang])
+            return redirect(url_for("propose"))
+    return render_template("propose.html", form=form)
+
+
+@app.route("/admin/proposals")
+def admin_proposals():
+    if not ADMIN_TOKEN or request.args.get("token") != ADMIN_TOKEN:
+        abort(403)
+    rows = get_db().execute("SELECT * FROM proposals ORDER BY id DESC").fetchall()
+    if request.args.get("format") == "csv":
+        out = io.StringIO()
+        writer = csv.writer(out)
+        writer.writerow(["id", "lang", "country", "topic", "question", "why", "created_at"])
+        for r in rows:
+            writer.writerow([r["id"], r["lang"], r["country"], r["topic"], r["question"],
+                             r["why"], r["created_at"]])
+        return Response("\ufeff" + out.getvalue(), mimetype="text/csv",
+                        headers={"Content-Disposition": "attachment; filename=proposals.csv"})
+    g.lang = "es"
+    return render_template("admin_proposals.html", rows=rows, token=ADMIN_TOKEN)
+
+
+@app.route("/admin/proposals/<int:pid>/delete", methods=["POST"])
+def admin_delete_proposal(pid):
+    if not ADMIN_TOKEN or request.form.get("token") != ADMIN_TOKEN:
+        abort(403)
+    db = get_db()
+    db.execute("DELETE FROM proposals WHERE id = ?", (pid,))
+    db.commit()
+    return redirect(url_for("admin_proposals", token=ADMIN_TOKEN))
 
 
 @app.route("/<lang>/method")
