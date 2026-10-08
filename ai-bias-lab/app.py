@@ -278,8 +278,14 @@ def landing():
 
 @app.route("/<lang>/")
 def index():
+    q = QUESTIONS[0]
+    rows = [r for r in get_db().execute(
+        "SELECT lean, flags FROM submissions WHERE question_id = ?", (q["id"],)) if not r["flags"]]
+    # gauge = {"ok": bool, "n": respuestas con postura, "pos": 0-100 (0 = postura israelí,
+    #          50 = equilibrado, 100 = postura palestina), "pct": {...}, "missing": cuántas faltan}
     return render_template("index.html", questions=QUESTIONS,
-                           counts=count_by_question())
+                           counts=count_by_question(), gauge=lean_score(rows),
+                           total_valid=len(rows), min_metro=MIN_METRO)
 
 
 @app.route("/<lang>/q/<qid>", methods=["GET", "POST"])
