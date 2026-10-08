@@ -1,6 +1,7 @@
 """Textos de la interfaz en español, inglés y francés."""
 
-LANGS = {"es": "Español", "en": "English", "fr": "Français"}
+LANGS = {"es": "Español", "en": "English", "fr": "Français", "he": "עברית"}
+RTL = {"he"}
 
 T = {
     "tagline": {
@@ -144,23 +145,118 @@ T = {
         "es": [
             ("Por qué", "Los chats de IA aprenden de enormes cantidades de texto y de las decisiones de quienes los entrenan. Una sola respuesta no demuestra nada. Pero si cientos de personas hacen exactamente las mismas preguntas y un chat contesta casi siempre igual, eso es un patrón."),
             ("Reglas para que los datos valgan", "Usa un chat nuevo. Copia las preguntas tal cual. Pega las respuestas completas, aunque no te gusten. Envía una prueba por chat; si repites en el mismo chat, envía solo la primera."),
-            ("Idioma y país", "La misma pregunta está traducida al español, inglés y francés. Así podemos ver si un chat responde distinto según el idioma o el país desde el que se pregunta."),
+            ("Idioma y país", "La misma pregunta está traducida al español, inglés, francés y hebreo. Así podemos ver si un chat responde distinto según el idioma o el país desde el que se pregunta."),
             ("Neutralidad", "Las casillas para clasificar las respuestas recogen argumentos de las dos partes. Las rellenan las personas participantes, así que es útil leer también las respuestas completas."),
             ("Privacidad", "No pedimos nombre ni correo. El país se deduce de la conexión en el momento del envío y la IP no se guarda. Para frenar envíos masivos usamos un identificador cifrado. Todos los datos se pueden descargar en CSV."),
         ],
         "en": [
             ("Why", "AI chats learn from huge amounts of text and from the choices of the people who train them. A single answer proves nothing. But if hundreds of people ask exactly the same questions and a chat almost always answers the same way, that is a pattern."),
             ("Rules that keep the data useful", "Use a new chat. Copy the questions word for word. Paste the full answers, even if you don't like them. Send one test per chat; if you repeat in the same chat, send only the first."),
-            ("Language and country", "The same question is translated into Spanish, English and French, so we can see whether a chat answers differently depending on the language or the country it is asked from."),
+            ("Language and country", "The same question is translated into Spanish, English, French and Hebrew, so we can see whether a chat answers differently depending on the language or the country it is asked from."),
             ("Neutrality", "The tick boxes used to classify answers cover arguments from both sides. Participants fill them in, so it is worth reading the full answers too."),
             ("Privacy", "We don't ask for your name or email. The country is derived from your connection when you submit, and your IP is not stored. We use an encrypted identifier to stop mass submissions. All data can be downloaded as CSV."),
         ],
         "fr": [
             ("Pourquoi", "Les chats d'IA apprennent à partir d'énormes quantités de textes et des choix de ceux qui les entraînent. Une seule réponse ne prouve rien. Mais si des centaines de personnes posent exactement les mêmes questions et qu'un chat répond presque toujours de la même façon, c'est une tendance."),
             ("Des règles pour des données utiles", "Utilisez une nouvelle conversation. Copiez les questions mot pour mot. Collez les réponses complètes, même si elles ne vous plaisent pas. Envoyez un test par chat ; si vous répétez dans la même conversation, n'envoyez que le premier."),
-            ("Langue et pays", "La même question est traduite en espagnol, anglais et français, pour voir si un chat répond différemment selon la langue ou le pays d'où on l'interroge."),
+            ("Langue et pays", "La même question est traduite en espagnol, anglais, français et hébreu, pour voir si un chat répond différemment selon la langue ou le pays d'où on l'interroge."),
             ("Neutralité", "Les cases pour classer les réponses couvrent les arguments des deux parties. Ce sont les participants qui les remplissent : il est donc utile de lire aussi les réponses complètes."),
             ("Confidentialité", "Nous ne demandons ni nom ni e-mail. Le pays est déduit de votre connexion lors de l'envoi et votre IP n'est pas enregistrée. Un identifiant chiffré sert à limiter les envois massifs. Toutes les données sont téléchargeables en CSV."),
         ],
     },
 }
+
+
+# ------------------------------------------------------------------ hebreo
+HE = {
+    "tagline": "האם הבינה המלאכותית שלך מוטה?",
+    "nav_test": "לעשות את המבחן",
+    "nav_results": "תוצאות",
+    "nav_method": "איך זה עובד",
+    "story_title": "האם זה קרה רק לי?",
+    "story": [
+        "שאלתי את ChatGPT שתי שאלות על המלחמה בעזה. התשובות שלו נראו לי נוטות לצד אחד. רק כשהתחלתי להתווכח איתו הטון השתנה, ובסוף הוא אפילו הודה: „הצגתי את הנושא באופן א־סימטרי מדי”.",
+        "אז שאלתי את עצמי: האם זה קורה לכולם? האם Gemini,‏ Claude,‏ Copilot או Grok עונים אותו דבר? האם התשובה משתנה לפי השפה או המדינה שממנה שואלים?",
+        "שיחה אחת לא מוכיחה כלום. מאות שיחות כן. עשו את המבחן עם אותן שתי שאלות ששאלתי, מילה במילה, ושתפו מה הצ'אט שלכם ענה. זה לוקח כחמש דקות.",
+    ],
+    "how_title": "איך משתתפים",
+    "how_steps": [
+        "העתיקו את השאלה הראשונה והדביקו אותה בשיחה חדשה עם הבינה המלאכותית שלכם.",
+        "העתיקו את התשובה והדביקו אותה כאן.",
+        "שאלו את השאלה השנייה באותה שיחה והביאו גם את התשובה הזאת.",
+        "סמנו מה הצ'אט אמר ושלחו.",
+    ],
+    "start": "להתחיל את המבחן",
+    "see_results": "לצפייה בתוצאות",
+    "n_answers": "תשובות",
+    "so_far": "תשובות עד כה",
+    "rules": "השתמשו בשיחה חדשה, בלי היסטוריה. אל תביעו את דעתכם לפני כן ואל תשנו אף מילה בשאלות, כדי שאפשר יהיה להשוות בין כל התשובות.",
+    "open_chat": "פתחו את הצ'אט שלכם:",
+    "question_n": "שאלה",
+    "copy": "העתקת השאלה",
+    "copied": "הועתק!",
+    "select_copy": "סמנו והעתיקו",
+    "same_chat": "שאלו אותה באותה שיחה, מיד אחרי הראשונה.",
+    "paste_answer": "הדביקו כאן את התשובה המלאה",
+    "paste_ph": "הדביקו את מה שהוא ענה…",
+    "classify": "מה התשובה אומרת?",
+    "about_you": "על המבחן שלכם",
+    "which_chat": "באיזה צ'אט השתמשתם?",
+    "choose": "בחרו…",
+    "model": "מודל או גרסה",
+    "model_ph": "למשל: חינמי, Plus, GPT-5…",
+    "optional": "(לא חובה)",
+    "lean_q": "באופן כללי, האם לדעתכם התשובות נוטות לצד אחד?",
+    "lean": {
+        "pro_israel": "כן, לעבר העמדה הישראלית",
+        "pro_palestine": "כן, לעבר העמדה הפלסטינית",
+        "balanced": "לא, הן מאוזנות",
+        "unsure": "לא בטוח/ה",
+    },
+    "yes": "כן",
+    "no": "לא",
+    "send": "שליחת התשובות שלי",
+    "privacy_note": "איננו מבקשים שם או דוא״ל. אנו שומרים את השפה ואת המדינה המשוערת של החיבור שלכם (לא את כתובת ה-IP).",
+    "thanks": "תודה! התשובות שלכם כבר נספרות בתוצאות.",
+    "err_chat": "בחרו באיזה צ'אט השתמשתם.",
+    "err_answer": "הדביקו את התשובה לשאלה",
+    "err_long": "אחת התשובות ארוכה מדי (עד 12,000 תווים).",
+    "err_field": "חסרה תשובה:",
+    "err_fields": "נותרו {n} שאלות ללא תשובה.",
+    "err_lean": "ספרו לנו אם לדעתכם התשובות נוטות לצד אחד.",
+    "err_rate": "שלחתם הרבה תשובות ברצף. נסו שוב בעוד שעה.",
+    "results_title": "תוצאות",
+    "filter_lang": "שפת המבחן",
+    "filter_country": "מדינה",
+    "all": "הכול",
+    "all_chats": "כל הצ'אטים",
+    "chat": "צ'אט",
+    "by_lang": "לפי שפה",
+    "by_country": "לפי מדינה",
+    "perceived": "האם המשתתפים רואים נטייה?",
+    "small_n": "כשיש פחות מ-20 תשובות בקבוצה, האחוזים משתנים מאוד. התייחסו אליהם כרמז, לא כהוכחה.",
+    "latest": "תשובות אחרונות",
+    "empty": "עדיין אין תשובות שמתאימות לסינון הזה. היו הראשונים לעשות את המבחן.",
+    "add_mine": "להוסיף את המבחן שלי",
+    "delete": "מחיקה",
+    "unknown": "לא ידוע",
+    "footer": "ניסוי אזרחי ועצמאי. התשובות נשלחות על ידי מתנדבים ואינן נבדקות אחת־אחת.",
+    "download": "הורדת כל הנתונים (CSV)",
+    "choose_lang": "בחרו שפה",
+    "method": [
+        ("למה", "צ'אטים של בינה מלאכותית לומדים מכמויות עצומות של טקסט ומההחלטות של מי שמאמן אותם. תשובה אחת לא מוכיחה כלום. אבל אם מאות אנשים שואלים בדיוק את אותן שאלות וצ'אט מסוים עונה כמעט תמיד באותו אופן, זה דפוס."),
+        ("כללים כדי שהנתונים יהיו שימושיים", "השתמשו בשיחה חדשה. העתיקו את השאלות מילה במילה. הדביקו את התשובות המלאות, גם אם הן לא מוצאות חן בעיניכם. שלחו מבחן אחד לכל צ'אט; אם חזרתם על השאלות באותו צ'אט, שלחו רק את הראשון."),
+        ("שפה ומדינה", "אותה שאלה מתורגמת לספרדית, לאנגלית, לצרפתית ולעברית, כדי לבדוק אם צ'אט עונה אחרת לפי השפה או המדינה שממנה שואלים."),
+        ("ניטרליות", "התיבות לסיווג התשובות כוללות טיעונים של שני הצדדים. המשתתפים ממלאים אותן, ולכן כדאי לקרוא גם את התשובות המלאות."),
+        ("פרטיות", "איננו מבקשים שם או דוא״ל. המדינה נקבעת לפי החיבור בזמן השליחה, וכתובת ה-IP אינה נשמרת. מזהה מוצפן משמש לבלימת שליחות המוניות. אפשר להוריד את כל הנתונים כקובץ CSV."),
+    ],
+}
+
+for _key, _value in HE.items():
+    if _key == "lean":
+        for _k, _v in _value.items():
+            T["lean"][_k]["he"] = _v
+    else:
+        T[_key]["he"] = _value
+_missing = [k for k, v in T.items() if k != "lean" and "he" not in v]
+assert not _missing, _missing

@@ -4,11 +4,11 @@ Experimento ciudadano: cada persona hace **las mismas preguntas** en su chat de 
 (ChatGPT, Gemini, Claude, Copilot, Grok, Meta AI, DeepSeek, Le Chat, Perplexity…), pega las respuestas y las
 clasifica. La web compara los resultados **por chat, por idioma y por país** para ver si hay sesgos sistemáticos.
 
-La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, en español, inglés y francés.
+La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, en español, inglés, francés y hebreo (la web se muestra de derecha a izquierda en hebreo).
 
 ## Recorrido
 
-1. `/` — la persona elige idioma (español, English, français).
+1. `/` — la persona elige idioma (español, English, français, עברית).
 2. `/<idioma>/` — portada con la historia del proyecto y cómo participar.
 3. `/<idioma>/q/gaza` — copia la pregunta 1 en un chat nuevo, pega la respuesta; hace la pregunta 2 en el
    mismo chat y pega la respuesta; marca qué dijo el chat y si cree que se inclina hacia un lado.
@@ -34,7 +34,7 @@ La página «Cómo funciona» lo explica a las personas participantes. En la UE 
 
 ## Cambiar o añadir preguntas
 
-Edita `questions.json`. Cada prueba tiene textos en `es`, `en` y `fr` y una lista de `steps` (preguntas que
+Edita `questions.json`. Cada prueba tiene textos en `es`, `en`, `fr` y `he` y una lista de `steps` (preguntas que
 se hacen en el mismo chat, una tras otra). Cada paso tiene `fields`, las casillas para clasificar la respuesta:
 
 - con `"type": "yesno"` → casilla Sí / No;

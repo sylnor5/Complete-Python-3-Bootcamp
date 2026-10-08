@@ -14,7 +14,7 @@ from pathlib import Path
 from flask import (Flask, Response, abort, flash, g, redirect,
                    render_template, request, url_for)
 
-from i18n import LANGS, T
+from i18n import LANGS, RTL, T
 
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = os.environ.get("DATABASE", str(BASE_DIR / "data.db"))
@@ -33,7 +33,7 @@ CHATS = [
     ("deepseek", "DeepSeek", "https://chat.deepseek.com/"),
     ("mistral", "Le Chat (Mistral)", "https://chat.mistral.ai/"),
     ("perplexity", "Perplexity", "https://www.perplexity.ai/"),
-    ("otro", "Otro / Other / Autre", None),
+    ("otro", "Otro / Other / Autre / אחר", None),
 ]
 CHAT_NAMES = {key: name for key, name, _ in CHATS}
 LEAN_KEYS = list(T["lean"])
@@ -95,7 +95,7 @@ def inject_helpers():
         return fix(obj.get(lang) or obj.get("en") or next(iter(obj.values())))
 
     return {"t": t, "tr": tr, "lang": lang, "langs": LANGS, "T": T,
-            "flag": flag}
+            "flag": flag, "rtl": RTL, "dir": "rtl" if lang in RTL else "ltr"}
 
 
 def flag(code):
