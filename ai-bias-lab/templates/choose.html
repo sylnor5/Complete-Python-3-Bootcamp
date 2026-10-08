@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}AI Bias Lab{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<section class="choose">
+  <h1>AI Bias Lab</h1>
+  <p class="lede">{% for code in langs %}<span lang="{{ code }}">{{ T.tagline[code] }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+  <p class="tag">{% for code in langs %}{{ T.choose_lang[code] }}{% if not loop.last %} / {% endif %}{% endfor %}</p>
+  <div class="lang-grid">
+    {% for code, name in langs.items() %}
+    <a class="lang-card {% if code == best %}best{% endif %}" href="{{ url_for('index', lang=code) }}" lang="{{ code }}">
+      <span class="lang-name">{{ name }}</span>
+      <span class="lang-sub">{{ T.story_title[code] }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

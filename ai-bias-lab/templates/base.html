@@ -1,26 +1,33 @@
 <!doctype html>
-<html lang="es">
+<html lang="{{ lang }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}AI Bias Lab{% endblock %}</title>
-  <meta name="description" content="Haz la misma pregunta en tu chat de IA favorito y compara las respuestas para descubrir sesgos.">
+  <title>{% block title %}AI Bias Lab · {{ t('tagline') }}{% endblock %}</title>
+  <meta name="description" content="{{ t('tagline') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header class="top">
-    <a class="brand" href="{{ url_for('index') }}">AI&nbsp;Bias&nbsp;Lab</a>
+    <a class="brand" href="{% if request.endpoint == 'choose_language' %}/{% else %}{{ url_for('index') }}{% endif %}">AI&nbsp;Bias&nbsp;Lab</a>
+    {% block nav %}
     <nav>
-      <a href="{{ url_for('index') }}">Preguntas</a>
-      <a href="{{ url_for('method') }}">Cómo funciona</a>
+      <a href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>
+      <a href="{{ url_for('method') }}">{{ t('nav_method') }}</a>
+      <span class="langs">
+        {% for code in langs %}
+        <a href="{{ url_for(request.endpoint, **dict(request.view_args, lang=code)) }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}" class="{% if code == lang %}on{% endif %}" lang="{{ code }}">{{ code|upper }}</a>
+        {% endfor %}
+      </span>
     </nav>
+    {% endblock %}
   </header>
   <main class="wrap">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-      <div class="flashes">
+      <div class="flashes" role="alert">
         {% for cat, msg in messages %}<p class="flash {{ cat }}">{{ msg }}</p>{% endfor %}
       </div>
       {% endif %}
@@ -28,7 +35,7 @@
     {% block content %}{% endblock %}
   </main>
   <footer class="foot wrap">
-    <p>Experimento ciudadano. Las respuestas las aportan personas voluntarias y no se verifican una por una. <a href="{{ url_for('export_csv') }}">Descargar todos los datos (CSV)</a></p>
+    <p>{{ t('footer') }} <a href="{{ url_for('export_csv') }}">{{ t('download') }}</a></p>
   </footer>
 </body>
 </html>

@@ -1,93 +1,96 @@
 {% extends "base.html" %}
-{% block title %}{{ q.title }} · AI Bias Lab{% endblock %}
+{% block title %}{{ tr(q.title) }} · AI Bias Lab{% endblock %}
 {% block content %}
-<p class="tag">{{ q.topic }} · {{ count }} respuestas hasta ahora</p>
-<h1>{{ q.title }}</h1>
+<p class="tag">{{ tr(q.topic) }} · {{ count }} {{ t('so_far') }}</p>
+<h1>{{ tr(q.title) }}</h1>
+<p class="rules">{{ t('rules') }}</p>
 
-<section class="step">
-  <h2><span class="stepnum">1</span> Copia la pregunta exacta</h2>
-  <div class="prompt-box">
-    <p id="prompt">{{ q.prompt }}</p>
-    <button type="button" class="btn" id="copy">Copiar pregunta</button>
-  </div>
-  <p class="hint">Cópiala tal cual, sin añadir nada. Así todas las respuestas son comparables.</p>
-</section>
-
-<section class="step">
-  <h2><span class="stepnum">2</span> Pregúntala en un chat nuevo</h2>
-  <p class="hint">Abre una conversación nueva (sin historial ni instrucciones personalizadas si puedes) en el chat que prefieras:</p>
+<div class="open-chat">
+  <span class="hint">{{ t('open_chat') }}</span>
   <div class="chips">
     {% for key, name, link in chats if link %}
     <a class="chip" href="{{ link }}" target="_blank" rel="noopener">{{ name }} ↗</a>
     {% endfor %}
   </div>
-</section>
+</div>
 
-<section class="step">
-  <h2><span class="stepnum">3</span> Pega la respuesta y clasifícala</h2>
-  <form method="post" class="form" novalidate>
+<form method="post" class="form" novalidate>
+  {% for step in q.steps %}
+  {% set i = loop.index %}
+  <section class="step">
+    <h2><span class="stepnum">{{ i }}</span> {{ t('question_n') }} {{ i }}</h2>
+    {% if i > 1 %}<p class="hint">{{ t('same_chat') }}</p>{% endif %}
+    <div class="prompt-box">
+      <p id="prompt{{ i }}">{{ tr(step.prompt) }}</p>
+      <button type="button" class="btn copy" data-target="prompt{{ i }}">{{ t('copy') }}</button>
+    </div>
+
+    <label for="answer{{ i }}" class="block">{{ t('paste_answer') }}
+      <textarea id="answer{{ i }}" name="answer{{ i }}" rows="7" maxlength="12000" placeholder="{{ t('paste_ph') }}">{{ form.get('answer' ~ i, '') }}</textarea>
+    </label>
+
+    <h3>{{ t('classify') }}</h3>
+    <div class="fields">
+    {% for field in step.fields %}
+      <fieldset class="{{ 'yesno' if field.type == 'yesno' else 'choice' }}">
+        <legend>{{ tr(field.label) }}</legend>
+        <div class="radios">
+          {% for key, label in field_options(field) %}
+          <label class="radio"><input type="radio" id="{{ field.id }}-{{ key }}" name="{{ field.id }}" value="{{ key }}" {% if form.get(field.id) == key %}checked{% endif %}> {{ tr(label) }}</label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    {% endfor %}
+    </div>
+  </section>
+  {% endfor %}
+
+  <section class="step">
+    <h2><span class="stepnum">{{ q.steps|length + 1 }}</span> {{ t('about_you') }}</h2>
     <div class="row">
-      <label for="chat">¿Qué chat usaste?
-        <select id="chat" name="chat" required>
-          <option value="">Elige uno…</option>
+      <label for="chat">{{ t('which_chat') }}
+        <select id="chat" name="chat">
+          <option value="">{{ t('choose') }}</option>
           {% for key, name, link in chats %}
           <option value="{{ key }}" {% if form.get('chat') == key %}selected{% endif %}>{{ name }}</option>
           {% endfor %}
         </select>
       </label>
-      <label for="model">Modelo o versión <span class="opt">(opcional)</span>
-        <input id="model" name="model" maxlength="80" placeholder="p. ej. GPT-5, gratis, Pro…" value="{{ form.get('model', '') }}">
-      </label>
-      <label for="country">Tu país <span class="opt">(opcional)</span>
-        <input id="country" name="country" maxlength="60" placeholder="p. ej. México" value="{{ form.get('country', '') }}">
+      <label for="model">{{ t('model') }} <span class="opt">{{ t('optional') }}</span>
+        <input id="model" name="model" maxlength="80" placeholder="{{ t('model_ph') }}" value="{{ form.get('model', '') }}">
       </label>
     </div>
-
-    <label for="answer">Respuesta completa del chat
-      <textarea id="answer" name="answer" rows="6" maxlength="5000" required placeholder="Pega aquí lo que te contestó…">{{ form.get('answer', '') }}</textarea>
-    </label>
-
-    {% for field in q.fields %}
-    <fieldset>
-      <legend>{{ field.label }}</legend>
+    <fieldset class="choice">
+      <legend>{{ t('lean_q') }}</legend>
       <div class="radios">
-        {% for opt in field.options %}
-        <label class="radio"><input type="radio" id="{{ field.id }}-{{ loop.index }}" name="{{ field.id }}" value="{{ opt }}" {% if form.get(field.id) == opt %}checked{% endif %}> {{ opt }}</label>
+        {% for key, label in T.lean.items() %}
+        <label class="radio"><input type="radio" id="lean-{{ key }}" name="lean" value="{{ key }}" {% if form.get('lean') == key %}checked{% endif %}> {{ tr(label) }}</label>
         {% endfor %}
       </div>
     </fieldset>
-    {% endfor %}
+  </section>
 
-    <fieldset>
-      <legend>¿Crees que esta respuesta muestra algún sesgo?</legend>
-      <div class="radios">
-        {% for key, label in perception.items() %}
-        <label class="radio"><input type="radio" id="pb-{{ key }}" name="perceived_bias" value="{{ key }}" {% if form.get('perceived_bias') == key %}checked{% endif %}> {{ label }}</label>
-        {% endfor %}
-      </div>
-    </fieldset>
+  <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>
 
-    <div class="hp" aria-hidden="true"><label>No rellenar <input name="website" tabindex="-1" autocomplete="off"></label></div>
-
-    <div class="actions">
-      <button class="btn" type="submit">Enviar mi respuesta</button>
-      <a href="{{ url_for('results', qid=q.id) }}">Solo ver resultados</a>
-    </div>
-  </form>
-</section>
+  <div class="actions">
+    <button class="btn big" type="submit">{{ t('send') }}</button>
+    <a href="{{ url_for('results', qid=q.id) }}">{{ t('see_results') }}</a>
+  </div>
+  <p class="hint">{{ t('privacy_note') }}</p>
+</form>
 
 <aside class="why">
-  <h2>¿Qué estamos midiendo?</h2>
-  <p>{{ q.why }}</p>
+  <p>{{ tr(q.why) }}</p>
 </aside>
 
 <script>
-document.getElementById("copy").addEventListener("click", async (e) => {
-  const text = document.getElementById("prompt").textContent;
-  try { await navigator.clipboard.writeText(text); e.target.textContent = "¡Copiada!"; }
-  catch { const r = document.createRange(); r.selectNodeContents(document.getElementById("prompt"));
-          const s = getSelection(); s.removeAllRanges(); s.addRange(r); e.target.textContent = "Selecciona y copia"; }
-  setTimeout(() => (e.target.textContent = "Copiar pregunta"), 2000);
-});
+document.querySelectorAll(".copy").forEach((btn) => btn.addEventListener("click", async () => {
+  const el = document.getElementById(btn.dataset.target);
+  const label = btn.textContent;
+  try { await navigator.clipboard.writeText(el.textContent); btn.textContent = {{ t('copied')|tojson }}; }
+  catch { const r = document.createRange(); r.selectNodeContents(el);
+          const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = {{ t('select_copy')|tojson }}; }
+  setTimeout(() => (btn.textContent = label), 2000);
+}));
 </script>
 {% endblock %}

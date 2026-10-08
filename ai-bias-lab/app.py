@@ -1,5 +1,5 @@
-"""AI Bias Lab: la gente hace la misma pregunta en su chat de IA favorito,
-pega la respuesta y la web compara los resultados entre chats."""
+"""AI Bias Lab: la gente hace las mismas preguntas en su chat de IA favorito,
+pega las respuestas y la web compara los resultados por chat, idioma y país."""
 
 import csv
 import hashlib
@@ -14,32 +14,130 @@ from pathlib import Path
 from flask import (Flask, Response, abort, flash, g, redirect,
                    render_template, request, url_for)
 
+from i18n import LANGS, T
+
 BASE_DIR = Path(__file__).resolve().parent
 DATABASE = os.environ.get("DATABASE", str(BASE_DIR / "data.db"))
 ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
+GEOIP_DB = os.environ.get("GEOIP_DB", str(BASE_DIR / "geoip.mmdb"))
+MAX_ANSWER = 12000
 
 CHATS = [
     ("chatgpt", "ChatGPT", "https://chatgpt.com/"),
-    ("claude", "Claude", "https://claude.ai/new"),
     ("gemini", "Gemini", "https://gemini.google.com/"),
+    ("claude", "Claude", "https://claude.ai/new"),
     ("copilot", "Copilot", "https://copilot.microsoft.com/"),
-    ("meta", "Meta AI", "https://www.meta.ai/"),
     ("grok", "Grok", "https://grok.com/"),
+    ("meta", "Meta AI", "https://www.meta.ai/"),
     ("deepseek", "DeepSeek", "https://chat.deepseek.com/"),
     ("mistral", "Le Chat (Mistral)", "https://chat.mistral.ai/"),
     ("perplexity", "Perplexity", "https://www.perplexity.ai/"),
-    ("otro", "Otro", None),
+    ("otro", "Otro / Other / Autre", None),
 ]
 CHAT_NAMES = {key: name for key, name, _ in CHATS}
-PERCEPTION = {"si": "Sí", "no": "No", "nose": "No estoy seguro"}
+LEAN_KEYS = list(T["lean"])
 
 with open(BASE_DIR / "questions.json", encoding="utf-8") as fh:
     QUESTIONS = json.load(fh)
 QUESTIONS_BY_ID = {q["id"]: q for q in QUESTIONS}
 
+
+def all_fields(q):
+    for step in q["steps"]:
+        yield from step["fields"]
+
+
+def field_options(field):
+    """Opciones de un campo como lista de (id, {idioma: texto})."""
+    if field.get("type") == "yesno":
+        return [("yes", T["yes"]), ("no", T["no"])]
+    return [(o["id"], o["label"]) for o in field["options"]]
+
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "dev-only-change-me")
+
+
+# ------------------------------------------------------------ idioma y país
+
+@app.url_value_preprocessor
+def pull_lang(_endpoint, values):
+    if values and "lang" in values:
+        lang = values.pop("lang")
+        if lang not in LANGS:
+            abort(404)
+        g.lang = lang
+
+
+@app.url_defaults
+def add_lang(endpoint, values):
+    if "lang" not in values and app.url_map.is_endpoint_expecting(endpoint, "lang"):
+        values["lang"] = g.get("lang", "es")
+
+
+@app.context_processor
+def inject_helpers():
+    lang = g.get("lang", "es")
+
+    def fix(text):  # en francés, espacio no separable antes de ? ! : ;
+        if lang == "fr" and isinstance(text, str):
+            for mark in "?!:;":
+                text = text.replace(" " + mark, "\u00a0" + mark)
+        return text
+
+    def t(key):
+        value = T[key]
+        value = value[lang] if isinstance(value, dict) and lang in value else value
+        return [fix(v) for v in value] if isinstance(value, list) and value and isinstance(value[0], str) else fix(value)
+
+    def tr(obj):  # texto multilingüe de questions.json
+        return fix(obj.get(lang) or obj.get("en") or next(iter(obj.values())))
+
+    return {"t": t, "tr": tr, "lang": lang, "langs": LANGS, "T": T,
+            "flag": flag}
+
+
+def flag(code):
+    if not code or len(code) != 2 or not code.isalpha():
+        return "🏳️"
+    return "".join(chr(0x1F1E6 + ord(ch) - ord("A")) for ch in code.upper())
+
+
+def client_ip():
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "")
+    return ip.split(",")[0].strip()
+
+
+_geo_reader = None
+
+
+def detect_country():
+    """País aproximado (código ISO de 2 letras) a partir de la conexión.
+
+    Primero mira las cabeceras que añaden algunos proxies (Cloudflare, Vercel…);
+    si no hay, consulta una base GeoIP local (fichero .mmdb) si existe."""
+    for header in ("CF-IPCountry", "X-Vercel-IP-Country", "X-Country-Code",
+                   "X-AppEngine-Country"):
+        code = request.headers.get(header, "").strip().upper()
+        if len(code) == 2 and code.isalpha() and code != "XX":
+            return code
+
+    global _geo_reader
+    if _geo_reader is None:
+        try:
+            import maxminddb
+            _geo_reader = maxminddb.open_database(GEOIP_DB)
+        except Exception:  # sin librería o sin fichero: no detectamos
+            _geo_reader = False
+    if _geo_reader:
+        try:
+            rec = _geo_reader.get(client_ip()) or {}
+            code = (rec.get("country") or {}).get("iso_code", "")
+            return code.upper() if code else ""
+        except ValueError:
+            return ""
+    return ""
 
 
 # ---------------------------------------------------------------- database
@@ -61,44 +159,56 @@ def close_db(_exc):
 def init_db():
     with sqlite3.connect(DATABASE) as db:
         db.execute("""
-            CREATE TABLE IF NOT EXISTS responses (
+            CREATE TABLE IF NOT EXISTS submissions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 question_id TEXT NOT NULL,
+                lang TEXT NOT NULL,
+                country TEXT,
                 chat TEXT NOT NULL,
                 model TEXT,
-                answer TEXT NOT NULL,
+                answers TEXT NOT NULL,
                 fields TEXT NOT NULL,
-                perceived_bias TEXT,
-                country TEXT,
+                lean TEXT,
                 ip_hash TEXT,
                 created_at TEXT NOT NULL
             )""")
-        db.execute("CREATE INDEX IF NOT EXISTS idx_q ON responses(question_id)")
+        db.execute("CREATE INDEX IF NOT EXISTS idx_sub_q ON submissions(question_id)")
 
 
 def ip_hash():
-    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "")
-    ip = ip.split(",")[0].strip()
-    return hashlib.sha256((app.secret_key + ip).encode()).hexdigest()[:16]
+    return hashlib.sha256((app.secret_key + client_ip()).encode()).hexdigest()[:16]
 
 
 def count_by_question():
     rows = get_db().execute(
-        "SELECT question_id, COUNT(*) AS n FROM responses GROUP BY question_id")
+        "SELECT question_id, COUNT(*) AS n FROM submissions GROUP BY question_id")
     return {r["question_id"]: r["n"] for r in rows}
+
+
+def distribution(rows, key_fn, keys):
+    total = len(rows)
+    c = Counter(key_fn(r) for r in rows)
+    return total, [(c[k], round(100 * c[k] / total) if total else 0) for k in keys]
 
 
 # ------------------------------------------------------------------ routes
 
 @app.route("/")
+def choose_language():
+    best = request.accept_languages.best_match(list(LANGS)) or "en"
+    return render_template("choose.html", best=best)
+
+
+@app.route("/<lang>/")
 def index():
     return render_template("index.html", questions=QUESTIONS,
                            counts=count_by_question())
 
 
-@app.route("/q/<qid>", methods=["GET", "POST"])
+@app.route("/<lang>/q/<qid>", methods=["GET", "POST"])
 def question(qid):
     q = QUESTIONS_BY_ID.get(qid) or abort(404)
+    lang = g.lang
     form = {}
 
     if request.method == "POST":
@@ -109,118 +219,158 @@ def question(qid):
             return redirect(url_for("results", qid=qid))
 
         chat = form.get("chat", "")
-        answer = form.get("answer", "").strip()
         if chat not in CHAT_NAMES:
-            errors.append("Elige qué chat usaste.")
-        if len(answer) < 2:
-            errors.append("Pega la respuesta que te dio el chat.")
-        if len(answer) > 5000:
-            errors.append("La respuesta es demasiado larga (máximo 5000 caracteres).")
+            errors.append(T["err_chat"][lang])
 
-        values = {}
-        for field in q["fields"]:
+        answers = []
+        for i, _step in enumerate(q["steps"], start=1):
+            text = form.get(f"answer{i}", "").strip()
+            if len(text) < 2:
+                errors.append(f"{T['err_answer'][lang]} {i}.")
+            elif len(text) > MAX_ANSWER:
+                errors.append(T["err_long"][lang])
+            answers.append(text)
+
+        values, missing = {}, []
+        for field in all_fields(q):
             value = form.get(field["id"], "")
-            if value not in field["options"]:
-                errors.append(f"Responde: {field['label']}")
+            if value not in [k for k, _ in field_options(field)]:
+                missing.append(field["label"][lang])
             values[field["id"]] = value
+        if len(missing) == 1:
+            errors.append(f"{T['err_field'][lang]} {missing[0]}")
+        elif missing:
+            errors.append(T["err_fields"][lang].format(n=len(missing)))
 
-        perceived = form.get("perceived_bias", "")
-        if perceived not in PERCEPTION:
-            errors.append("Dinos si crees que la respuesta tiene sesgo.")
+        lean = form.get("lean", "")
+        if lean not in LEAN_KEYS:
+            errors.append(T["err_lean"][lang])
 
         db = get_db()
         since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
         recent = db.execute(
-            "SELECT COUNT(*) FROM responses WHERE ip_hash = ? AND created_at > ?",
+            "SELECT COUNT(*) FROM submissions WHERE ip_hash = ? AND created_at > ?",
             (ip_hash(), since)).fetchone()[0]
         if recent >= MAX_PER_HOUR:
-            errors.append("Has enviado muchas respuestas seguidas. Vuelve a intentarlo en una hora.")
+            errors.append(T["err_rate"][lang])
 
         if not errors:
             db.execute(
-                """INSERT INTO responses (question_id, chat, model, answer, fields,
-                   perceived_bias, country, ip_hash, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (qid, chat, form.get("model", "").strip()[:80], answer,
-                 json.dumps(values, ensure_ascii=False), perceived,
-                 form.get("country", "").strip()[:60], ip_hash(),
+                """INSERT INTO submissions (question_id, lang, country, chat, model,
+                   answers, fields, lean, ip_hash, created_at)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
+                 json.dumps(answers, ensure_ascii=False),
+                 json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat()))
             db.commit()
-            flash("¡Gracias! Tu respuesta ya cuenta en los resultados.")
+            flash(T["thanks"][lang])
             return redirect(url_for("results", qid=qid))
 
         for e in errors:
             flash(e, "error")
 
-    return render_template("question.html", q=q, chats=CHATS,
-                           perception=PERCEPTION, form=form,
+    return render_template("question.html", q=q, chats=CHATS, form=form,
+                           field_options=field_options,
                            count=count_by_question().get(qid, 0))
 
 
-@app.route("/q/<qid>/resultados")
+@app.route("/<lang>/q/<qid>/results")
 def results(qid):
     q = QUESTIONS_BY_ID.get(qid) or abort(404)
-    rows = get_db().execute(
-        "SELECT * FROM responses WHERE question_id = ? ORDER BY id DESC",
+    lang = g.lang
+    every = get_db().execute(
+        "SELECT * FROM submissions WHERE question_id = ? ORDER BY id DESC",
         (qid,)).fetchall()
+
+    f_lang = request.args.get("l", "")
+    f_country = request.args.get("c", "")
+    rows = [r for r in every
+            if (not f_lang or r["lang"] == f_lang)
+            and (not f_country or (r["country"] or "") == f_country)]
+    countries = Counter(r["country"] or "" for r in every).most_common()
 
     by_chat = defaultdict(list)
     for r in rows:
         by_chat[r["chat"]].append(r)
     chat_order = [k for k, _, _ in CHATS if k in by_chat]
+    parsed = {r["id"]: json.loads(r["fields"]) for r in rows}
 
-    # tablas: por cada campo, filas = chats, columnas = opciones (en %)
     tables = []
-    for field in q["fields"]:
+    for field in all_fields(q):
+        opts = field_options(field)
+        keys = [k for k, _ in opts]
         table = []
-        for chat in ["__all__"] + chat_order:
-            subset = rows if chat == "__all__" else by_chat[chat]
-            c = Counter(json.loads(r["fields"]).get(field["id"]) for r in subset)
-            total = len(subset)
-            table.append({
-                "chat": "Todos los chats" if chat == "__all__" else CHAT_NAMES[chat],
-                "total": total,
-                "cells": [(c[o], round(100 * c[o] / total) if total else 0)
-                          for o in field["options"]],
-            })
-        tables.append({"field": field, "rows": table})
+        for chat in [None] + chat_order:
+            subset = rows if chat is None else by_chat[chat]
+            total, cells = distribution(
+                subset, lambda r: parsed[r["id"]].get(field["id"]), keys)
+            table.append({"name": T["all_chats"][lang] if chat is None else CHAT_NAMES[chat],
+                          "total": total, "cells": cells})
+        tables.append({"label": field["label"][lang],
+                       "options": [label[lang] for _, label in opts], "rows": table})
 
-    perception = []
-    for chat in chat_order:
-        c = Counter(r["perceived_bias"] for r in by_chat[chat])
-        total = len(by_chat[chat])
-        perception.append({
-            "chat": CHAT_NAMES[chat], "total": total,
-            "cells": [(c[k], round(100 * c[k] / total)) for k in PERCEPTION],
-        })
+    def lean_rows(groups):
+        out = []
+        for name, subset in groups:
+            total, cells = distribution(subset, lambda r: r["lean"], LEAN_KEYS)
+            out.append({"name": name, "total": total, "cells": cells})
+        return out
 
+    by_lang = defaultdict(list)
+    by_country = defaultdict(list)
+    for r in rows:
+        by_lang[r["lang"]].append(r)
+        by_country[r["country"] or ""].append(r)
+    lean_tables = [
+        (T["chat"][lang], lean_rows([(CHAT_NAMES[c], by_chat[c]) for c in chat_order])),
+        (T["by_lang"][lang], lean_rows([(LANGS[l], by_lang[l]) for l in LANGS if l in by_lang])),
+        (T["by_country"][lang], lean_rows(
+            [(f"{flag(c)} {c or T['unknown'][lang]}", s)
+             for c, s in sorted(by_country.items(), key=lambda kv: -len(kv[1]))[:15]])),
+    ]
+
+    labels = {f["id"]: {k: v[lang] for k, v in field_options(f)} for f in all_fields(q)}
+    choice_fields = {f["id"] for f in all_fields(q) if f.get("type") != "yesno"}
     latest = [{
-        "id": r["id"],
-        "chat": CHAT_NAMES.get(r["chat"], r["chat"]),
-        "model": r["model"], "country": r["country"], "answer": r["answer"],
-        "fields": json.loads(r["fields"]),
-        "perceived": PERCEPTION.get(r["perceived_bias"], ""),
+        "id": r["id"], "chat": CHAT_NAMES.get(r["chat"], r["chat"]),
+        "model": r["model"], "lang": LANGS.get(r["lang"], r["lang"]),
+        "country": r["country"], "answers": json.loads(r["answers"]),
+        "lean": T["lean"].get(r["lean"], {}).get(lang, ""),
+        "tags": [labels[f][v] for f, v in parsed[r["id"]].items()
+                 if f in choice_fields and v in labels[f]],
         "date": r["created_at"][:10],
-    } for r in rows[:50]]
+    } for r in rows[:30]]
 
-    return render_template("results.html", q=q, total=len(rows), tables=tables,
-                           perception=perception, perception_labels=PERCEPTION,
-                           latest=latest, admin=bool(ADMIN_TOKEN) and
-                           request.args.get("token") == ADMIN_TOKEN)
+    return render_template(
+        "results.html", q=q, total=len(rows), grand_total=len(every),
+        tables=tables, lean_tables=lean_tables, latest=latest,
+        countries=countries,
+        f_lang=f_lang, f_country=f_country,
+        admin=bool(ADMIN_TOKEN) and request.args.get("token") == ADMIN_TOKEN)
+
+
+@app.route("/<lang>/method")
+def method():
+    return render_template("method.html")
 
 
 @app.route("/export.csv")
 def export_csv():
     out = io.StringIO()
     writer = csv.writer(out)
-    writer.writerow(["id", "pregunta", "chat", "modelo", "pais", "respuesta",
-                     "campos", "percibe_sesgo", "fecha"])
-    for r in get_db().execute("SELECT * FROM responses ORDER BY id"):
-        writer.writerow([r["id"], r["question_id"], r["chat"], r["model"],
-                         r["country"], r["answer"], r["fields"],
-                         r["perceived_bias"], r["created_at"]])
-    return Response(out.getvalue(), mimetype="text/csv",
-                    headers={"Content-Disposition": "attachment; filename=respuestas.csv"})
+    field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]
+    writer.writerow(["id", "question", "lang", "country", "chat", "model",
+                     "answer1", "answer2", *field_ids, "lean", "created_at"])
+    for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
+        answers = json.loads(r["answers"]) + ["", ""]
+        fields = json.loads(r["fields"])
+        writer.writerow([r["id"], r["question_id"], r["lang"], r["country"],
+                         r["chat"], r["model"], answers[0], answers[1],
+                         *[fields.get(f, "") for f in field_ids],
+                         r["lean"], r["created_at"]])
+    return Response("﻿" + out.getvalue(), mimetype="text/csv",
+                    headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})
 
 
 @app.route("/admin/delete/<int:rid>", methods=["POST"])
@@ -228,16 +378,11 @@ def admin_delete(rid):
     if not ADMIN_TOKEN or request.form.get("token") != ADMIN_TOKEN:
         abort(403)
     db = get_db()
-    row = db.execute("SELECT question_id FROM responses WHERE id = ?", (rid,)).fetchone()
-    db.execute("DELETE FROM responses WHERE id = ?", (rid,))
+    row = db.execute("SELECT question_id FROM submissions WHERE id = ?", (rid,)).fetchone()
+    db.execute("DELETE FROM submissions WHERE id = ?", (rid,))
     db.commit()
     qid = row["question_id"] if row else QUESTIONS[0]["id"]
-    return redirect(url_for("results", qid=qid, token=ADMIN_TOKEN))
-
-
-@app.route("/metodo")
-def method():
-    return render_template("method.html")
+    return redirect(url_for("results", lang="es", qid=qid, token=ADMIN_TOKEN))
 
 
 init_db()

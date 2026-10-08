@@ -1,28 +1,23 @@
 {% extends "base.html" %}
+{% set q = questions[0] %}
 {% block content %}
 <section class="hero">
-  <h1>¿Tu IA piensa con estereotipos?</h1>
-  <p class="lede">Elige una pregunta, hazla en el chat que uses a diario (ChatGPT, Claude, Gemini, Copilot…) y pega aquí lo que te contestó. Cuando muchas personas hacen lo mismo, las diferencias entre chats salen a la luz.</p>
-  <ol class="steps">
-    <li><strong>Copia</strong> la pregunta exacta.</li>
-    <li><strong>Pregúntala</strong> en un chat nuevo de tu IA.</li>
-    <li><strong>Pega</strong> la respuesta y clasifícala.</li>
-    <li><strong>Compara</strong> con lo que respondieron las demás IAs.</li>
-  </ol>
+  <p class="tag">{{ tr(q.topic) }}</p>
+  <h1>{{ t('story_title') }}</h1>
+  <div class="story">
+    {% for p in t('story') %}<p>{{ p }}</p>{% endfor %}
+  </div>
+  <div class="actions">
+    <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
+    <a class="btn ghost" href="{{ url_for('results', qid=q.id) }}">{{ t('see_results') }}</a>
+    <span class="num">{{ counts.get(q.id, 0) }} {{ t('so_far') }}</span>
+  </div>
 </section>
 
-<section class="qlist">
-  {% for q in questions %}
-  <article class="qcard">
-    <p class="tag">{{ q.topic }}</p>
-    <h2><a href="{{ url_for('question', qid=q.id) }}">{{ q.title }}</a></h2>
-    <p class="prompt-preview">“{{ q.prompt }}”</p>
-    <div class="qcard-foot">
-      <span class="num">{{ counts.get(q.id, 0) }} respuestas</span>
-      <a class="btn" href="{{ url_for('question', qid=q.id) }}">Participar</a>
-      <a class="btn ghost" href="{{ url_for('results', qid=q.id) }}">Ver resultados</a>
-    </div>
-  </article>
-  {% endfor %}
+<section class="how">
+  <h2>{{ t('how_title') }}</h2>
+  <ol class="steps">
+    {% for s in t('how_steps') %}<li>{{ s }}</li>{% endfor %}
+  </ol>
 </section>
 {% endblock %}
