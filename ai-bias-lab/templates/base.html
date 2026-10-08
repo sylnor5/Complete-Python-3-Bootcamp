@@ -36,7 +36,7 @@
     {% block content %}{% endblock %}
   </main>
   <footer class="foot wrap">
-    <p><strong>TheChatRadar.com</strong> · {{ t('footer') }} <a href="{{ url_for('export_csv') }}">{{ t('download') }}</a></p>
+    <p><strong>TheChatRadar.com</strong> · {{ t('footer') }} <a href="{{ url_for('export_csv') }}">{{ t('download') }}</a>{% if geoip_credit %} <a href="https://db-ip.com" rel="noopener">IP geolocation by DB-IP</a>{% endif %}</p>
   </footer>
 </body>
 </html>

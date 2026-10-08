@@ -111,7 +111,8 @@ def inject_helpers():
         return fix(obj.get(lang) or obj.get("en") or next(iter(obj.values())))
 
     return {"t": t, "tr": tr, "lang": lang, "langs": LANGS, "T": T,
-            "flag": flag, "rtl": RTL, "dir": "rtl" if lang in RTL else "ltr"}
+            "flag": flag, "rtl": RTL, "dir": "rtl" if lang in RTL else "ltr",
+            "geoip_credit": os.path.exists(GEOIP_DB)}
 
 
 def flag(code):
