@@ -18,9 +18,18 @@
       {% for code, n in countries if code %}<option value="{{ code }}" {% if f_country == code %}selected{% endif %}>{{ flag(code) }} {{ code }} ({{ n }})</option>{% endfor %}
     </select>
   </label>
+  <label for="v">{{ t('filter_quality') }}
+    <select id="v" name="v" onchange="this.form.submit()">
+      <option value="">{{ t('q_all') }}</option>
+      <option value="link" {% if f_quality == 'link' %}selected{% endif %}>{{ t('q_link') }} ({{ n_link }})</option>
+      <option value="checked" {% if f_quality == 'checked' %}selected{% endif %}>{{ t('q_checked') }} ({{ n_checked }})</option>
+    </select>
+  </label>
+  {% if admin %}<input type="hidden" name="token" value="{{ request.args.get('token') }}">{% endif %}
   <noscript><button class="btn small">OK</button></noscript>
   <p class="total"><strong>{{ total }}</strong> {{ t('n_answers') }}{% if total != grand_total %} <span class="cnt">/ {{ grand_total }}</span>{% endif %}</p>
 </form>
+<p class="hint">{{ t('quality_note').format(link=n_link, total=grand_total, checked=n_checked) }}{% if admin %} · Admin: {{ n_flagged }} descartadas automáticamente (se muestran al final de la lista).{% endif %}</p>
 
 {% if total == 0 %}
 <div class="empty">
@@ -62,17 +71,21 @@
   <h2>{{ t('latest') }}</h2>
   <div class="answers">
   {% for a in latest %}
-    <article class="answer">
-      <p class="meta"><strong>{{ a.chat }}</strong>{% if a.model %}<span>{{ a.model }}</span>{% endif %}<span>{{ a.lang }}</span><span>{{ flag(a.country) }} {{ a.country or t('unknown') }}</span><time>{{ a.date }}</time></p>
+    <article class="answer{% if a.flags %} flagged{% endif %}">
+      <p class="meta"><strong>{{ a.chat }}</strong>{% if a.checked %}<span class="badge strong">{{ t('checked_badge') }}</span>{% elif a.share_url %}<span class="badge">{{ t('verifiable') }}</span>{% endif %}{% if a.flags %}<span class="badge alert">{{ a.flags }}</span>{% endif %}{% if a.model %}<span>{{ a.model }}</span>{% endif %}<span>{{ a.lang }}</span><span>{{ flag(a.country) }} {{ a.country or t('unknown') }}</span><time>{{ a.date }}</time></p>
       {% for text in a.answers %}
       <details {% if loop.first %}open{% endif %}>
         <summary>{{ t('question_n') }} {{ loop.index }}</summary>
         <blockquote>{{ text }}</blockquote>
       </details>
       {% endfor %}
+      {% if a.share_url %}<p><a href="{{ a.share_url }}" target="_blank" rel="noopener nofollow ugc">{{ t('see_original') }}</a></p>{% endif %}
       <p class="chips small">{% for tag in a.tags %}<span class="chip">{{ tag }}</span>{% endfor %}<span class="chip muted">{{ a.lean }}</span></p>
       {% if admin %}
-      <form method="post" action="{{ url_for('admin_delete', rid=a.id) }}"><input type="hidden" name="token" value="{{ request.args.get('token') }}"><button class="btn ghost small">{{ t('delete') }}</button></form>
+      <div class="actions">
+        {% if not a.checked %}<form method="post" action="{{ url_for('admin_check', rid=a.id) }}"><input type="hidden" name="token" value="{{ request.args.get('token') }}"><button class="btn small">{{ t('mark_checked') }}</button></form>{% endif %}
+        <form method="post" action="{{ url_for('admin_delete', rid=a.id) }}"><input type="hidden" name="token" value="{{ request.args.get('token') }}"><button class="btn ghost small">{{ t('delete') }}</button></form>
+      </div>
       {% endif %}
     </article>
   {% endfor %}

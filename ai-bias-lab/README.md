@@ -18,6 +18,20 @@ La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, e
    - las últimas respuestas completas.
 5. `/export.csv` — todos los datos, una columna por casilla, para analizarlos en Excel o Python.
 
+## Protección contra respuestas falsas
+
+- **Enlace para compartir (opcional, muy recomendado).** La persona pega el enlace «Compartir» de su chat
+  (ChatGPT, Claude, Gemini, Copilot, Grok, Meta AI, DeepSeek, Le Chat, Perplexity). Solo se aceptan
+  enlaces `https://` de esos dominios. En resultados se puede filtrar «solo con enlace».
+- **Descarte automático.** No cuentan en los resultados los envíos con alguna respuesta de menos de 150
+  caracteres, sin ninguna palabra clave del tema (lista `keywords` en `questions.json`, en los 4 idiomas),
+  con la misma respuesta en las dos preguntas o idénticos a un envío anterior. A quien envía no se le avisa,
+  para no enseñar cómo saltarse el filtro.
+- **Comprobación a mano.** Con `?token=ADMIN_TOKEN` en la página de resultados ves también los descartados
+  y puedes marcar cualquier respuesta como «comprobada» (tras abrir su enlace) o borrarla. Hay un filtro
+  «solo comprobadas a mano».
+- El CSV incluye `share_url`, `checked` y `flags` para analizar con o sin los dudosos.
+
 ## País de cada participante
 
 La web guarda el **país aproximado** de la conexión, nunca la IP. Lo obtiene así, por orden:

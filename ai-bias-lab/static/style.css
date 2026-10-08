@@ -190,3 +190,7 @@ blockquote { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; fo
   .total { margin-inline-start: 0; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+.badge { font-size: .75rem; font-weight: 600; border: 1px solid var(--ink); border-radius: 3px; padding: 0 6px; color: var(--ink); }
+.badge.strong { background: var(--marker); color: var(--marker-ink); border-color: var(--marker); }
+.badge.alert { border-color: var(--alert); color: var(--alert); }
+.answer.flagged { border-style: dashed; opacity: .8; }

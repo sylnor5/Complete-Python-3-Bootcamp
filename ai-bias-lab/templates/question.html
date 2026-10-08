@@ -61,6 +61,10 @@
         <input id="model" name="model" maxlength="80" placeholder="{{ t('model_ph') }}" value="{{ form.get('model', '') }}">
       </label>
     </div>
+    <label for="share_url" class="block">{{ t('share_label') }} <span class="opt">{{ t('optional') }}</span>
+      <input id="share_url" name="share_url" type="url" inputmode="url" maxlength="500" placeholder="{{ t('share_ph') }}" value="{{ form.get('share_url', '') }}" dir="ltr">
+      <span class="hint">{{ t('share_hint') }}</span>
+    </label>
     <fieldset class="choice">
       <legend>{{ t('lean_q') }}</legend>
       <div class="radios">

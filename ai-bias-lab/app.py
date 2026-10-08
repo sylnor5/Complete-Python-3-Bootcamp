@@ -7,8 +7,10 @@ import io
 import json
 import os
 import sqlite3
+import unicodedata
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
+from urllib.parse import urlparse
 from pathlib import Path
 
 from flask import (Flask, Response, abort, flash, g, redirect,
@@ -36,6 +38,14 @@ CHATS = [
     ("otro", "Otro / Other / Autre / אחר", None),
 ]
 CHAT_NAMES = {key: name for key, name, _ in CHATS}
+
+# Dominios desde los que los chats publican conversaciones compartidas.
+SHARE_HOSTS = {
+    "chatgpt.com", "chat.openai.com", "claude.ai", "g.co", "gemini.google.com",
+    "copilot.microsoft.com", "grok.com", "x.com", "www.meta.ai", "meta.ai",
+    "chat.deepseek.com", "chat.mistral.ai", "www.perplexity.ai", "perplexity.ai",
+}
+MIN_ANSWER = 150  # una respuesta real a estas preguntas es mucho más larga
 LEAN_KEYS = list(T["lean"])
 
 with open(BASE_DIR / "questions.json", encoding="utf-8") as fh:
@@ -173,6 +183,43 @@ def init_db():
                 created_at TEXT NOT NULL
             )""")
         db.execute("CREATE INDEX IF NOT EXISTS idx_sub_q ON submissions(question_id)")
+        cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
+        for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
+                          ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0")]:
+            if col not in cols:
+                db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
+
+
+def normalize(text):
+    text = unicodedata.normalize("NFKD", text.lower())
+    return " ".join("".join(ch for ch in text if not unicodedata.combining(ch)).split())
+
+
+def valid_share_url(url):
+    try:
+        parsed = urlparse(url)
+    except ValueError:
+        return False
+    return parsed.scheme == "https" and parsed.hostname in SHARE_HOSTS and len(parsed.path) > 1
+
+
+def quality_flags(q, answers, answers_hash, db):
+    """Señales de que un envío no corresponde a las preguntas. No se muestran a quien
+    envía (sería una guía para engañar); los envíos marcados no cuentan en los resultados."""
+    flags = []
+    keywords = [normalize(k) for k in q.get("keywords", [])]
+    for i, text in enumerate(answers, start=1):
+        norm = normalize(text)
+        if len(text) < MIN_ANSWER:
+            flags.append(f"short{i}")
+        if keywords and not any(k in norm for k in keywords):
+            flags.append(f"offtopic{i}")
+    if len(answers) > 1 and len({normalize(a) for a in answers}) < len(answers):
+        flags.append("same_text")
+    if db.execute("SELECT 1 FROM submissions WHERE answers_hash = ? LIMIT 1",
+                  (answers_hash,)).fetchone():
+        flags.append("duplicate")
+    return flags
 
 
 def ip_hash():
@@ -246,6 +293,10 @@ def question(qid):
         if lean not in LEAN_KEYS:
             errors.append(T["err_lean"][lang])
 
+        share_url = form.get("share_url", "").strip()[:500]
+        if share_url and not valid_share_url(share_url):
+            errors.append(T["err_share"][lang])
+
         db = get_db()
         since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
         recent = db.execute(
@@ -255,14 +306,19 @@ def question(qid):
             errors.append(T["err_rate"][lang])
 
         if not errors:
+            answers_hash = hashlib.sha256(
+                "\n".join(normalize(a) for a in answers).encode()).hexdigest()
+            flags = quality_flags(q, answers, answers_hash, db)
             db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
-                   answers, fields, lean, ip_hash, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   answers, fields, lean, ip_hash, created_at,
+                   share_url, flags, answers_hash, checked)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
-                 datetime.now(timezone.utc).isoformat()))
+                 datetime.now(timezone.utc).isoformat(),
+                 share_url or None, ",".join(flags), answers_hash))
             db.commit()
             flash(T["thanks"][lang])
             return redirect(url_for("results", qid=qid))
@@ -283,18 +339,27 @@ def results(qid):
         "SELECT * FROM submissions WHERE question_id = ? ORDER BY id DESC",
         (qid,)).fetchall()
 
+    admin = bool(ADMIN_TOKEN) and request.args.get("token") == ADMIN_TOKEN
+    flagged = [r for r in every if r["flags"]]
+    every = [r for r in every if not r["flags"]]  # los sospechosos no cuentan
+
     f_lang = request.args.get("l", "")
     f_country = request.args.get("c", "")
+    f_quality = request.args.get("v", "")
     rows = [r for r in every
             if (not f_lang or r["lang"] == f_lang)
-            and (not f_country or (r["country"] or "") == f_country)]
+            and (not f_country or (r["country"] or "") == f_country)
+            and (f_quality != "link" or r["share_url"])
+            and (f_quality != "checked" or r["checked"])]
+    n_link = sum(1 for r in every if r["share_url"])
+    n_checked = sum(1 for r in every if r["checked"])
     countries = Counter(r["country"] or "" for r in every).most_common()
 
     by_chat = defaultdict(list)
     for r in rows:
         by_chat[r["chat"]].append(r)
     chat_order = [k for k, _, _ in CHATS if k in by_chat]
-    parsed = {r["id"]: json.loads(r["fields"]) for r in rows}
+    parsed = {r["id"]: json.loads(r["fields"]) for r in rows + flagged}
 
     tables = []
     for field in all_fields(q):
@@ -337,17 +402,31 @@ def results(qid):
         "model": r["model"], "lang": LANGS.get(r["lang"], r["lang"]),
         "country": r["country"], "answers": json.loads(r["answers"]),
         "lean": T["lean"].get(r["lean"], {}).get(lang, ""),
+        "share_url": r["share_url"], "checked": r["checked"], "flags": r["flags"],
         "tags": [labels[f][v] for f, v in parsed[r["id"]].items()
                  if f in choice_fields and v in labels[f]],
         "date": r["created_at"][:10],
-    } for r in rows[:30]]
+    } for r in (rows[:30] + (flagged[:50] if admin else []))]
 
     return render_template(
         "results.html", q=q, total=len(rows), grand_total=len(every),
         tables=tables, lean_tables=lean_tables, latest=latest,
         countries=countries,
-        f_lang=f_lang, f_country=f_country,
-        admin=bool(ADMIN_TOKEN) and request.args.get("token") == ADMIN_TOKEN)
+        f_lang=f_lang, f_country=f_country, f_quality=f_quality,
+        n_link=n_link, n_checked=n_checked, n_flagged=len(flagged), admin=admin)
+
+
+@app.route("/admin/check/<int:rid>", methods=["POST"])
+def admin_check(rid):
+    if not ADMIN_TOKEN or request.form.get("token") != ADMIN_TOKEN:
+        abort(403)
+    db = get_db()
+    row = db.execute("SELECT question_id FROM submissions WHERE id = ?", (rid,)).fetchone()
+    # comprobada a mano: cuenta aunque el filtro automático la hubiera marcado
+    db.execute("UPDATE submissions SET checked = 1, flags = '' WHERE id = ?", (rid,))
+    db.commit()
+    qid = row["question_id"] if row else QUESTIONS[0]["id"]
+    return redirect(url_for("results", lang="es", qid=qid, token=ADMIN_TOKEN))
 
 
 @app.route("/<lang>/method")
@@ -361,14 +440,16 @@ def export_csv():
     writer = csv.writer(out)
     field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
-                     "answer1", "answer2", *field_ids, "lean", "created_at"])
+                     "answer1", "answer2", *field_ids, "lean", "share_url",
+                     "checked", "flags", "created_at"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = json.loads(r["answers"]) + ["", ""]
         fields = json.loads(r["fields"])
         writer.writerow([r["id"], r["question_id"], r["lang"], r["country"],
                          r["chat"], r["model"], answers[0], answers[1],
                          *[fields.get(f, "") for f in field_ids],
-                         r["lean"], r["created_at"]])
+                         r["lean"], r["share_url"] or "", r["checked"],
+                         r["flags"] or "", r["created_at"]])
     return Response("﻿" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})
 
