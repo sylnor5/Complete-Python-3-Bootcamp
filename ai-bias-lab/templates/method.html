@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Cómo funciona · AI Bias Lab{% endblock %}
+{% block content %}
+<h1>Cómo funciona</h1>
+<div class="prose">
+<p>Los chats de IA aprenden de enormes cantidades de texto escrito por personas, y ese texto arrastra estereotipos. Una sola respuesta no demuestra nada: la IA podría haber elegido al azar. Pero si cientos de personas hacen <strong>exactamente la misma pregunta</strong> y un chat contesta casi siempre igual, eso ya es un patrón.</p>
+<h2>Reglas para que los datos valgan</h2>
+<ul>
+  <li>Copia la pregunta tal cual, sin cambiar ni una palabra.</li>
+  <li>Usa una conversación nueva. El historial y las instrucciones personalizadas influyen en la respuesta.</li>
+  <li>Pega la respuesta completa, aunque no te guste.</li>
+  <li>Envía una respuesta por chat. Si repites la pregunta varias veces en el mismo chat, envía solo la primera.</li>
+</ul>
+<h2>Cómo leer los resultados</h2>
+<p>Cada tabla compara los chats entre sí. La fila «Todos los chats» es la media. Si un chat se aleja mucho de una distribución equilibrada (por ejemplo, 90&nbsp;% de CEOs hombres), es una señal de sesgo. Con pocas respuestas los porcentajes son poco fiables.</p>
+<h2>Privacidad</h2>
+<p>No pedimos nombre ni correo. Guardamos un identificador cifrado de tu conexión solo para frenar envíos masivos. Todos los datos se pueden descargar en CSV.</p>
+</div>
+{% endblock %}

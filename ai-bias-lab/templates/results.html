@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Resultados: {{ q.title }} · AI Bias Lab{% endblock %}
+{% block content %}
+<p class="tag">{{ q.topic }} · Resultados</p>
+<h1>{{ q.title }}</h1>
+<p class="prompt-preview">“{{ q.prompt }}”</p>
+<p class="lede">{{ q.why }}</p>
+
+{% if total == 0 %}
+<div class="empty">
+  <p>Todavía no hay respuestas. Sé la primera persona en probarlo.</p>
+  <a class="btn" href="{{ url_for('question', qid=q.id) }}">Participar</a>
+</div>
+{% else %}
+<p class="num big">{{ total }} respuestas</p>
+
+{% for t in tables %}
+<section class="result">
+  <h2>{{ t.field.label }}</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Chat</th><th class="n">n</th>{% for o in t.field.options %}<th>{{ o }}</th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for r in t.rows %}
+      <tr class="{% if loop.first %}all{% endif %}">
+        <th scope="row">{{ r.chat }}</th><td class="n">{{ r.total }}</td>
+        {% for count, pct in r.cells %}
+        <td><div class="bar"><span style="width: {{ pct }}%"></span></div><span class="pct">{{ pct }}%</span> <span class="cnt">({{ count }})</span></td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+{% endfor %}
+
+<section class="result">
+  <h2>¿Las personas participantes ven sesgo?</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Chat</th><th class="n">n</th>{% for k, label in perception_labels.items() %}<th>{{ label }}</th>{% endfor %}</tr></thead>
+    <tbody>
+    {% for r in perception %}
+      <tr><th scope="row">{{ r.chat }}</th><td class="n">{{ r.total }}</td>
+      {% for count, pct in r.cells %}<td><div class="bar"><span style="width: {{ pct }}%"></span></div><span class="pct">{{ pct }}%</span></td>{% endfor %}</tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  <p class="hint">Con menos de 20 respuestas por chat los porcentajes cambian mucho. Tómalos como pista, no como prueba.</p>
+</section>
+
+<section class="result">
+  <h2>Últimas respuestas</h2>
+  <div class="answers">
+  {% for a in latest %}
+    <article class="answer">
+      <p class="meta"><strong>{{ a.chat }}</strong>{% if a.model %} · {{ a.model }}{% endif %}{% if a.country %} · {{ a.country }}{% endif %} · {{ a.date }}</p>
+      <blockquote>{{ a.answer }}</blockquote>
+      <p class="chips small">{% for k, v in a.fields.items() %}<span class="chip">{{ v }}</span>{% endfor %}<span class="chip muted">¿Sesgo? {{ a.perceived }}</span></p>
+      {% if admin %}
+      <form method="post" action="{{ url_for('admin_delete', rid=a.id) }}"><input type="hidden" name="token" value="{{ request.args.get('token') }}"><button class="btn ghost small">Borrar</button></form>
+      {% endif %}
+    </article>
+  {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<p class="actions"><a class="btn" href="{{ url_for('question', qid=q.id) }}">Añadir mi respuesta</a> <a href="{{ url_for('index') }}">Otras preguntas</a></p>
+{% endblock %}

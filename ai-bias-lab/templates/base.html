@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}AI Bias Lab{% endblock %}</title>
+  <meta name="description" content="Haz la misma pregunta en tu chat de IA favorito y compara las respuestas para descubrir sesgos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="{{ url_for('index') }}">AI&nbsp;Bias&nbsp;Lab</a>
+    <nav>
+      <a href="{{ url_for('index') }}">Preguntas</a>
+      <a href="{{ url_for('method') }}">Cómo funciona</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div class="flashes">
+        {% for cat, msg in messages %}<p class="flash {{ cat }}">{{ msg }}</p>{% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="foot wrap">
+    <p>Experimento ciudadano. Las respuestas las aportan personas voluntarias y no se verifican una por una. <a href="{{ url_for('export_csv') }}">Descargar todos los datos (CSV)</a></p>
+  </footer>
+</body>
+</html>
