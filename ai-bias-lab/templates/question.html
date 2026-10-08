@@ -31,6 +31,7 @@
     </label>
 
     <h3>{{ t('classify') }}</h3>
+    <p class="hint">{{ t('classify_rule') }}</p>
     <div class="fields">
     {% for field in step.fields %}
       <fieldset class="{{ 'yesno' if field.type == 'yesno' else 'choice' }}">
