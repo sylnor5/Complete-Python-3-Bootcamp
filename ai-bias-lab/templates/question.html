@@ -1,79 +1,97 @@
 {% extends "base.html" %}
 {% block title %}{{ tr(q.title) }} · ChatRadar{% endblock %}
+{% set step = q.steps[0] %}
+{% set required = step.fields|selectattr('required')|list %}
+{% set optional = step.fields|rejectattr('required')|list %}
+{% macro field_row(field) %}
+<fieldset class="{{ 'yesno' if field.type == 'yesno' else 'choice' }}">
+  <legend>{{ tr(field.label) }}</legend>
+  <div class="radios">
+    {% for key, label in field_options(field) %}
+    <label class="seg"><input type="radio" id="{{ field.id }}-{{ key }}" name="{{ field.id }}" value="{{ key }}" {% if form.get(field.id) == key %}checked{% endif %}><span>{{ tr(label) }}</span></label>
+    {% endfor %}
+  </div>
+</fieldset>
+{% endmacro %}
 {% block content %}
 <h1>{{ tr(q.title) }}</h1>
 <p class="count">{{ count }} {{ t('so_far') }}</p>
 <p class="rules">{{ t('rules') }}</p>
 
-<div class="open-chat">
-  <span class="hint">{{ t('open_chat') }}</span>
-  <div class="chips">
-    {% for key, name, link in chats if link %}
-    <a class="chip" href="{{ link }}" target="_blank" rel="noopener">{{ name }}</a>
-    {% endfor %}
-  </div>
-</div>
-
 <form method="post" class="form" novalidate>
-  {% for step in q.steps %}
-  {% set i = loop.index %}
   <section class="step">
-    <h2><span class="stepnum">{{ i }}</span> {{ t('question_n') }}{% if q.steps|length > 1 %} {{ i }}{% endif %}</h2>
-    {% if i > 1 %}<p class="hint">{{ t('same_chat') }}</p>{% endif %}
+    <h2><span class="stepnum">1</span> {{ t('question_n') }}</h2>
     <div class="prompt-box">
       <p class="exact">{{ t('exact_text') }}</p>
-      <p class="prompt" id="prompt{{ i }}">{{ tr(step.prompt) }}</p>
-      <button type="button" class="btn copy" data-target="prompt{{ i }}">{{ t('copy') }}</button>
+      <p class="prompt" id="prompt1">{{ tr(step.prompt) }}</p>
+      <button type="button" class="btn copy" data-target="prompt1">{{ t('copy') }}</button>
     </div>
+    <div class="open-chat">
+      <span class="hint">{{ t('open_chat') }}</span>
+      <div class="chips">
+        {% for key, name, link in chats if link %}
+        <a class="chip open" href="{{ link }}" target="_blank" rel="noopener" data-chat="{{ key }}">{{ name }}</a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 
-    <label for="answer{{ i }}" class="block">{{ t('paste_answer') }}
-      <textarea id="answer{{ i }}" name="answer{{ i }}" rows="7" maxlength="12000" placeholder="{{ t('paste_ph') }}">{{ form.get('answer' ~ i, '') }}</textarea>
+  <section class="step">
+    <h2><span class="stepnum">2</span> {{ t('how_bring') }}</h2>
+    <label for="chat" class="block">{{ t('which_chat') }}
+      <select id="chat" name="chat">
+        <option value="">{{ t('choose') }}</option>
+        {% for key, name, link in chats %}
+        <option value="{{ key }}" {% if form.get('chat') == key %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
     </label>
 
-    <h3>{{ t('classify') }}</h3>
-    <p class="hint">{{ t('classify_rule') }}</p>
+    <div class="modes" id="modes">
+      <button type="button" class="mode" data-mode="link"><strong>{{ t('mode_link') }}</strong><span>{{ t('mode_link_sub') }}</span></button>
+      <button type="button" class="mode" data-mode="text"><strong>{{ t('mode_text') }}</strong><span>{{ t('mode_text_sub') }}</span></button>
+    </div>
+
+    <div class="panel" id="panel-link">
+      <label for="share_url" class="block">{{ t('share_label') }}
+        <input id="share_url" name="share_url" type="url" inputmode="url" maxlength="500" placeholder="{{ t('share_ph') }}" value="{{ form.get('share_url', '') }}" dir="ltr">
+      </label>
+      <p class="hint">{{ t('link_help') }}</p>
+      <button type="button" class="linkish switch" data-mode="text">{{ t('switch_text') }}</button>
+    </div>
+
+    <div class="panel" id="panel-text">
+      <label for="answer1" class="block">{{ t('paste_answer') }}
+        <textarea id="answer1" name="answer1" rows="7" maxlength="12000" placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
+      </label>
+      <button type="button" class="linkish switch" data-mode="link">{{ t('switch_link') }}</button>
+    </div>
+  </section>
+
+  <section class="step">
+    <h2><span class="stepnum">3</span> {{ t('classify') }}</h2>
     <div class="fields">
-    {% for field in step.fields %}
-      <fieldset class="{{ 'yesno' if field.type == 'yesno' else 'choice' }}">
-        <legend>{{ tr(field.label) }}</legend>
+      {% for field in required %}{{ field_row(field) }}{% endfor %}
+      <fieldset class="choice">
+        <legend>{{ t('lean_q') }}</legend>
         <div class="radios">
-          {% for key, label in field_options(field) %}
-          <label class="seg"><input type="radio" id="{{ field.id }}-{{ key }}" name="{{ field.id }}" value="{{ key }}" {% if form.get(field.id) == key %}checked{% endif %}><span>{{ tr(label) }}</span></label>
+          {% for key, label in T.lean.items() %}
+          <label class="seg"><input type="radio" id="lean-{{ key }}" name="lean" value="{{ key }}" {% if form.get('lean') == key %}checked{% endif %}><span>{{ tr(label) }}</span></label>
           {% endfor %}
         </div>
       </fieldset>
-    {% endfor %}
     </div>
-  </section>
-  {% endfor %}
 
-  <section class="step">
-    <h2><span class="stepnum">{{ q.steps|length + 1 }}</span> {{ t('about_you') }}</h2>
-    <div class="row">
-      <label for="chat">{{ t('which_chat') }}
-        <select id="chat" name="chat">
-          <option value="">{{ t('choose') }}</option>
-          {% for key, name, link in chats %}
-          <option value="{{ key }}" {% if form.get('chat') == key %}selected{% endif %}>{{ name }}</option>
-          {% endfor %}
-        </select>
-      </label>
-      <label for="model">{{ t('model') }} <span class="opt">{{ t('optional') }}</span>
+    <details class="more" {% if optional|selectattr('id', 'in', form.keys()|list)|list %}open{% endif %}>
+      <summary>{{ t('more_details') }}</summary>
+      <p class="hint">{{ t('more_details_hint') }} {{ t('classify_rule') }}</p>
+      <div class="fields">
+        {% for field in optional %}{{ field_row(field) }}{% endfor %}
+      </div>
+      <label for="model" class="block">{{ t('model') }} <span class="opt">{{ t('optional') }}</span>
         <input id="model" name="model" maxlength="80" placeholder="{{ t('model_ph') }}" value="{{ form.get('model', '') }}">
       </label>
-    </div>
-    <label for="share_url" class="block">{{ t('share_label') }} <span class="opt">{{ t('optional') }}</span>
-      <input id="share_url" name="share_url" type="url" inputmode="url" maxlength="500" placeholder="{{ t('share_ph') }}" value="{{ form.get('share_url', '') }}" dir="ltr">
-      <span class="hint">{{ t('share_hint') }}</span>
-    </label>
-    <fieldset class="choice">
-      <legend>{{ t('lean_q') }}</legend>
-      <div class="radios">
-        {% for key, label in T.lean.items() %}
-        <label class="seg"><input type="radio" id="lean-{{ key }}" name="lean" value="{{ key }}" {% if form.get('lean') == key %}checked{% endif %}><span>{{ tr(label) }}</span></label>
-        {% endfor %}
-      </div>
-    </fieldset>
+    </details>
   </section>
 
   <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -98,5 +116,25 @@ document.querySelectorAll(".copy").forEach((btn) => btn.addEventListener("click"
           const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = {{ t('select_copy')|tojson }}; }
   setTimeout(() => (btn.textContent = label), 2000);
 }));
+
+// al abrir un chat, se marca solo en «¿Qué chat usaste?»
+document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", () => {
+  document.getElementById("chat").value = a.dataset.chat;
+}));
+
+// dos formas de traer la respuesta: enlace o texto
+(() => {
+  const panels = { link: document.getElementById("panel-link"), text: document.getElementById("panel-text") };
+  const modes = document.querySelectorAll(".mode");
+  function show(mode, focus) {
+    for (const [k, p] of Object.entries(panels)) p.hidden = k !== mode;
+    modes.forEach((m) => m.classList.toggle("on", m.dataset.mode === mode));
+    if (focus) panels[mode].querySelector("input, textarea").focus();
+  }
+  document.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", () => show(b.dataset.mode, true)));
+  if (document.getElementById("share_url").value) show("link");
+  else if (document.getElementById("answer1").value) show("text");
+  else { panels.link.hidden = true; panels.text.hidden = true; }
+})();
 </script>
 {% endblock %}

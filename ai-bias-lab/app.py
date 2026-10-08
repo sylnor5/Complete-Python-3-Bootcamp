@@ -89,12 +89,12 @@ def pull_lang(_endpoint, values):
 @app.url_defaults
 def add_lang(endpoint, values):
     if "lang" not in values and app.url_map.is_endpoint_expecting(endpoint, "lang"):
-        values["lang"] = g.get("lang", "es")
+        values["lang"] = g.get("lang", "en")
 
 
 @app.context_processor
 def inject_helpers():
-    lang = g.get("lang", "es")
+    lang = g.get("lang", "en")
 
     def fix(text):  # en francés, espacio no separable antes de ? ! : ;
         if lang == "fr" and isinstance(text, str):
@@ -228,12 +228,14 @@ def valid_share_url(url):
     return parsed.scheme == "https" and parsed.hostname in SHARE_HOSTS and len(parsed.path) > 1
 
 
-def quality_flags(q, answers, answers_hash, db):
+def quality_flags(q, answers, answers_hash, share_url, db):
     """Señales de que un envío no corresponde a las preguntas. No se muestran a quien
     envía (sería una guía para engañar); los envíos marcados no cuentan en los resultados."""
     flags = []
     keywords = [normalize(k) for k in q.get("keywords", [])]
     for i, text in enumerate(answers, start=1):
+        if share_url and not text:
+            continue  # solo enlace: se comprueba abriéndolo, no por el texto
         norm = normalize(text)
         if len(text) < MIN_ANSWER:
             flags.append(f"short{i}")
@@ -241,8 +243,11 @@ def quality_flags(q, answers, answers_hash, db):
             flags.append(f"offtopic{i}")
     if len(answers) > 1 and len({normalize(a) for a in answers}) < len(answers):
         flags.append("same_text")
-    if db.execute("SELECT 1 FROM submissions WHERE answers_hash = ? LIMIT 1",
-                  (answers_hash,)).fetchone():
+    if any(answers) and db.execute(
+            "SELECT 1 FROM submissions WHERE answers_hash = ? LIMIT 1", (answers_hash,)).fetchone():
+        flags.append("duplicate")
+    elif share_url and db.execute(
+            "SELECT 1 FROM submissions WHERE share_url = ? LIMIT 1", (share_url,)).fetchone():
         flags.append("duplicate")
     return flags
 
@@ -266,9 +271,9 @@ def distribution(rows, key_fn, keys):
 # ------------------------------------------------------------------ routes
 
 @app.route("/")
-def choose_language():
-    best = request.accept_languages.best_match(list(LANGS)) or "en"
-    return render_template("choose.html", best=best)
+def landing():
+    g.lang = "en"  # la portada principal es en inglés; el menú permite cambiar de idioma
+    return index()
 
 
 @app.route("/<lang>/")
@@ -294,20 +299,27 @@ def question(qid):
         if chat not in CHAT_NAMES:
             errors.append(T["err_chat"][lang])
 
+        share_url = form.get("share_url", "").strip()[:500]
+        if share_url and not valid_share_url(share_url):
+            errors.append(T["err_share"][lang])
+
+        # basta con el enlace a la conversación o con el texto de la respuesta
         answers = []
         for i, _step in enumerate(q["steps"], start=1):
             text = form.get(f"answer{i}", "").strip()
-            if len(text) < 2:
-                errors.append(f"{T['err_answer'][lang]} {i}.")
-            elif len(text) > MAX_ANSWER:
+            if len(text) > MAX_ANSWER:
                 errors.append(T["err_long"][lang])
             answers.append(text)
+        if not share_url and any(len(a) < 2 for a in answers):
+            errors.append(T["err_answer_or_link"][lang])
 
         values, missing = {}, []
         for field in all_fields(q):
             value = form.get(field["id"], "")
             if value not in [k for k, _ in field_options(field)]:
-                missing.append(field["label"][lang])
+                value = ""
+                if field.get("required"):
+                    missing.append(field["label"][lang])
             values[field["id"]] = value
         if len(missing) == 1:
             errors.append(f"{T['err_field'][lang]} {missing[0]}")
@@ -317,10 +329,6 @@ def question(qid):
         lean = form.get("lean", "")
         if lean not in LEAN_KEYS:
             errors.append(T["err_lean"][lang])
-
-        share_url = form.get("share_url", "").strip()[:500]
-        if share_url and not valid_share_url(share_url):
-            errors.append(T["err_share"][lang])
 
         db = get_db()
         since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
@@ -333,7 +341,7 @@ def question(qid):
         if not errors:
             answers_hash = hashlib.sha256(
                 "\n".join(normalize(a) for a in answers).encode()).hexdigest()
-            flags = quality_flags(q, answers, answers_hash, db)
+            flags = quality_flags(q, answers, answers_hash, share_url, db)
             db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
@@ -345,15 +353,32 @@ def question(qid):
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash))
             db.commit()
+            done = session.get("done", {})
+            done[qid] = sorted(set(done.get(qid, [])) | {chat})
+            session["done"] = done
             session["just_sent"] = qid
-            return redirect(url_for("results", qid=qid) + "#metronome")
+            return redirect(url_for("next_chat", qid=qid, chat=chat))
 
         for e in errors:
             flash(e, "error")
 
+    if request.method == "GET" and request.args.get("chat") in CHAT_NAMES:
+        form = {"chat": request.args["chat"]}
     return render_template("question.html", q=q, chats=CHATS, form=form,
                            field_options=field_options,
                            count=count_by_question().get(qid, 0))
+
+
+@app.route("/<lang>/q/<qid>/next")
+def next_chat(qid):
+    """Tras enviar: invitar a probar la misma pregunta en otro chat antes de ver resultados."""
+    q = QUESTIONS_BY_ID.get(qid) or abort(404)
+    done = session.get("done", {}).get(qid, [])
+    last = request.args.get("chat", "")
+    others = [(k, n, l) for k, n, l in CHATS if l and k not in done and k != last]
+    return render_template("next.html", q=q, others=others,
+                           done=[CHAT_NAMES[c] for c in done if c in CHAT_NAMES],
+                           last=CHAT_NAMES.get(last, ""))
 
 
 @app.route("/<lang>/q/<qid>/results")
@@ -397,7 +422,8 @@ def results(qid):
         keys = [k for k, _ in opts]
         table = []
         for chat in [None] + chat_order:
-            subset = rows if chat is None else by_chat[chat]
+            subset = [r for r in (rows if chat is None else by_chat[chat])
+                      if parsed[r["id"]].get(field["id"])]  # los campos opcionales sin marcar no cuentan
             total, cells = distribution(
                 subset, lambda r: parsed[r["id"]].get(field["id"]), keys)
             table.append({"name": T["all_chats"][lang] if chat is None else CHAT_NAMES[chat],

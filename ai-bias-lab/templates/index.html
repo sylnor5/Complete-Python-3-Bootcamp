@@ -2,6 +2,9 @@
 {% set q = questions[0] %}
 {% block content %}
 <section class="hero">
+  <p class="also-in">{{ t('also_in') }}
+    {% for code, name in langs.items() if code != lang %}<a href="{{ '/' if code == 'en' else url_for('index', lang=code) }}" lang="{{ code }}">{{ name }}</a>{% endfor %}
+  </p>
   <h1>{{ t('story_title') }}</h1>
   <figure class="transcript">
     <div class="turn user">

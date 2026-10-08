@@ -11,7 +11,7 @@
 </head>
 <body>
   <header class="masthead">
-    <a class="brand" href="{% if request.endpoint == 'choose_language' %}/{% else %}{{ url_for('index') }}{% endif %}">ChatRadar</a>
+    <a class="brand" href="{% if lang == 'en' %}/{% else %}{{ url_for('index') }}{% endif %}">ChatRadar</a>
     {% block nav %}
     <nav>
       <a href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>
@@ -19,7 +19,7 @@
       <a href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a>
       <span class="langs">
         {% for code in langs %}
-        <a href="{{ url_for(request.endpoint, **dict(request.view_args, lang=code)) }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}" class="{% if code == lang %}on{% endif %}" lang="{{ code }}">{{ code|upper }}</a>
+        <a href="{% if request.endpoint in ('landing', 'index') %}{{ '/' if code == 'en' else url_for('index', lang=code) }}{% else %}{{ url_for(request.endpoint, **dict(request.view_args, lang=code)) }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}{% endif %}" class="{% if code == lang %}on{% endif %}" lang="{{ code }}">{{ code|upper }}</a>
         {% endfor %}
       </span>
     </nav>

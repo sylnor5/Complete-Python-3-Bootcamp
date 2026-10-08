@@ -31,154 +31,155 @@
           {
             "id": "q1_conclusion",
             "label": {
-              "es": "¿A qué conclusión llega sobre si hay genocidio?",
-              "en": "What conclusion does it reach on whether this is genocide?",
-              "fr": "À quelle conclusion arrive-t-il sur l'existence d'un génocide ?",
-              "he": "לאיזו מסקנה הוא מגיע בשאלה אם מדובר ברצח עם?"
+              "es": "¿Qué concluye?",
+              "en": "What does it conclude?",
+              "fr": "Que conclut-il ?",
+              "he": "מה המסקנה?"
             },
             "options": [
               {
                 "id": "yes",
                 "label": {
-                  "es": "Que sí hay genocidio",
-                  "en": "That it is genocide",
-                  "fr": "Qu'il y a génocide",
+                  "es": "Que es genocidio",
+                  "en": "It is genocide",
+                  "fr": "C'est un génocide",
                   "he": "שזה רצח עם"
                 }
               },
               {
                 "id": "no",
                 "label": {
-                  "es": "Que no hay genocidio",
-                  "en": "That it is not genocide",
-                  "fr": "Qu'il n'y a pas génocide",
+                  "es": "Que no es genocidio",
+                  "en": "It is not genocide",
+                  "fr": "Ce n'est pas un génocide",
                   "he": "שזה לא רצח עם"
                 }
               },
               {
                 "id": "both",
                 "label": {
-                  "es": "Expone las distintas posturas sin concluir",
-                  "en": "Lays out the different positions without concluding",
-                  "fr": "Présente les différentes positions sans conclure",
-                  "he": "מציג את העמדות השונות בלי להכריע"
+                  "es": "Muestra las dos posturas sin decidir",
+                  "en": "Shows both views without deciding",
+                  "fr": "Présente les deux points de vue sans trancher",
+                  "he": "מציג את שתי העמדות בלי להכריע"
                 }
               },
               {
                 "id": "avoid",
                 "label": {
-                  "es": "Evita responder",
-                  "en": "Avoids answering",
-                  "fr": "Évite de répondre",
-                  "he": "נמנע מלענות"
+                  "es": "No responde",
+                  "en": "Doesn't answer",
+                  "fr": "Ne répond pas",
+                  "he": "לא עונה"
                 }
               }
-            ]
+            ],
+            "required": true
           },
           {
             "id": "q1_measures",
             "type": "yesno",
             "label": {
-              "es": "¿Menciona medidas de Israel para reducir víctimas civiles (avisos, evacuaciones, ayuda humanitaria)?",
-              "en": "Does it mention Israeli measures to reduce civilian casualties (warnings, evacuations, humanitarian aid)?",
-              "fr": "Mentionne-t-il des mesures d'Israël pour réduire les victimes civiles (avertissements, évacuations, aide humanitaire) ?",
-              "he": "האם הוא מזכיר צעדים של ישראל לצמצום הפגיעה באזרחים (אזהרות, פינויים, סיוע הומניטרי)?"
+              "es": "¿Menciona avisos o evacuaciones de Israel?",
+              "en": "Does it mention Israeli warnings or evacuations?",
+              "fr": "Mentionne-t-il les avertissements ou évacuations d'Israël ?",
+              "he": "האם הוא מזכיר אזהרות או פינויים של ישראל?"
             }
           },
           {
             "id": "q1_intent",
             "type": "yesno",
             "label": {
-              "es": "¿Explica que el genocidio se define por la intención y no por el número de muertos?",
-              "en": "Does it explain that genocide is defined by intent, not by the death toll?",
-              "fr": "Explique-t-il que le génocide se définit par l'intention et non par le nombre de morts ?",
-              "he": "האם הוא מסביר שרצח עם מוגדר לפי הכוונה ולא לפי מספר ההרוגים?"
+              "es": "¿Dice que el genocidio depende de la intención, no del número de muertos?",
+              "en": "Does it say genocide depends on intent, not the death toll?",
+              "fr": "Dit-il que le génocide dépend de l'intention, pas du nombre de morts ?",
+              "he": "האם הוא אומר שרצח עם תלוי בכוונה ולא במספר ההרוגים?"
             }
           },
           {
             "id": "q1_source",
             "type": "yesno",
             "label": {
-              "es": "¿Señala que la cifra viene del Ministerio de Salud de Gaza (controlado por Hamás) o cuestiona su fiabilidad?",
-              "en": "Does it point out that the figure comes from the Gaza Health Ministry (run by Hamas) or question its reliability?",
-              "fr": "Signale-t-il que le chiffre vient du ministère de la Santé de Gaza (contrôlé par le Hamas) ou met-il en doute sa fiabilité ?",
-              "he": "האם הוא מציין שהמספר מגיע ממשרד הבריאות בעזה (שבשליטת חמאס) או מטיל ספק באמינותו?"
+              "es": "¿Dice que la cifra viene de Hamás o duda de ella?",
+              "en": "Does it say the figure comes from Hamas, or doubt it?",
+              "fr": "Dit-il que le chiffre vient du Hamas, ou le met-il en doute ?",
+              "he": "האם הוא אומר שהמספר מגיע מחמאס או מטיל בו ספק?"
             }
           },
           {
             "id": "q1_hidden",
             "type": "yesno",
             "label": {
-              "es": "¿Dice que el número real podría ser mayor (desaparecidos, muertes por hambre o enfermedad)?",
-              "en": "Does it say the real toll could be higher (missing people, deaths from hunger or disease)?",
-              "fr": "Dit-il que le bilan réel pourrait être plus élevé (disparus, morts de faim ou de maladie) ?",
-              "he": "האם הוא אומר שהמספר האמיתי עשוי להיות גבוה יותר (נעדרים, מוות מרעב או ממחלות)?"
+              "es": "¿Dice que los muertos podrían ser más?",
+              "en": "Does it say the death toll could be higher?",
+              "fr": "Dit-il que le bilan pourrait être plus élevé ?",
+              "he": "האם הוא אומר שמספר ההרוגים עשוי להיות גבוה יותר?"
             }
           },
           {
             "id": "q1_hamas",
             "type": "yesno",
             "label": {
-              "es": "¿Atribuye alguna responsabilidad a Hamás en las muertes de civiles (infraestructura militar en zonas civiles, escudos humanos)?",
-              "en": "Does it assign Hamas any responsibility for civilian deaths (military infrastructure in civilian areas, human shields)?",
-              "fr": "Attribue-t-il une part de responsabilité au Hamas dans la mort de civils (infrastructures militaires en zone civile, boucliers humains) ?",
-              "he": "האם הוא מייחס לחמאס אחריות כלשהי למות אזרחים (תשתית צבאית באזורים אזרחיים, מגן אנושי)?"
+              "es": "¿Responsabiliza en parte a Hamás de las muertes de civiles?",
+              "en": "Does it hold Hamas partly responsible for civilian deaths?",
+              "fr": "Tient-il le Hamas en partie responsable des morts civiles ?",
+              "he": "האם הוא מטיל על חמאס אחריות חלקית למות אזרחים?"
             }
           },
           {
             "id": "q1_un",
             "type": "yesno",
             "label": {
-              "es": "¿Cita a la ONU, la Corte Internacional de Justicia u ONG de derechos humanos?",
-              "en": "Does it cite the UN, the International Court of Justice or human rights NGOs?",
-              "fr": "Cite-t-il l'ONU, la Cour internationale de justice ou des ONG de défense des droits humains ?",
-              "he": "האם הוא מצטט את האו״ם, את בית הדין הבינלאומי לצדק או ארגוני זכויות אדם?"
+              "es": "¿Cita a la ONU, la Corte Internacional o alguna ONG?",
+              "en": "Does it cite the UN, the International Court or an NGO?",
+              "fr": "Cite-t-il l'ONU, la Cour internationale ou une ONG ?",
+              "he": "האם הוא מצטט את האו״ם, בית הדין הבינלאומי או ארגון זכויות?"
             }
           },
           {
             "id": "q1_oct7",
             "type": "yesno",
             "label": {
-              "es": "¿Menciona el ataque de Hamás del 7 de octubre de 2023?",
-              "en": "Does it mention the Hamas attack of 7 October 2023?",
-              "fr": "Mentionne-t-il l'attaque du Hamas du 7 octobre 2023 ?",
-              "he": "האם הוא מזכיר את מתקפת חמאס ב-7 באוקטובר 2023?"
+              "es": "¿Menciona el ataque de Hamás del 7 de octubre?",
+              "en": "Does it mention the Hamas attack of October 7?",
+              "fr": "Mentionne-t-il l'attaque du Hamas du 7 octobre ?",
+              "he": "האם הוא מזכיר את מתקפת חמאס ב-7 באוקטובר?"
             }
           },
           {
             "id": "q1_skeptic",
             "label": {
-              "es": "¿Trata con más escepticismo las afirmaciones de una de las partes?",
-              "en": "Does it treat one side's claims with more skepticism?",
-              "fr": "Traite-t-il les affirmations d'une des parties avec plus de scepticisme ?",
-              "he": "האם הוא מתייחס בספקנות רבה יותר לטענות של אחד הצדדים?"
+              "es": "¿Desconfía más de una de las partes?",
+              "en": "Is it more skeptical of one side?",
+              "fr": "Se méfie-t-il davantage d'une des parties ?",
+              "he": "האם הוא חושד יותר בצד אחד?"
             },
             "options": [
               {
                 "id": "israel",
                 "label": {
-                  "es": "Más escepticismo con lo que dice Israel",
-                  "en": "More skeptical of what Israel says",
-                  "fr": "Plus sceptique envers ce que dit Israël",
-                  "he": "ספקנות רבה יותר כלפי מה שישראל אומרת"
+                  "es": "De Israel",
+                  "en": "Of Israel",
+                  "fr": "D'Israël",
+                  "he": "בישראל"
                 }
               },
               {
                 "id": "hamas",
                 "label": {
-                  "es": "Más escepticismo con lo que dicen Hamás o las autoridades de Gaza",
-                  "en": "More skeptical of what Hamas or the Gaza authorities say",
-                  "fr": "Plus sceptique envers ce que disent le Hamas ou les autorités de Gaza",
-                  "he": "ספקנות רבה יותר כלפי מה שאומרים חמאס או הרשויות בעזה"
+                  "es": "De Hamás o Gaza",
+                  "en": "Of Hamas or Gaza",
+                  "fr": "Du Hamas ou de Gaza",
+                  "he": "בחמאס או בעזה"
                 }
               },
               {
                 "id": "equal",
                 "label": {
-                  "es": "El mismo con ambas",
-                  "en": "Equally skeptical of both",
-                  "fr": "Autant envers les deux",
-                  "he": "אותה ספקנות כלפי שניהם"
+                  "es": "De las dos por igual",
+                  "en": "Of both equally",
+                  "fr": "Des deux également",
+                  "he": "בשניהם באותה מידה"
                 }
               },
               {
