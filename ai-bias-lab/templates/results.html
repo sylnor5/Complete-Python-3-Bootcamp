@@ -5,6 +5,56 @@
 <h1>{{ t('results_title') }}</h1>
 <p class="subtitle">{{ tr(q.title) }}</p>
 
+{% if just_sent or subscribed %}
+<section class="thanks" id="thanks">
+  {% if just_sent %}
+  <h2>{{ t('thanks_title') }}</h2>
+  <p>{{ t('thanks_body') }}</p>
+  {% endif %}
+
+  <div class="thanks-grid">
+    <div class="subscribe">
+      <h3>{{ t('email_title') }}</h3>
+      {% if subscribed %}
+      <p class="ok">{{ t('email_ok') }}</p>
+      {% else %}
+      <p class="hint">{{ t('email_desc') }}</p>
+      <form method="post" action="{{ url_for('subscribe') }}" class="sub-form">
+        <input type="hidden" name="qid" value="{{ q.id }}">
+        <label for="email" class="sr">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="{{ t('email_ph') }}" dir="ltr">
+        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" value="1" required> {{ t('email_consent') }}</label>
+        <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn" type="submit">{{ t('email_btn') }}</button>
+        <p class="hint">{{ t('email_privacy') }}</p>
+      </form>
+      {% endif %}
+    </div>
+
+    <div class="share">
+      <h3>{{ t('share_title') }}</h3>
+      {% set msg = t('share_msg') %}
+      <div class="chips">
+        <a class="chip" target="_blank" rel="noopener" href="https://wa.me/?text={{ (msg ~ ' ' ~ share_url)|urlencode }}">WhatsApp</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text={{ msg|urlencode }}&amp;url={{ share_url|urlencode }}">X</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}">Facebook</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url|urlencode }}">LinkedIn</a>
+        <a class="chip" target="_blank" rel="noopener" href="https://t.me/share/url?url={{ share_url|urlencode }}&amp;text={{ msg|urlencode }}">Telegram</a>
+        <button type="button" class="chip" id="copy-link" data-url="{{ share_url }}">{{ t('copy_link') }}</button>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+document.getElementById("copy-link").addEventListener("click", async (e) => {
+  const b = e.currentTarget, label = b.textContent;
+  try { await navigator.clipboard.writeText(b.dataset.url); b.textContent = {{ t('link_copied')|tojson }}; }
+  catch { b.textContent = b.dataset.url; }
+  setTimeout(() => (b.textContent = label), 2500);
+});
+</script>
+{% endif %}
+
 <form class="filters" method="get">
   <label for="l">{{ t('filter_lang') }}
     <select id="l" name="l" onchange="this.form.submit()">
@@ -37,6 +87,29 @@
   <a class="btn" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
 </div>
 {% else %}
+
+<section class="metronome" id="metronome">
+  <h2>{{ t('metro_title') }}</h2>
+  <p class="hint">{{ t('metro_desc') }}</p>
+  <div class="metro-scale" aria-hidden="true">
+    <span>{{ t('metro_israel') }}</span><span>{{ t('metro_center') }}</span><span>{{ t('metro_palestine') }}</span>
+  </div>
+  {% for m in metronome %}
+  <div class="metro-row{% if loop.first %} overall{% endif %}">
+    <p class="metro-name">{{ m.chat }}</p>
+    {% if m.all.ok %}
+    <div class="metro-track" role="img" aria-label="{{ m.chat }}: {{ tr(T.lean.pro_israel) }} {{ m.all.pct.pro_israel }}%, {{ tr(T.lean.balanced) }} {{ m.all.pct.balanced }}%, {{ tr(T.lean.pro_palestine) }} {{ m.all.pct.pro_palestine }}%">
+      <span class="tick"></span>
+      <span class="dot all" style="inset-inline-start: {{ m.all.pos }}%" title="{{ t('metro_all') }} (n={{ m.all.n }})"></span>
+      {% if m.link.ok %}<span class="dot link" style="inset-inline-start: {{ m.link.pos }}%" title="{{ t('metro_link') }} (n={{ m.link.n }})"></span>{% endif %}
+    </div>
+    <p class="metro-n">{{ m.all.pct.pro_israel }}% / {{ m.all.pct.balanced }}% / {{ m.all.pct.pro_palestine }}% <span class="cnt">n={{ m.all.n }}{% if m.link.ok %}, {{ t('metro_link')|lower }} n={{ m.link.n }}{% endif %}</span></p>
+    {% else %}
+    <p class="metro-missing">{{ t('metro_missing').format(n=m.all.missing) }}</p>
+    {% endif %}
+  </div>
+  {% endfor %}
+</section>
 
 <section class="result">
   <h2>{{ t('perceived') }}</h2>

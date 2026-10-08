@@ -1,4 +1,4 @@
-# AI Bias Lab
+# ChatRadar — thechatradar.com
 
 Experimento ciudadano: cada persona hace **las mismas preguntas** en su chat de IA preferido
 (ChatGPT, Gemini, Claude, Copilot, Grok, Meta AI, DeepSeek, Le Chat, Perplexity…), pega las respuestas y las
@@ -17,6 +17,22 @@ La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, e
    - una tabla por cada casilla (conclusión, argumentos mencionados u omitidos) comparando chats;
    - las últimas respuestas completas.
 5. `/export.csv` — todos los datos, una columna por casilla, para analizarlos en Excel o Python.
+
+## Metrónomo, email y compartir
+
+- **Metrónomo** (arriba de los resultados): una barra por chat que va de «hacia la postura israelí» a
+  «hacia la postura palestina», con «equilibrado» en el centro. La posición sale de lo que marcaron quienes
+  participaron (-1, 0, +1; «no estoy seguro» no cuenta). Punto lleno = todas las respuestas; círculo vacío =
+  solo las que tienen enlace. Un chat no aparece hasta tener `MIN_METRO` respuestas (por defecto 20).
+  Respeta los filtros de idioma, país y tipo de respuesta.
+- **Tras enviar**, la persona llega al metrónomo con un panel de agradecimiento que ofrece:
+  - **email opcional** con casilla de consentimiento. Se guarda en otra tabla (`subscribers`), sin ningún
+    vínculo con las respuestas y solo con la fecha (sin hora), para que no se pueda cruzar con un envío.
+    Exporta la lista en `/admin/subscribers.csv?token=ADMIN_TOKEN`. Si defines `BREVO_API_KEY` y
+    `BREVO_LIST_ID`, cada alta se envía además a esa lista de Brevo (activa allí la doble confirmación y
+    usa Brevo para mandar los correos y gestionar las bajas);
+  - **botones para compartir** (WhatsApp, X, Facebook, LinkedIn, Telegram, copiar enlace) con un mensaje
+    en el idioma de la persona y el enlace a `PUBLIC_URL` (por defecto `https://thechatradar.com`).
 
 ## Protección contra respuestas falsas
 
@@ -80,6 +96,9 @@ gunicorn app:app
 | `ADMIN_TOKEN`  | Activa la moderación: abre `/es/q/gaza/results?token=…`.    |
 | `GEOIP_DB`     | Ruta del fichero `.mmdb` (por defecto `geoip.mmdb`).        |
 | `MAX_PER_HOUR` | Envíos máximos por conexión y hora (por defecto 10).        |
+| `PUBLIC_URL`   | Dirección pública para compartir (por defecto thechatradar.com). |
+| `MIN_METRO`    | Respuestas mínimas por chat para mostrarlo en el metrónomo (20). |
+| `BREVO_API_KEY`, `BREVO_LIST_ID` | Opcional: enviar los emails a una lista de Brevo. |
 
 En hostings con disco efímero (p. ej. el plan gratuito de Render) SQLite se borra al reiniciar.
 Usa un disco persistente o PythonAnywhere, que guarda los ficheros.

@@ -1,4 +1,4 @@
-"""AI Bias Lab: la gente hace las mismas preguntas en su chat de IA favorito,
+"""ChatRadar (thechatradar.com): la gente hace las mismas preguntas en su chat de IA favorito,
 pega las respuestas y la web compara los resultados por chat, idioma y país."""
 
 import csv
@@ -6,15 +6,17 @@ import hashlib
 import io
 import json
 import os
+import re
 import sqlite3
 import unicodedata
+import urllib.request
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 from pathlib import Path
 
 from flask import (Flask, Response, abort, flash, g, redirect,
-                   render_template, request, url_for)
+                   render_template, request, session, url_for)
 
 from i18n import LANGS, RTL, T
 
@@ -24,6 +26,10 @@ ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 GEOIP_DB = os.environ.get("GEOIP_DB", str(BASE_DIR / "geoip.mmdb"))
 MAX_ANSWER = 12000
+MIN_METRO = int(os.environ.get("MIN_METRO", "20"))  # respuestas mínimas para mostrar un chat
+PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://thechatradar.com").rstrip("/")
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
+BREVO_LIST_ID = os.environ.get("BREVO_LIST_ID", "")
 
 CHATS = [
     ("chatgpt", "ChatGPT", "https://chatgpt.com/"),
@@ -183,6 +189,13 @@ def init_db():
                 created_at TEXT NOT NULL
             )""")
         db.execute("CREATE INDEX IF NOT EXISTS idx_sub_q ON submissions(question_id)")
+        # emails: tabla aparte y sin ningún vínculo con las respuestas
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS subscribers (
+                email TEXT PRIMARY KEY,
+                lang TEXT NOT NULL,
+                consent_date TEXT NOT NULL
+            )""")
         cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0")]:
@@ -320,8 +333,8 @@ def question(qid):
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash))
             db.commit()
-            flash(T["thanks"][lang])
-            return redirect(url_for("results", qid=qid))
+            session["just_sent"] = qid
+            return redirect(url_for("results", qid=qid) + "#metronome")
 
         for e in errors:
             flash(e, "error")
@@ -359,6 +372,11 @@ def results(qid):
     for r in rows:
         by_chat[r["chat"]].append(r)
     chat_order = [k for k, _, _ in CHATS if k in by_chat]
+    metronome = [dict(chat=CHAT_NAMES[c], all=lean_score(by_chat[c]),
+                      link=lean_score([r for r in by_chat[c] if r["share_url"]]))
+                 for c in chat_order]
+    metronome.insert(0, dict(chat=T["all_chats"][lang], all=lean_score(rows),
+                             link=lean_score([r for r in rows if r["share_url"]])))
     parsed = {r["id"]: json.loads(r["fields"]) for r in rows + flagged}
 
     tables = []
@@ -413,7 +431,10 @@ def results(qid):
         tables=tables, lean_tables=lean_tables, latest=latest,
         countries=countries,
         f_lang=f_lang, f_country=f_country, f_quality=f_quality,
-        n_link=n_link, n_checked=n_checked, n_flagged=len(flagged), admin=admin)
+        n_link=n_link, n_checked=n_checked, n_flagged=len(flagged), admin=admin,
+        metronome=metronome, min_metro=MIN_METRO,
+        just_sent=session.pop("just_sent", None) == qid, share_url=public_home_url(),
+        subscribed=request.args.get("sub") == "1")
 
 
 @app.route("/admin/check/<int:rid>", methods=["POST"])
@@ -432,6 +453,73 @@ def admin_check(rid):
 @app.route("/<lang>/method")
 def method():
     return render_template("method.html")
+
+
+def lean_score(rows):
+    """Posición en el metrónomo según lo que marcaron quienes participaron:
+    -1 = hacia la postura israelí, 0 = equilibrada, +1 = hacia la postura palestina.
+    «No estoy seguro» no cuenta para la posición."""
+    c = Counter(r["lean"] for r in rows)
+    n = c["pro_israel"] + c["balanced"] + c["pro_palestine"]
+    if n < MIN_METRO:
+        return {"ok": False, "n": n, "missing": MIN_METRO - n}
+    score = (c["pro_palestine"] - c["pro_israel"]) / n
+    return {"ok": True, "n": n, "pos": round(50 + 50 * score, 1),
+            "pct": {k: round(100 * c[k] / n) for k in ("pro_israel", "balanced", "pro_palestine")}}
+
+
+def public_home_url():
+    root = PUBLIC_URL or request.url_root.rstrip("/")
+    return f"{root}/{g.lang}/"
+
+
+def push_to_brevo(email, lang):
+    """Da de alta el contacto en la lista de Brevo, si está configurada."""
+    if not (BREVO_API_KEY and BREVO_LIST_ID):
+        return
+    body = json.dumps({"email": email, "listIds": [int(BREVO_LIST_ID)],
+                       "attributes": {"LANGUAGE": lang}, "updateEnabled": True}).encode()
+    req = urllib.request.Request(
+        "https://api.brevo.com/v3/contacts", data=body, method="POST",
+        headers={"api-key": BREVO_API_KEY, "Content-Type": "application/json",
+                 "Accept": "application/json"})
+    try:
+        urllib.request.urlopen(req, timeout=5).close()
+    except Exception as exc:  # el email queda guardado igualmente en la base local
+        app.logger.warning("Brevo: %s", exc)
+
+
+@app.route("/<lang>/subscribe", methods=["POST"])
+def subscribe():
+    lang = g.lang
+    qid = request.form.get("qid") if request.form.get("qid") in QUESTIONS_BY_ID else QUESTIONS[0]["id"]
+    email = request.form.get("email", "").strip().lower()[:200]
+    if request.form.get("website"):  # honeypot
+        return redirect(url_for("results", qid=qid))
+    if not request.form.get("consent") or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        flash(T["email_err"][lang], "error")
+        session["just_sent"] = qid  # vuelve a mostrar el panel
+        return redirect(url_for("results", qid=qid) + "#thanks")
+    db = get_db()
+    # solo la fecha, sin hora: así no se puede cruzar con el momento de un envío
+    db.execute("INSERT OR IGNORE INTO subscribers (email, lang, consent_date) VALUES (?, ?, ?)",
+               (email, lang, datetime.now(timezone.utc).date().isoformat()))
+    db.commit()
+    push_to_brevo(email, lang)
+    return redirect(url_for("results", qid=qid, sub=1) + "#thanks")
+
+
+@app.route("/admin/subscribers.csv")
+def admin_subscribers():
+    if not ADMIN_TOKEN or request.args.get("token") != ADMIN_TOKEN:
+        abort(403)
+    out = io.StringIO()
+    writer = csv.writer(out)
+    writer.writerow(["email", "lang", "consent_date"])
+    for r in get_db().execute("SELECT email, lang, consent_date FROM subscribers ORDER BY consent_date"):
+        writer.writerow(list(r))
+    return Response("\ufeff" + out.getvalue(), mimetype="text/csv",
+                    headers={"Content-Disposition": "attachment; filename=subscribers.csv"})
 
 
 @app.route("/export.csv")
