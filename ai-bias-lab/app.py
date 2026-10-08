@@ -627,6 +627,8 @@ def admin_subscribers():
 
 @app.route("/export.csv")
 def export_csv():
+    if not ADMIN_TOKEN or request.args.get("token") != ADMIN_TOKEN:
+        abort(403)  # solo para ti: /export.csv?token=ADMIN_TOKEN
     out = io.StringIO()
     writer = csv.writer(out)
     field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]

@@ -328,7 +328,7 @@ T = {
             ("Idioma y país", "La misma pregunta está traducida al español, inglés, francés y hebreo. Así podemos ver si un chat responde distinto según el idioma o el país desde el que se pregunta."),
             ("Neutralidad", "Las casillas para clasificar las respuestas recogen argumentos de las dos partes. Las rellenan las personas participantes, así que es útil leer también las respuestas completas."),
             ("Verificación", "Pedimos el enlace para compartir la conversación, que permite comprobar que las preguntas y respuestas son reales. Puedes ver solo las respuestas con enlace o las comprobadas a mano. Los envíos que no tratan el tema, demasiado cortos o repetidos se descartan automáticamente."),
-            ("Privacidad", "No pedimos nombre ni correo. El país se deduce de la conexión en el momento del envío y la IP no se guarda. Para frenar envíos masivos usamos un identificador cifrado. Todos los datos se pueden descargar en CSV."),
+            ("Privacidad", "No pedimos nombre ni correo. El país se deduce de la conexión en el momento del envío y la IP no se guarda. Para frenar envíos masivos usamos un identificador cifrado."),
         ],
         "en": [
             ("Why", "AI chats learn from huge amounts of text and from the choices of the people who train them. A single answer proves nothing. But if hundreds of people ask exactly the same questions and a chat almost always answers the same way, that is a pattern."),
@@ -336,7 +336,7 @@ T = {
             ("Language and country", "The same question is translated into Spanish, English, French and Hebrew, so we can see whether a chat answers differently depending on the language or the country it is asked from."),
             ("Neutrality", "The tick boxes used to classify answers cover arguments from both sides. Participants fill them in, so it is worth reading the full answers too."),
             ("Verification", "We ask for the conversation's share link, which lets anyone check that the questions and answers are real. You can view only answers with a link, or only those checked by hand. Submissions that are off-topic, too short or repeated are discarded automatically."),
-            ("Privacy", "We don't ask for your name or email. The country is derived from your connection when you submit, and your IP is not stored. We use an encrypted identifier to stop mass submissions. All data can be downloaded as CSV."),
+            ("Privacy", "We don't ask for your name or email. The country is derived from your connection when you submit, and your IP is not stored. We use an encrypted identifier to stop mass submissions."),
         ],
         "fr": [
             ("Pourquoi", "Les chats d'IA apprennent à partir d'énormes quantités de textes et des choix de ceux qui les entraînent. Une seule réponse ne prouve rien. Mais si des centaines de personnes posent exactement les mêmes questions et qu'un chat répond presque toujours de la même façon, c'est une tendance."),
@@ -344,7 +344,7 @@ T = {
             ("Langue et pays", "La même question est traduite en espagnol, anglais, français et hébreu, pour voir si un chat répond différemment selon la langue ou le pays d'où on l'interroge."),
             ("Neutralité", "Les cases pour classer les réponses couvrent les arguments des deux parties. Ce sont les participants qui les remplissent : il est donc utile de lire aussi les réponses complètes."),
             ("Vérification", "Nous demandons le lien de partage de la conversation, qui permet de vérifier que les questions et les réponses sont réelles. Vous pouvez n'afficher que les réponses avec lien, ou celles vérifiées à la main. Les envois hors sujet, trop courts ou répétés sont écartés automatiquement."),
-            ("Confidentialité", "Nous ne demandons ni nom ni e-mail. Le pays est déduit de votre connexion lors de l'envoi et votre IP n'est pas enregistrée. Un identifiant chiffré sert à limiter les envois massifs. Toutes les données sont téléchargeables en CSV."),
+            ("Confidentialité", "Nous ne demandons ni nom ni e-mail. Le pays est déduit de votre connexion lors de l'envoi et votre IP n'est pas enregistrée. Un identifiant chiffré sert à limiter les envois massifs."),
         ],
     },
 }
@@ -506,7 +506,7 @@ HE = {
         ("שפה ומדינה", "אותה שאלה מתורגמת לספרדית, לאנגלית, לצרפתית ולעברית, כדי לבדוק אם צ'אט עונה אחרת לפי השפה או המדינה שממנה שואלים."),
         ("ניטרליות", "התיבות לסיווג התשובות כוללות טיעונים של שני הצדדים. המשתתפים ממלאים אותן, ולכן כדאי לקרוא גם את התשובות המלאות."),
         ("אימות", "אנו מבקשים את קישור השיתוף של השיחה, שמאפשר לבדוק שהשאלות והתשובות אמיתיות. אפשר להציג רק תשובות עם קישור או רק כאלה שנבדקו ידנית. שליחות שאינן בנושא, קצרות מדי או חוזרות נפסלות אוטומטית."),
-        ("פרטיות", "איננו מבקשים שם או דוא״ל. המדינה נקבעת לפי החיבור בזמן השליחה, וכתובת ה-IP אינה נשמרת. מזהה מוצפן משמש לבלימת שליחות המוניות. אפשר להוריד את כל הנתונים כקובץ CSV."),
+        ("פרטיות", "איננו מבקשים שם או דוא״ל. המדינה נקבעת לפי החיבור בזמן השליחה, וכתובת ה-IP אינה נשמרת. מזהה מוצפן משמש לבלימת שליחות המוניות."),
     ],
 }
 

@@ -16,7 +16,7 @@ La primera prueba es la pregunta sobre Gaza que originó el proyecto (una sola p
    - percepción de inclinación por chat, por idioma y por país;
    - una tabla por cada casilla (conclusión, argumentos mencionados u omitidos) comparando chats;
    - las últimas respuestas completas.
-5. `/export.csv` — todos los datos, una columna por casilla, para analizarlos en Excel o Python.
+5. `/export.csv?token=ADMIN_TOKEN` — todos los datos (solo para ti), una columna por casilla, para analizarlos en Excel o Python.
 
 ## Metrónomo, email y compartir
 

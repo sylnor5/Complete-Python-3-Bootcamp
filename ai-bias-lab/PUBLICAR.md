@@ -127,7 +127,7 @@ Y luego **Reload** en la pestaña Web. Los datos (`~/chatradar-data/data.db`) no
 
 ## 8. Copias de seguridad
 
-Una vez por semana descarga `https://www.thechatradar.com/export.csv` (todas las respuestas) y la lista de
+Una vez por semana descarga `https://www.thechatradar.com/export.csv?token=TU_ADMIN_TOKEN` (todas las respuestas) y la lista de
 emails. O descarga directamente el archivo `chatradar-data/data.db` desde la pestaña **Files**.
 
 ## Más adelante (opcional)
