@@ -1,0 +1,47 @@
+{# Indicador de la portada. pos: 0 = postura israelí, 50 = equilibrado, 100 = postura palestina.
+   En RTL se refleja (israelí a la derecha), igual que el resto del sitio. #}
+{% set is_rtl = dir == 'rtl' %}
+{% if gauge.ok %}
+  {% set shown = (100 - gauge.pos) if is_rtl else gauge.pos %}
+  {% set aria = t('gauge_aria').format(isr=gauge.pct.pro_israel, bal=gauge.pct.balanced, pal=gauge.pct.pro_palestine, n=gauge.n) %}
+{% else %}
+  {% set aria = t('gauge_aria_wait').format(n=gauge.n, min=min_metro) %}
+{% endif %}
+<figure class="gauge{% if not gauge.ok %} gauge-waiting{% endif %}">
+  <svg class="gauge-dial" viewBox="0 0 400 226" role="img" aria-label="{{ aria }}">
+    <path class="gauge-face" d="M 22 200 A 178 178 0 0 1 378 200 Z"/>
+    <path class="gauge-band" d="M 39 200 A 161 161 0 0 1 361 200" pathLength="100" stroke-dasharray="16 100" stroke-dashoffset="-42"/>
+    <path class="gauge-arc" d="M 30 200 A 170 170 0 0 1 370 200"/>
+    <g class="gauge-ticks">
+      {% for i in range(41) %}
+        {% set major = i % 20 == 0 %}{% set mid = i % 10 == 0 %}{% set step = i % 2 == 0 %}
+        <line x1="200" y1="34" x2="200" y2="{{ 66 if major else (56 if mid else (48 if step else 42)) }}"
+              class="{{ 'gauge-major' if major else ('gauge-mid' if mid else '') }}"
+              transform="rotate({{ (i * 4.5 - 90)|round(1) }} 200 200)"/>
+      {% endfor %}
+    </g>
+    {% if gauge.ok %}
+    <g class="gauge-needle" style="--gauge-rot: {{ ((shown - 50) * 1.8)|round(1) }}deg; --gauge-from: {{ '90deg' if is_rtl else '-90deg' }}">
+      <path d="M 200 52 L 204 200 L 202.5 220 L 197.5 220 L 196 200 Z"/>
+    </g>
+    {% endif %}
+    <circle class="gauge-hub" cx="200" cy="200" r="13"/>
+    <circle class="gauge-pin" cx="200" cy="200" r="4.5"/>
+  </svg>
+  <div class="gauge-scale">
+    <p><span>{{ t('metro_israel') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.pro_israel }}%</b>{% endif %}</p>
+    <p class="gauge-mid-label"><span>{{ t('metro_center') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.balanced }}%</b>{% endif %}</p>
+    <p><span>{{ t('metro_palestine') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.pro_palestine }}%</b>{% endif %}</p>
+  </div>
+  <figcaption class="gauge-caption">
+    {% if gauge.ok %}{{ t('gauge_caption') }}{% else %}<mark>{{ t('gauge_wait').format(min=min_metro, missing=gauge.missing) }}</mark>{% endif %}
+  </figcaption>
+  <div class="gauge-foot">
+    <p class="gauge-odo">
+      <span class="gauge-digits" aria-hidden="true">{% for d in '%06d'|format(total_valid) %}<span>{{ d }}</span>{% endfor %}</span>
+      <span class="sr">{{ total_valid }}</span>
+      <span class="gauge-odo-label">{{ t('so_far') }}</span>
+    </p>
+    <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
+  </div>
+</figure>

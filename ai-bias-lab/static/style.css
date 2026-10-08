@@ -247,3 +247,43 @@ details.more[open] { display: grid; gap: 12px; }
 .next-chats { display: flex; flex-wrap: wrap; gap: 8px; }
 
 [hidden] { display: none !important; }
+
+/* indicador de la portada: un instrumento dibujado con tinta; el rotulador marca la zona equilibrada.
+   Los dos extremos son idénticos a propósito. */
+.gauge { margin: 4px 0 0; width: 100%; max-width: 520px; display: grid; gap: 10px; justify-items: center; text-align: center; }
+.gauge-dial { display: block; width: 100%; height: auto; overflow: visible; }
+.gauge-face { fill: var(--surface); stroke: var(--line); stroke-width: 1; }
+.gauge-band { fill: none; stroke: var(--marker); stroke-width: 24; }
+.gauge-arc { fill: none; stroke: var(--ink); stroke-width: 2.5; }
+.gauge-ticks line { stroke: var(--ink); stroke-width: 1.25; }
+.gauge-ticks .gauge-mid { stroke-width: 2; }
+.gauge-ticks .gauge-major { stroke-width: 3.5; }
+.gauge-needle { fill: var(--ink); transform: rotate(var(--gauge-rot)); transform-box: view-box; transform-origin: 200px 200px;
+  animation: gauge-sweep 1.3s cubic-bezier(.2, 1.25, .35, 1) .25s both; }
+@keyframes gauge-sweep { from { transform: rotate(var(--gauge-from)); } }
+.gauge-hub { fill: var(--ink); }
+.gauge-pin { fill: var(--marker); }
+.gauge-waiting .gauge-hub { fill: var(--surface); stroke: var(--ink); stroke-width: 2.5; }
+.gauge-waiting .gauge-pin { fill: var(--ink); }
+.gauge-waiting .gauge-arc { stroke-dasharray: 2 6; stroke-linecap: round; }
+.gauge-scale { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: -6px;
+  font-size: .85rem; line-height: 1.3; color: var(--muted); font-weight: 500; }
+.gauge-scale p { display: flex; flex-direction: column; justify-content: space-between; gap: 2px; }
+.gauge-scale p:first-child { text-align: start; }
+.gauge-scale p:last-child { text-align: end; }
+.gauge-scale b { font: 700 1.5rem/1.1 var(--font-display); color: var(--ink); font-variant-numeric: tabular-nums; }
+.gauge-mid-label span { color: var(--ink); }
+.gauge-caption { max-width: 42ch; color: var(--ink); font-size: 1rem; text-wrap: balance; }
+.gauge-foot { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 22px; margin-top: 8px; }
+.gauge-odo { display: flex; align-items: center; gap: 10px; }
+.gauge-digits { display: inline-flex; gap: 3px; direction: ltr; }
+.gauge-digits span { display: inline-grid; place-items: center; width: 1.45em; height: 1.9em; border-radius: 3px;
+  background: var(--ink); color: var(--paper); font: 500 1.15rem/1 var(--font-mono); font-variant-numeric: tabular-nums;
+  box-shadow: inset 0 -.95em 0 rgb(255 255 255 / .07); }
+.gauge-odo-label { font-size: .9rem; color: var(--muted); text-align: start; }
+@media (max-width: 520px) {
+  .gauge-scale { font-size: .78rem; gap: 8px; }
+  .gauge-scale b { font-size: 1.25rem; }
+  .gauge-digits span { width: 1.3em; height: 1.75em; font-size: 1.05rem; }
+}
+@media (prefers-reduced-motion: reduce) { .gauge-needle { animation: none; } }

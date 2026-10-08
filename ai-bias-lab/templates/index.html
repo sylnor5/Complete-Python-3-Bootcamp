@@ -6,6 +6,7 @@
     {% for code, name in langs.items() if code != lang %}<a href="{{ '/' if code == 'en' else url_for('index', lang=code) }}" lang="{{ code }}">{{ name }}</a>{% endfor %}
   </p>
   <h1>{{ t('story_title') }}</h1>
+  {% include '_gauge.html' %}
   <figure class="transcript">
     <div class="turn user">
       <figcaption class="who">{{ t('orig_label') }}</figcaption>

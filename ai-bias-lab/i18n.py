@@ -150,6 +150,26 @@ T = {
     "metro_israel": {"es": "Hacia la postura israelí", "en": "Toward the Israeli position", "fr": "Vers la position israélienne"},
     "metro_center": {"es": "Equilibrado", "en": "Balanced", "fr": "Équilibré"},
     "metro_palestine": {"es": "Hacia la postura palestina", "en": "Toward the Palestinian position", "fr": "Vers la position palestinienne"},
+    "gauge_caption": {
+        "es": "Hacia dónde se inclinan las respuestas de la IA, según quienes las probaron",
+        "en": "Where AI answers lean, according to the people who tested them",
+        "fr": "Vers où penchent les réponses de l'IA, selon les personnes qui les ont testées",
+    },
+    "gauge_wait": {
+        "es": "La aguja aparece con {min} respuestas. Faltan {missing}.",
+        "en": "The needle appears after {min} answers. {missing} to go.",
+        "fr": "L'aiguille apparaît après {min} réponses. Encore {missing}.",
+    },
+    "gauge_aria": {
+        "es": "Indicador: {isr}% hacia la postura israelí, {bal}% equilibradas, {pal}% hacia la postura palestina, sobre {n} respuestas.",
+        "en": "Gauge reading: {isr}% toward the Israeli position, {bal}% balanced, {pal}% toward the Palestinian position, from {n} answers.",
+        "fr": "Indicateur : {isr} % vers la position israélienne, {bal} % équilibrées, {pal} % vers la position palestinienne, sur {n} réponses.",
+    },
+    "gauge_aria_wait": {
+        "es": "Indicador sin aguja: aún no hay suficientes respuestas ({n} de {min}).",
+        "en": "Gauge without a needle: not enough answers yet ({n} of {min}).",
+        "fr": "Indicateur sans aiguille : pas encore assez de réponses ({n} sur {min}).",
+    },
     "metro_all": {"es": "Todas", "en": "All", "fr": "Toutes"},
     "metro_link": {"es": "Con enlace", "en": "With link", "fr": "Avec lien"},
     "metro_missing": {
@@ -410,6 +430,10 @@ HE = {
     "metro_israel": "לעבר העמדה הישראלית",
     "metro_center": "מאוזן",
     "metro_palestine": "לעבר העמדה הפלסטינית",
+    "gauge_caption": "לאן נוטות תשובות הבינה המלאכותית, לפי מי שבדקו אותן",
+    "gauge_wait": "המחוג יופיע אחרי {min} תשובות. חסרות עוד {missing}.",
+    "gauge_aria": "מד: {isr}% לעבר העמדה הישראלית, {bal}% מאוזנות, {pal}% לעבר העמדה הפלסטינית, מתוך {n} תשובות.",
+    "gauge_aria_wait": "מד ללא מחוג: עדיין אין מספיק תשובות ({n} מתוך {min}).",
     "metro_all": "הכול",
     "metro_link": "עם קישור",
     "metro_missing": "חסרות עוד {n} תשובות כדי להציג",
