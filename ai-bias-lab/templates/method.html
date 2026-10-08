@@ -4,8 +4,10 @@
 <h1>{{ t('nav_method') }}</h1>
 <div class="prose">
   {% for heading, body in t('method') %}
-  <h2>{{ heading }}</h2>
-  <p>{{ body }}</p>
+  <section{% if loop.last %} id="privacy"{% endif %}>
+    <h2>{{ heading }}</h2>
+    <p>{{ body }}</p>
+  </section>
   {% endfor %}
 </div>
 {% endblock %}

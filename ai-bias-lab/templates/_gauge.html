@@ -1,47 +1,58 @@
-{# Indicador de la portada. pos: 0 = postura israelí, 50 = equilibrado, 100 = postura palestina.
-   En RTL se refleja (israelí a la derecha), igual que el resto del sitio. #}
+{# Instrumento de la portada. pos: 0 = postura israelí, 50 = equilibrado, 100 = postura palestina.
+   En RTL se refleja (israelí a la derecha), igual que el resto del sitio. Sin porcentajes: los
+   resultados detallados solo se ven después de participar. Los dos extremos son idénticos. #}
 {% set is_rtl = dir == 'rtl' %}
 {% if gauge.ok %}
   {% set shown = (100 - gauge.pos) if is_rtl else gauge.pos %}
-  {% set aria = t('gauge_aria').format(isr=gauge.pct.pro_israel, bal=gauge.pct.balanced, pal=gauge.pct.pro_palestine, n=gauge.n) %}
+  {% set aria = t('gauge_aria_live').format(n=total_valid) %}
 {% else %}
   {% set aria = t('gauge_aria_wait').format(n=gauge.n, min=min_metro) %}
 {% endif %}
-<figure class="gauge{% if not gauge.ok %} gauge-waiting{% endif %}">
-  <svg class="gauge-dial" viewBox="0 0 400 226" role="img" aria-label="{{ aria }}">
-    <path class="gauge-face" d="M 22 200 A 178 178 0 0 1 378 200 Z"/>
-    <path class="gauge-band" d="M 39 200 A 161 161 0 0 1 361 200" pathLength="100" stroke-dasharray="16 100" stroke-dashoffset="-42"/>
-    <path class="gauge-arc" d="M 30 200 A 170 170 0 0 1 370 200"/>
-    <g class="gauge-ticks">
-      {% for i in range(41) %}
-        {% set major = i % 20 == 0 %}{% set mid = i % 10 == 0 %}{% set step = i % 2 == 0 %}
-        <line x1="200" y1="34" x2="200" y2="{{ 66 if major else (56 if mid else (48 if step else 42)) }}"
-              class="{{ 'gauge-major' if major else ('gauge-mid' if mid else '') }}"
-              transform="rotate({{ (i * 4.5 - 90)|round(1) }} 200 200)"/>
-      {% endfor %}
-    </g>
+{% set left_label = t('g_palestine') if is_rtl else t('g_israel') %}
+{% set right_label = t('g_israel') if is_rtl else t('g_palestine') %}
+<figure class="instrument{% if not gauge.ok %} is-waiting{% endif %}" role="group" aria-label="{{ aria }}">
+  <div class="dial">
+    <div class="screws" aria-hidden="true"><span></span><span></span></div>
+    <div class="dial-face">
+      <svg class="gauge" viewBox="0 0 400 226" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line class="hatch-line" x1="0" y1="0" x2="0" y2="4"/>
+          </pattern>
+          <radialGradient id="cap" cx="40%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#5a5d62"/><stop offset="1" stop-color="#1a1b1d"/>
+          </radialGradient>
+        </defs>
+        <path d="M 172.56 44.40 A 158 158 0 0 1 227.44 44.40 L 224.83 59.17 A 143 143 0 0 0 175.17 59.17 Z" fill="url(#hatch)"/>
+        <path class="arc-out" d="M 42.60 186.23 A 158 158 0 0 1 357.40 186.23"/>
+        <path class="arc-in" d="M 66.51 188.32 A 134 134 0 0 1 333.49 188.32"/>
+        <g class="ticks">
+          {% for i in range(69) %}{% set a2 = 10 + 5 * i %}
+          <line x1="200" y1="42" x2="200" y2="{{ 57 if a2 % 60 == 0 else (52 if a2 % 20 == 0 else 48) }}" class="{{ 'tk-major' if a2 % 60 == 0 else ('tk-mid' if a2 % 20 == 0 else 'tk-minor') }}" transform="rotate({{ 85 - 2.5 * i }} 200 200)"/>
+          {% endfor %}
+        </g>
+        {% if gauge.ok %}
+        <g class="needle" style="--rot: {{ ((shown - 50) * 1.7)|round(1) }}deg; --from: {{ '30deg' if is_rtl else '-30deg' }}">
+          <path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/>
+        </g>
+        {% endif %}
+        <circle cx="200" cy="200" r="11" fill="url(#cap)"/>
+        <circle class="needle-pin" cx="200" cy="200" r="3"/>
+      </svg>
+      <span class="g-lbl g-top">{{ t('g_center') }}</span>
+      <span class="g-lbl g-left">{{ left_label }}</span>
+      <span class="g-lbl g-right">{{ right_label }}</span>
+    </div>
+    <div class="readout">
+      <span class="odo" aria-hidden="true">{% for d in '%06d'|format(total_valid) %}{% set n = d|int %}<b data-p="{{ (n + 9) % 10 }}" data-n="{{ (n + 1) % 10 }}"{% if loop.last %} class="last"{% endif %}>{{ d }}</b>{% endfor %}</span>
+      <span class="odo-label"><strong>{{ t('odo_label') }}</strong>{{ t('odo_label2') }}</span>
+    </div>
+  </div>
+  <figcaption class="caption">
     {% if gauge.ok %}
-    <g class="gauge-needle" style="--gauge-rot: {{ ((shown - 50) * 1.8)|round(1) }}deg; --gauge-from: {{ '90deg' if is_rtl else '-90deg' }}">
-      <path d="M 200 52 L 204 200 L 202.5 220 L 197.5 220 L 196 200 Z"/>
-    </g>
+    <span class="live"><i></i>{{ t('live') }}</span><span>· {{ t('live_caption') }}</span>
+    {% else %}
+    <span class="wait-icon" aria-hidden="true"></span><span>{{ t('gauge_wait').format(min=min_metro, missing=gauge.missing) }}</span>
     {% endif %}
-    <circle class="gauge-hub" cx="200" cy="200" r="13"/>
-    <circle class="gauge-pin" cx="200" cy="200" r="4.5"/>
-  </svg>
-  <div class="gauge-scale">
-    <p><span>{{ t('metro_israel') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.pro_israel }}%</b>{% endif %}</p>
-    <p class="gauge-mid-label"><span>{{ t('metro_center') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.balanced }}%</b>{% endif %}</p>
-    <p><span>{{ t('metro_palestine') }}</span>{% if gauge.ok %}<b>{{ gauge.pct.pro_palestine }}%</b>{% endif %}</p>
-  </div>
-  <figcaption class="gauge-caption">
-    {% if gauge.ok %}{{ t('gauge_caption') }}{% else %}<mark>{{ t('gauge_wait').format(min=min_metro, missing=gauge.missing) }}</mark>{% endif %}
   </figcaption>
-  <div class="gauge-foot">
-    <p class="gauge-odo">
-      <span class="gauge-digits" aria-hidden="true">{% for d in '%06d'|format(total_valid) %}<span>{{ d }}</span>{% endfor %}</span>
-      <span class="sr">{{ total_valid }}</span>
-      <span class="gauge-odo-label">{{ t('so_far') }}</span>
-    </p>
-    <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
-  </div>
 </figure>

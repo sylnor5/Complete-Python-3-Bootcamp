@@ -4,39 +4,73 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}ChatRadar · {{ t('tagline') }}{% endblock %}</title>
-  <meta name="description" content="{{ t('tagline') }}">
+  <meta name="description" content="{% block description %}{{ t('tagline') }}{% endblock %}">
+  <meta name="color-scheme" content="light dark">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&display=swap">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {# Latin: Archivo (titulares, contador) + IBM Plex Sans (texto). Hebreo: Rubik (titulares) + IBM Plex Sans Hebrew (texto). #}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans+Hebrew:wght@400;500;600&family=Rubik:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-  <header class="masthead">
-    <a class="brand" href="{% if lang == 'en' %}/{% else %}{{ url_for('index') }}{% endif %}">ChatRadar</a>
+{% macro lang_url(code) -%}
+  {%- if request.endpoint in ('landing', 'index') -%}
+    {{ '/' if code == 'en' else url_for('index', lang=code) }}
+  {%- else -%}
+    {{ url_for(request.endpoint, **dict(request.view_args, lang=code)) }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}
+  {%- endif -%}
+{%- endmacro %}
+<body class="{% block body_class %}page{% endblock %}">
+  <header class="top wrap">
+    <a class="mark" href="{% if lang == 'en' %}/{% else %}{{ url_for('index') }}{% endif %}" aria-label="ChatRadar">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path class="mk-arc" d="M3 17a9 9 0 0 1 18 0" stroke-width="2" stroke-linecap="round"/>
+        <path class="mk-arc" d="M6.6 17a5.4 5.4 0 0 1 10.8 0" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+        <path class="mk-needle" d="M12 17l3.2-7.2" stroke-width="2.2" stroke-linecap="round"/>
+        <circle class="mk-hub" cx="12" cy="17" r="2"/>
+      </svg>
+      <span dir="ltr">ChatRadar</span>
+    </a>
     {% block nav %}
-    <nav>
-      {% if session.get('done', {}).get('gaza') %}<a href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
-      <a href="{{ url_for('method') }}">{{ t('nav_method') }}</a>
-      <a href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a>
-      <span class="langs">
-        {% for code in langs %}
-        <a href="{% if request.endpoint in ('landing', 'index') %}{{ '/' if code == 'en' else url_for('index', lang=code) }}{% else %}{{ url_for(request.endpoint, **dict(request.view_args, lang=code)) }}{% if request.query_string %}?{{ request.query_string.decode() }}{% endif %}{% endif %}" class="{% if code == lang %}on{% endif %}" lang="{{ code }}">{{ code|upper }}</a>
-        {% endfor %}
-      </span>
+    <nav class="top-nav">
+      {% if session.get('done', {}).get('gaza') %}<a class="top-link" href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
+      <details class="lang-pick">
+        <summary aria-label="{{ t('lang_menu') }}: {{ langs[lang] }}">{{ lang|upper }}
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <ul>
+          {% for code, name in langs.items() %}
+          <li><a href="{{ lang_url(code) }}" lang="{{ code }}" {% if code == lang %}aria-current="true"{% endif %}>{{ name }}</a></li>
+          {% endfor %}
+        </ul>
+      </details>
     </nav>
     {% endblock %}
   </header>
-  <main class="wrap">
+
+  <main class="{% block main_class %}wrap page-main{% endblock %}">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-      <div class="flashes" role="alert">
+      <div class="flashes wrap-inner" role="alert">
         {% for cat, msg in messages %}<p class="flash {{ cat }}">{{ msg }}</p>{% endfor %}
       </div>
       {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
   </main>
+
   <footer class="foot wrap">
-    <p><strong>TheChatRadar.com</strong> · {{ t('footer') }}{% if geoip_credit %} <a href="https://db-ip.com" rel="noopener">IP geolocation by DB-IP</a>{% endif %}</p>
+    <div class="foot-row">
+      <nav class="foot-nav" aria-label="Footer">
+        <a href="{{ url_for('method') }}">{{ t('foot_method') }}</a>
+        <a href="{{ url_for('method') }}#privacy">{{ t('foot_privacy') }}</a>
+        <span class="contact">{{ t('foot_contact') }}: <a href="mailto:hello@thechatradar.com" dir="ltr">hello@thechatradar.com</a></span>
+      </nav>
+      <div class="foot-langs">
+        {% for code, name in langs.items() %}<a href="{{ lang_url(code) }}" lang="{{ code }}" {% if code == lang %}aria-current="true"{% endif %}>{{ name }}</a>{% endfor %}
+      </div>
+    </div>
+    <p class="foot-note">{{ t('footer') }}{% if geoip_credit %} <a href="https://db-ip.com" rel="noopener">IP geolocation by DB-IP</a>{% endif %}</p>
   </footer>
+  {% block after %}{% endblock %}
 </body>
 </html>

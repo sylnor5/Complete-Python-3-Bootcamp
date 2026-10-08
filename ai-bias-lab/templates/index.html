@@ -1,38 +1,133 @@
 {% extends "base.html" %}
 {% set q = questions[0] %}
+{% set start_url = url_for('question', qid=q.id) %}
+{% block title %}ChatRadar · {{ t('hero_title') }}{% endblock %}
+{% block description %}{{ t('hero_sub').replace('{q}', t('hero_sub_q')) }}{% endblock %}
+{% block body_class %}landing{% endblock %}
+{% block main_class %}landing-main{% endblock %}
+{% macro arrow() %}<svg class="arrow" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h11M11 5.5 15.5 10 11 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>{% endmacro %}
+{% macro start_btn(extra='') %}<a class="btn btn-primary {{ extra }}" href="{{ start_url }}">{{ t('start') }} <span class="dur">{{ t('dur') }}</span>{{ arrow() }}</a>{% endmacro %}
 {% block content %}
-<section class="hero">
-  <p class="also-in">{{ t('also_in') }}
-    {% for code, name in langs.items() if code != lang %}<a href="{{ '/' if code == 'en' else url_for('index', lang=code) }}" lang="{{ code }}">{{ name }}</a>{% endfor %}
-  </p>
-  <h1>{{ t('story_title') }}</h1>
-  {% include '_gauge.html' %}
-  <figure class="transcript">
-    <div class="turn user">
-      <figcaption class="who">{{ t('orig_label') }}</figcaption>
-      <p>{{ tr(q.steps[0].prompt) }}</p>
+<div class="wrap">
+  <section class="hero">
+    <p class="topic-chip"><i aria-hidden="true"></i>{{ t('topic_chip') }}</p>
+    <h1>{{ t('hero_title') }} <span>{{ t('hero_title2') }}</span></h1>
+    {% set sub = t('hero_sub').split('{q}') %}
+    <p class="hero-sub">{{ sub[0] }}<a href="{{ start_url }}">{{ t('hero_sub_q') }}</a>{{ sub[1] }}</p>
+    {% include '_gauge.html' %}
+    <div class="hero-cta" id="heroCta">{{ start_btn('btn-block') }}</div>
+    <p class="micro">
+      <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 1.8 13 3.6v4c0 3-2.1 5.4-5 6.6C5.1 13 3 10.6 3 7.6v-4L8 1.8Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      {{ t('micro') }}
+    </p>
+  </section>
+</div>
+
+<section class="band">
+  <div class="wrap story-grid">
+    <h2 class="story-h">{{ t('story_h') }}</h2>
+    <div class="chat">
+      <div class="bubble me">
+        <p class="who">{{ t('orig_label') }}
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="5.5" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M3 14c.6-2.6 2.6-4 5-4s4.4 1.4 5 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </p>
+        <p class="say">{{ tr(q.steps[0].prompt) }}</p>
+      </div>
+      <div class="bubble ai">
+        <p class="who">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="3.5" width="11" height="9" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 7.5h.01M10.5 7.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 1.5v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          {{ t('admit_label') }}
+        </p>
+        <p class="say">{{ t('admission') }}</p>
+      </div>
     </div>
-    <div class="turn ai">
-      <figcaption class="who">{{ t('admit_label') }}</figcaption>
-      <p><mark>{{ t('admission') }}</mark></p>
+    <div class="story-body">
+      <p>{{ t('story_body') }}</p>
+      <p class="kicker">{{ t('story_kicker') }}</p>
     </div>
-  </figure>
-  <div class="story">
-    {% for p in t('story') %}<p>{{ p }}</p>{% endfor %}
-  </div>
-  <div class="actions">
-    <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
   </div>
 </section>
 
-<section class="how">
-  <h2>{{ t('how_title') }}</h2>
-  <ol class="steps">
-    {% for s in t('how_steps') %}<li>{{ s }}</li>{% endfor %}
-  </ol>
+<section class="band" id="how">
+  <div class="wrap split">
+    <h2>{{ t('steps_title') }}</h2>
+    <div>
+      <ol class="ruler">
+        {% for head, rest in t('steps3') %}
+        <li><span class="n">{{ loop.index }}</span><strong>{{ head }}</strong><span>{{ rest }}</span></li>
+        {% endfor %}
+      </ol>
+      <div class="after">
+        <p>{{ t('steps_note') }}</p>
+        {{ start_btn() }}
+      </div>
+    </div>
+  </div>
 </section>
-<section class="how">
-  <h2>{{ t('prop_cta') }}</h2>
-  <p><a class="btn ghost" href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a></p>
+
+<section class="band">
+  <div class="wrap">
+    <h2>{{ t('trust_title') }}</h2>
+    {% set icons = [
+      '<rect x="4" y="5" width="13" height="16" rx="2"/><rect class="ico-fill" x="11" y="9" width="13" height="16" rx="2"/><path d="M14.5 14h6M14.5 17.5h6M14.5 21h3.5"/>',
+      '<path d="M14 4v20M9 24h10M5 9h18"/><path d="M5 9l-3 7a3 3 0 0 0 6 0L5 9ZM23 9l-3 7a3 3 0 0 0 6 0l-3-7Z"/>',
+      '<path d="M12 16a4.5 4.5 0 0 0 6.4.4l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.4 1.4"/><path d="M16 12a4.5 4.5 0 0 0-6.4-.4l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.4-1.4"/>',
+      '<rect x="5.5" y="12.5" width="17" height="11" rx="2"/><path d="M9.5 12.5V9a4.5 4.5 0 0 1 9 0"/><path d="M14 17v2.5"/>'] %}
+    <div class="spec">
+      {% for head, body in t('trust') %}
+      <div>
+        <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{{ icons[loop.index0]|safe }}</svg>
+        <h3>{{ head }}</h3>
+        <p>{{ body }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="method-link" href="{{ url_for('method') }}">{{ t('method_link') }} {{ arrow() }}</a>
+  </div>
 </section>
+
+<section class="band band-tight">
+  <div class="wrap">
+    <div class="suggest">
+      <p>{{ t('suggest_box') }}</p>
+      <a class="btn btn-ghost" href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <div class="final">
+      <div class="final-copy">
+        <h2>{{ t('final_title') }}</h2>
+        <div class="slot-bubble" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+      <div class="final-cta">
+        {{ start_btn('btn-block') }}
+        <p class="micro">{{ t('micro') }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block after %}
+<div class="sticky" id="sticky" aria-hidden="true">
+  <div class="sticky-count"><b>{{ '%06d'|format(total_valid) }}</b>{{ t('odo_label') }}</div>
+  <a class="btn btn-primary" href="{{ start_url }}" tabindex="-1">{{ t('start') }} <span class="dur">{{ t('dur') }}</span></a>
+</div>
+<script>
+// la barra fija aparece en el móvil cuando el botón principal ya no se ve
+(function () {
+  var bar = document.getElementById("sticky"), cta = document.getElementById("heroCta");
+  if (!bar || !cta || !("IntersectionObserver" in window)) return;
+  var link = bar.querySelector("a");
+  new IntersectionObserver(function (e) {
+    var on = !e[0].isIntersecting && e[0].boundingClientRect.top < 0;
+    bar.classList.toggle("on", on);
+    bar.setAttribute("aria-hidden", on ? "false" : "true");
+    link.tabIndex = on ? 0 : -1;
+  }).observe(cta);
+})();
+</script>
 {% endblock %}
