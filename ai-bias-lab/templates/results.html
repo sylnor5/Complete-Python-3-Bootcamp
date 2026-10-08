@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}{{ t('results_title') }} · {{ tr(q.title) }}{% endblock %}
-{% macro bars(cells) %}{% for count, pct in cells %}<td><div class="bar"><span style="width: {{ pct }}%"></span></div><span class="pct">{{ pct }}%</span> <span class="cnt">({{ count }})</span></td>{% endfor %}{% endmacro %}
+{% macro bars(cells) %}{% set top = cells|map(attribute=1)|max %}{% for count, pct in cells %}<td class="{% if pct == top and pct > 0 %}lead{% endif %}"><div class="bar"><span style="width: {{ pct }}%"></span></div><span class="pct">{{ pct }}%</span> <span class="cnt">({{ count }})</span></td>{% endfor %}{% endmacro %}
 {% block content %}
-<p class="tag">{{ tr(q.topic) }} · {{ t('results_title') }}</p>
-<h1>{{ tr(q.title) }}</h1>
+<h1>{{ t('results_title') }}</h1>
+<p class="subtitle">{{ tr(q.title) }}</p>
 
 <form class="filters" method="get">
   <label for="l">{{ t('filter_lang') }}
@@ -19,7 +19,7 @@
     </select>
   </label>
   <noscript><button class="btn small">OK</button></noscript>
-  <p class="num big">{{ total }} {{ t('n_answers') }}{% if total != grand_total %} <span class="cnt">/ {{ grand_total }}</span>{% endif %}</p>
+  <p class="total"><strong>{{ total }}</strong> {{ t('n_answers') }}{% if total != grand_total %} <span class="cnt">/ {{ grand_total }}</span>{% endif %}</p>
 </form>
 
 {% if total == 0 %}
@@ -63,7 +63,7 @@
   <div class="answers">
   {% for a in latest %}
     <article class="answer">
-      <p class="meta"><strong>{{ a.chat }}</strong>{% if a.model %} · {{ a.model }}{% endif %} · {{ a.lang }} · {{ flag(a.country) }} {{ a.country or t('unknown') }} · {{ a.date }}</p>
+      <p class="meta"><strong>{{ a.chat }}</strong>{% if a.model %}<span>{{ a.model }}</span>{% endif %}<span>{{ a.lang }}</span><span>{{ flag(a.country) }} {{ a.country or t('unknown') }}</span><time>{{ a.date }}</time></p>
       {% for text in a.answers %}
       <details {% if loop.first %}open{% endif %}>
         <summary>{{ t('question_n') }} {{ loop.index }}</summary>

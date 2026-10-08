@@ -4,13 +4,14 @@
 {% block content %}
 <section class="choose">
   <h1>AI Bias Lab</h1>
-  <p class="lede">{% for code in langs %}<span lang="{{ code }}" dir="{{ 'rtl' if code in rtl else 'ltr' }}">{{ T.tagline[code] }}</span>{% if not loop.last %} · {% endif %}{% endfor %}</p>
-  <p class="tag">{% for code in langs %}<span lang="{{ code }}">{{ T.choose_lang[code] }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>
+  <ul class="taglines">
+    {% for code in langs %}<li lang="{{ code }}" dir="{{ 'rtl' if code in rtl else 'ltr' }}">{{ T.tagline[code] }}</li>{% endfor %}
+  </ul>
   <div class="lang-grid">
     {% for code, name in langs.items() %}
     <a class="lang-card {% if code == best %}best{% endif %}" href="{{ url_for('index', lang=code) }}" lang="{{ code }}" dir="{{ 'rtl' if code in rtl else 'ltr' }}">
       <span class="lang-name">{{ name }}</span>
-      <span class="lang-sub">{{ T.story_title[code] }}</span>
+      <span class="lang-sub">{{ T.choose_lang[code] }}</span>
     </a>
     {% endfor %}
   </div>

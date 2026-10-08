@@ -2,15 +2,23 @@
 {% set q = questions[0] %}
 {% block content %}
 <section class="hero">
-  <p class="tag">{{ tr(q.topic) }}</p>
   <h1>{{ t('story_title') }}</h1>
+  <figure class="transcript">
+    <div class="turn user">
+      <figcaption class="who">{{ t('orig_label') }}</figcaption>
+      <p>{{ tr(q.steps[0].prompt) }}</p>
+    </div>
+    <div class="turn ai">
+      <figcaption class="who">{{ t('admit_label') }}</figcaption>
+      <p><mark>{{ t('admission') }}</mark></p>
+    </div>
+  </figure>
   <div class="story">
     {% for p in t('story') %}<p>{{ p }}</p>{% endfor %}
   </div>
   <div class="actions">
     <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
-    <a class="btn ghost" href="{{ url_for('results', qid=q.id) }}">{{ t('see_results') }}</a>
-    <span class="num">{{ counts.get(q.id, 0) }} {{ t('so_far') }}</span>
+    <a class="link" href="{{ url_for('results', qid=q.id) }}">{{ t('see_results') }} ({{ counts.get(q.id, 0) }})</a>
   </div>
 </section>
 

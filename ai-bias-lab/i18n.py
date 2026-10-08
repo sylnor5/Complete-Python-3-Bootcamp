@@ -19,21 +19,25 @@ T = {
     },
     "story": {
         "es": [
-            "Le hice a ChatGPT dos preguntas sobre la guerra en Gaza. Sus respuestas me parecieron inclinadas hacia un solo lado. Solo cuando empecé a discutirle cambió el tono, y llegó a reconocer: «presenté la cuestión de forma demasiado asimétrica».",
+            "Le hice a ChatGPT dos preguntas sobre la guerra en Gaza. Sus respuestas me parecieron inclinadas hacia un solo lado. Solo cuando empecé a discutirle cambió el tono, y terminó por admitirlo.",
             "Entonces me pregunté: ¿le pasa a todo el mundo? ¿Responden igual Gemini, Claude, Copilot o Grok? ¿Cambia la respuesta según el idioma o el país desde el que preguntas?",
             "Una sola conversación no prueba nada. Cientos sí. Haz tú la prueba con las mismas dos preguntas que hice yo, tal cual, y comparte lo que te respondió tu chat. Tarda unos cinco minutos.",
         ],
         "en": [
-            "I asked ChatGPT two questions about the war in Gaza. Its answers seemed to me to lean to one side. Only when I started to push back did its tone change, and it went as far as admitting: “I presented the issue in a way that was too asymmetric.”",
+            "I asked ChatGPT two questions about the war in Gaza. Its answers seemed to me to lean to one side. Only when I started to push back did its tone change, and in the end it admitted it.",
             "So I wondered: does this happen to everyone? Do Gemini, Claude, Copilot or Grok answer the same way? Does the answer change depending on the language or the country you ask from?",
             "One conversation proves nothing. Hundreds can. Take the test with the same two questions I asked, word for word, and share what your chat told you. It takes about five minutes.",
         ],
         "fr": [
-            "J'ai posé à ChatGPT deux questions sur la guerre à Gaza. Ses réponses m'ont semblé pencher d'un seul côté. Ce n'est que lorsque j'ai commencé à le contredire que son ton a changé, au point de reconnaître : « j'ai présenté la question de manière trop asymétrique ».",
+            "J'ai posé à ChatGPT deux questions sur la guerre à Gaza. Ses réponses m'ont semblé pencher d'un seul côté. Ce n'est que lorsque j'ai commencé à le contredire que son ton a changé, et il a fini par l'admettre.",
             "Alors je me suis demandé : est-ce que ça arrive à tout le monde ? Gemini, Claude, Copilot ou Grok répondent-ils de la même façon ? La réponse change-t-elle selon la langue ou le pays d'où l'on pose la question ?",
             "Une seule conversation ne prouve rien. Des centaines, si. Faites le test avec les deux mêmes questions que moi, mot pour mot, et partagez ce que votre chat vous a répondu. Cela prend environ cinq minutes.",
         ],
     },
+    "orig_label": {"es": "Mi primera pregunta", "en": "My first question (translated from Spanish)", "fr": "Ma première question (traduite de l'espagnol)"},
+    "admit_label": {"es": "ChatGPT, después de que le discutí", "en": "ChatGPT, after I pushed back (translated)", "fr": "ChatGPT, après que je l'ai contredit (traduit)"},
+    "admission": {"es": "Presenté la cuestión de forma demasiado asimétrica.", "en": "I presented the issue in a way that was too asymmetric.", "fr": "J'ai présenté la question de manière trop asymétrique."},
+    "exact_text": {"es": "Texto exacto", "en": "Exact text", "fr": "Texte exact"},
     "how_title": {"es": "Cómo participar", "en": "How to take part", "fr": "Comment participer"},
     "how_steps": {
         "es": ["Copia la primera pregunta y pégala en un chat nuevo de tu IA.",
@@ -175,10 +179,14 @@ HE = {
     "nav_method": "איך זה עובד",
     "story_title": "האם זה קרה רק לי?",
     "story": [
-        "שאלתי את ChatGPT שתי שאלות על המלחמה בעזה. התשובות שלו נראו לי נוטות לצד אחד. רק כשהתחלתי להתווכח איתו הטון השתנה, ובסוף הוא אפילו הודה: „הצגתי את הנושא באופן א־סימטרי מדי”.",
+        "שאלתי את ChatGPT שתי שאלות על המלחמה בעזה. התשובות שלו נראו לי נוטות לצד אחד. רק כשהתחלתי להתווכח איתו הטון השתנה, ובסוף הוא הודה בכך.",
         "אז שאלתי את עצמי: האם זה קורה לכולם? האם Gemini,‏ Claude,‏ Copilot או Grok עונים אותו דבר? האם התשובה משתנה לפי השפה או המדינה שממנה שואלים?",
         "שיחה אחת לא מוכיחה כלום. מאות שיחות כן. עשו את המבחן עם אותן שתי שאלות ששאלתי, מילה במילה, ושתפו מה הצ'אט שלכם ענה. זה לוקח כחמש דקות.",
     ],
+    "orig_label": "השאלה הראשונה שלי (מתורגמת מספרדית)",
+    "admit_label": "ChatGPT, אחרי שהתווכחתי איתו (מתורגם)",
+    "admission": "הצגתי את הנושא באופן א־סימטרי מדי.",
+    "exact_text": "הטקסט המדויק",
     "how_title": "איך משתתפים",
     "how_steps": [
         "העתיקו את השאלה הראשונה והדביקו אותה בשיחה חדשה עם הבינה המלאכותית שלכם.",
