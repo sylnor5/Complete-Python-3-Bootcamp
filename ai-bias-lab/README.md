@@ -4,14 +4,14 @@ Experimento ciudadano: cada persona hace **las mismas preguntas** en su chat de 
 (ChatGPT, Gemini, Claude, Copilot, Grok, Meta AI, DeepSeek, Le Chat, Perplexity…), pega las respuestas y las
 clasifica. La web compara los resultados **por chat, por idioma y por país** para ver si hay sesgos sistemáticos.
 
-La primera prueba son las dos preguntas sobre Gaza que originaron el proyecto, en español, inglés, francés y hebreo (la web se muestra de derecha a izquierda en hebreo).
+La primera prueba es la pregunta sobre Gaza que originó el proyecto (una sola pregunta, igual para todos), en español, inglés, francés y hebreo (la web se muestra de derecha a izquierda en hebreo).
 
 ## Recorrido
 
 1. `/` — la persona elige idioma (español, English, français, עברית).
 2. `/<idioma>/` — portada con la historia del proyecto y cómo participar.
-3. `/<idioma>/q/gaza` — copia la pregunta 1 en un chat nuevo, pega la respuesta; hace la pregunta 2 en el
-   mismo chat y pega la respuesta; marca qué dijo el chat y si cree que se inclina hacia un lado.
+3. `/<idioma>/q/gaza` — copia la pregunta en un chat nuevo, pega la respuesta, marca qué dijo el chat y si
+   cree que se inclina hacia un lado.
 4. `/<idioma>/q/gaza/results` — resultados con filtros por idioma y país:
    - percepción de inclinación por chat, por idioma y por país;
    - una tabla por cada casilla (conclusión, argumentos mencionados u omitidos) comparando chats;
@@ -48,7 +48,7 @@ nueva a partir de una propuesta, añádela a `questions.json` con sus traduccion
   enlaces `https://` de esos dominios. En resultados se puede filtrar «solo con enlace».
 - **Descarte automático.** No cuentan en los resultados los envíos con alguna respuesta de menos de 150
   caracteres, sin ninguna palabra clave del tema (lista `keywords` en `questions.json`, en los 4 idiomas),
-  con la misma respuesta en las dos preguntas o idénticos a un envío anterior. A quien envía no se le avisa,
+  con la misma respuesta repetida en varias preguntas (si una prueba tiene más de una) o idénticos a un envío anterior. A quien envía no se le avisa,
   para no enseñar cómo saltarse el filtro.
 - **Comprobación a mano.** Con `?token=ADMIN_TOKEN` en la página de resultados ves también los descartados
   y puedes marcar cualquier respuesta como «comprobada» (tras abrir su enlace) o borrarla. Hay un filtro

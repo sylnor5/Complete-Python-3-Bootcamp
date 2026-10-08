@@ -148,7 +148,7 @@ document.getElementById("copy-link").addEventListener("click", async (e) => {
       <p class="meta"><strong>{{ a.chat }}</strong>{% if a.checked %}<span class="badge strong">{{ t('checked_badge') }}</span>{% elif a.share_url %}<span class="badge">{{ t('verifiable') }}</span>{% endif %}{% if a.flags %}<span class="badge alert">{{ a.flags }}</span>{% endif %}{% if a.model %}<span>{{ a.model }}</span>{% endif %}<span>{{ a.lang }}</span><span>{{ flag(a.country) }} {{ a.country or t('unknown') }}</span><time>{{ a.date }}</time></p>
       {% for text in a.answers %}
       <details {% if loop.first %}open{% endif %}>
-        <summary>{{ t('question_n') }} {{ loop.index }}</summary>
+        <summary>{{ t('question_n') }}{% if a.answers|length > 1 %} {{ loop.index }}{% endif %}</summary>
         <blockquote>{{ text }}</blockquote>
       </details>
       {% endfor %}

@@ -598,14 +598,15 @@ def export_csv():
     out = io.StringIO()
     writer = csv.writer(out)
     field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]
+    n_steps = max(len(q["steps"]) for q in QUESTIONS)
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
-                     "answer1", "answer2", *field_ids, "lean", "share_url",
+                     *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "share_url",
                      "checked", "flags", "created_at"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
-        answers = json.loads(r["answers"]) + ["", ""]
+        answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
         fields = json.loads(r["fields"])
         writer.writerow([r["id"], r["question_id"], r["lang"], r["country"],
-                         r["chat"], r["model"], answers[0], answers[1],
+                         r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
                          r["lean"], r["share_url"] or "", r["checked"],
                          r["flags"] or "", r["created_at"]])

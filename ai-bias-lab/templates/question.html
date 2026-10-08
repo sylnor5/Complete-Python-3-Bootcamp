@@ -18,7 +18,7 @@
   {% for step in q.steps %}
   {% set i = loop.index %}
   <section class="step">
-    <h2><span class="stepnum">{{ i }}</span> {{ t('question_n') }} {{ i }}</h2>
+    <h2><span class="stepnum">{{ i }}</span> {{ t('question_n') }}{% if q.steps|length > 1 %} {{ i }}{% endif %}</h2>
     {% if i > 1 %}<p class="hint">{{ t('same_chat') }}</p>{% endif %}
     <div class="prompt-box">
       <p class="exact">{{ t('exact_text') }}</p>
