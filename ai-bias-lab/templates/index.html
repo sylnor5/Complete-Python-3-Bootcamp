@@ -22,7 +22,6 @@
   </div>
   <div class="actions">
     <a class="btn big" href="{{ url_for('question', qid=q.id) }}">{{ t('start') }}</a>
-    <a class="link" href="{{ url_for('results', qid=q.id) }}">{{ t('see_results') }} ({{ counts.get(q.id, 0) }})</a>
   </div>
 </section>
 

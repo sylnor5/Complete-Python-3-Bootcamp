@@ -391,6 +391,11 @@ def next_chat(qid):
 def results(qid):
     q = QUESTIONS_BY_ID.get(qid) or abort(404)
     lang = g.lang
+    is_admin = bool(ADMIN_TOKEN) and request.args.get("token") == ADMIN_TOKEN
+    # los resultados solo se ven después de participar, para no influir en las respuestas
+    if not is_admin and not session.get("done", {}).get(qid):
+        flash(T["results_locked"][lang])
+        return redirect(url_for("question", qid=qid))
     every = get_db().execute(
         "SELECT * FROM submissions WHERE question_id = ? ORDER BY id DESC",
         (qid,)).fetchall()

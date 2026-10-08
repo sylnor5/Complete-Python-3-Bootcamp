@@ -14,7 +14,7 @@
     <a class="brand" href="{% if lang == 'en' %}/{% else %}{{ url_for('index') }}{% endif %}">ChatRadar</a>
     {% block nav %}
     <nav>
-      <a href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>
+      {% if session.get('done', {}).get('gaza') %}<a href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
       <a href="{{ url_for('method') }}">{{ t('nav_method') }}</a>
       <a href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a>
       <span class="langs">
