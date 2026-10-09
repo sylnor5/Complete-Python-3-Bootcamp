@@ -23,10 +23,8 @@
   <header class="top wrap">
     <a class="mark" href="{% if lang == 'en' %}/{% else %}{{ url_for('index') }}{% endif %}" aria-label="ChatRadar">
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path class="mk-arc" d="M3 17a9 9 0 0 1 18 0" stroke-width="2" stroke-linecap="round"/>
-        <path class="mk-arc" d="M6.6 17a5.4 5.4 0 0 1 10.8 0" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-        <path class="mk-needle" d="M12 17l3.2-7.2" stroke-width="2.2" stroke-linecap="round"/>
-        <circle class="mk-hub" cx="12" cy="17" r="2"/>
+        <rect class="mk-arc" x="1.5" y="7" width="21" height="10" rx="5" stroke-width="1.8"/>
+        <rect class="mk-needle" x="9" y="10" width="6" height="4" rx="2"/>
       </svg>
       <span dir="ltr">ChatRadar</span>
     </a>
