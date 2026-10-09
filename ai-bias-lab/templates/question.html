@@ -17,6 +17,7 @@
 <h1>{{ tr(q.title) }}</h1>
 <p class="count">{{ count }} {{ t('so_far') }}</p>
 <p class="rules">{{ t('rules') }}</p>
+<p class="loaded">{{ t('loaded_note') }}</p>
 
 <form method="post" class="form" novalidate>
   <section class="step">
@@ -75,8 +76,8 @@
       <fieldset class="choice">
         <legend>{{ t('lean_q') }}</legend>
         <div class="radios">
-          {% for key, label in T.lean.items() %}
-          <label class="seg"><input type="radio" id="lean-{{ key }}" name="lean" value="{{ key }}" {% if form.get('lean') == key %}checked{% endif %}><span>{{ tr(label) }}</span></label>
+          {% for key in lean_order %}
+          <label class="seg"><input type="radio" id="lean-{{ key }}" name="lean" value="{{ key }}" {% if form.get('lean') == key %}checked{% endif %}><span>{{ tr(T.lean[key]) }}</span></label>
           {% endfor %}
         </div>
       </fieldset>
@@ -92,6 +93,18 @@
         <input id="model" name="model" maxlength="80" placeholder="{{ t('model_ph') }}" value="{{ form.get('model', '') }}">
       </label>
     </details>
+  </section>
+
+  <section class="step stance">
+    <fieldset class="choice">
+      <legend>{{ t('stance_q') }} <span class="opt">{{ t('optional') }}</span></legend>
+      <p class="hint">{{ t('stance_hint') }}</p>
+      <div class="radios">
+        {% for key in stance_order %}
+        <label class="seg"><input type="radio" id="stance-{{ key }}" name="stance" value="{{ key }}" {% if form.get('stance') == key %}checked{% endif %}><span>{{ tr(T.stance[key]) }}</span></label>
+        {% endfor %}
+      </div>
+    </fieldset>
   </section>
 
   <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>

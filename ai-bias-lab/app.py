@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import os
+import random
 import re
 import sqlite3
 import unicodedata
@@ -53,6 +54,8 @@ SHARE_HOSTS = {
 }
 MIN_ANSWER = 150  # una respuesta real a estas preguntas es mucho más larga
 LEAN_KEYS = list(T["lean"])
+STANCE_KEYS = list(T["stance"])  # postura propia, opcional
+SHARE_NETS = ("whatsapp", "instagram", "facebook", "x", "telegram", "linkedin", "copy", "native")
 
 with open(BASE_DIR / "questions.json", encoding="utf-8") as fh:
     QUESTIONS = json.load(fh)
@@ -210,9 +213,19 @@ def init_db():
             )""")
         cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
-                          ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0")]:
+                          ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0"),
+                          ("stance", "TEXT"), ("order_flip", "INTEGER")]:
             if col not in cols:
                 db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
+        sub_cols = {r[1] for r in db.execute("PRAGMA table_info(subscribers)")}
+        if "instagram" not in sub_cols:
+            db.execute("ALTER TABLE subscribers ADD COLUMN instagram TEXT")
+        # contadores anónimos: de qué red llegan visitas y en qué botón de compartir se pulsa
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS counters (
+                day TEXT NOT NULL, kind TEXT NOT NULL, name TEXT NOT NULL,
+                n INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, kind, name)
+            )""")
 
 
 def normalize(text):
@@ -268,6 +281,69 @@ def distribution(rows, key_fn, keys):
     return total, [(c[k], round(100 * c[k] / total) if total else 0) for k in keys]
 
 
+def bump(kind, name):
+    db = get_db()
+    day = datetime.now(timezone.utc).date().isoformat()
+    db.execute("INSERT INTO counters (day, kind, name, n) VALUES (?, ?, ?, 1) "
+               "ON CONFLICT(day, kind, name) DO UPDATE SET n = n + 1", (day, kind, name))
+    db.commit()
+
+
+def valid_rows(qid):
+    return [r for r in get_db().execute(
+        "SELECT * FROM submissions WHERE question_id = ?", (qid,)) if not r["flags"]]
+
+
+def group_by_chat(rows):
+    by_chat = defaultdict(list)
+    for r in rows:
+        by_chat[r["chat"]].append(r)
+    return by_chat
+
+
+def chats_scores(rows):
+    """Aguja de cada chat por separado (nunca se mezclan respuestas de chats distintos)."""
+    by_chat = group_by_chat(rows)
+    return {k: dict(key=k, name=n, score=lean_score(by_chat.get(k, [])), total=len(by_chat.get(k, [])))
+            for k, n, _ in CHATS}
+
+
+def overall_score(scores):
+    """«Todos los chats»: media de las agujas de cada chat, cada chat pesa lo mismo."""
+    ok = [s["score"] for s in scores.values() if s["score"]["ok"]]
+    if not ok:
+        best = max((s["score"]["n"] for s in scores.values()), default=0)
+        return {"ok": False, "n": best, "missing": max(MIN_METRO - best, 0), "chats": 0}
+    return {"ok": True, "pos": round(sum(x["pos"] for x in ok) / len(ok), 1),
+            "n": sum(x["n"] for x in ok), "chats": len(ok)}
+
+
+def side_fields(q):
+    isr = [f["id"] for f in all_fields(q) if f.get("side") == "israeli"]
+    pal = [f["id"] for f in all_fields(q) if f.get("side") == "palestinian"]
+    return isr, pal
+
+
+def argument_point(q, rows):
+    """Posición en el mapa de dos ejes a partir de las casillas observables:
+    x = 0 (solo menciona argumentos del lado israelí) … 50 (los mismos de cada lado) … 100 (solo del palestino);
+    y = 0-100, cuántos de los argumentos de ambos lados menciona (completitud)."""
+    isr, pal = side_fields(q)
+    xs, ys = [], []
+    for r in rows:
+        f = json.loads(r["fields"])
+        if not any(f.get(k) for k in isr + pal):
+            continue  # no rellenó las casillas opcionales
+        a = sum(f.get(k) == "yes" for k in isr)
+        b = sum(f.get(k) == "yes" for k in pal)
+        xs.append(50 + 50 * (b - a) / (a + b) if a + b else 50)
+        ys.append(100 * (a + b) / (len(isr) + len(pal)))
+    n = len(xs)
+    if n < MIN_METRO:
+        return {"ok": False, "n": n, "missing": MIN_METRO - n}
+    return {"ok": True, "n": n, "x": round(sum(xs) / n, 1), "y": round(sum(ys) / n, 1)}
+
+
 # ------------------------------------------------------------------ routes
 
 @app.route("/")
@@ -279,12 +355,19 @@ def landing():
 @app.route("/<lang>/")
 def index():
     q = QUESTIONS[0]
-    rows = [r for r in get_db().execute(
-        "SELECT lean, flags FROM submissions WHERE question_id = ?", (q["id"],)) if not r["flags"]]
-    # gauge = {"ok": bool, "n": respuestas con postura, "pos": 0-100 (0 = postura israelí,
-    #          50 = equilibrado, 100 = postura palestina), "pct": {...}, "missing": cuántas faltan}
-    return render_template("index.html", questions=QUESTIONS,
-                           counts=count_by_question(), gauge=lean_score(rows),
+    src = request.args.get("from", "")
+    if src in SHARE_NETS:
+        bump("visit_from", src)
+    rows = valid_rows(q["id"])
+    scores = chats_scores(rows)
+    # La aguja solo se ve después de participar (para no anclar la opinión);
+    # antes solo se ven los contadores. pos: 0 = postura israelí, 50 = equilibrado, 100 = palestina.
+    unlocked = bool(session.get("done", {}).get(q["id"]))
+    selector = [dict(key="all", name=None, total=len(rows), score=overall_score(scores))] + \
+        [dict(s) for s in scores.values()]
+    return render_template("index.html", questions=QUESTIONS, q=q,
+                           counts=count_by_question(), gauge=overall_score(scores),
+                           selector=selector, unlocked=unlocked, share_url=public_home_url(),
                            total_valid=len(rows), min_metro=MIN_METRO)
 
 
@@ -335,6 +418,8 @@ def question(qid):
         lean = form.get("lean", "")
         if lean not in LEAN_KEYS:
             errors.append(T["err_lean"][lang])
+        stance = form.get("stance", "")
+        stance = stance if stance in STANCE_KEYS else None
 
         db = get_db()
         since = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
@@ -351,17 +436,21 @@ def question(qid):
             db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
-                   share_url, flags, answers_hash, checked)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)""",
+                   share_url, flags, answers_hash, checked, stance, order_flip)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat(),
-                 share_url or None, ",".join(flags), answers_hash))
+                 share_url or None, ",".join(flags), answers_hash,
+                 stance, int(bool(session.get("flip")))))
             db.commit()
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
             session["done"] = done
+            mine = session.get("mine", {})
+            mine.setdefault(qid, {})[chat] = lean  # para «Tus chats»: lo que dijo esta persona
+            session["mine"] = mine
             session["just_sent"] = qid
             return redirect(url_for("next_chat", qid=qid, chat=chat))
 
@@ -370,7 +459,15 @@ def question(qid):
 
     if request.method == "GET" and request.args.get("chat") in CHAT_NAMES:
         form = {"chat": request.args["chat"]}
+    # orden de las dos posturas al azar por visitante (fijo durante su visita), para que
+    # el orden no influya; «equilibrada» y «no estoy seguro» siempre al final
+    if "flip" not in session:
+        session["flip"] = random.random() < 0.5
+    sides = ["pro_palestine", "pro_israel"] if session["flip"] else ["pro_israel", "pro_palestine"]
+    stance_order = (["pal_clear", "pal_lean", "neither", "isr_lean", "isr_clear"] if session["flip"]
+                    else ["isr_clear", "isr_lean", "neither", "pal_lean", "pal_clear"]) + ["skip"]
     return render_template("question.html", q=q, chats=CHATS, form=form,
+                           lean_order=sides + ["balanced", "unsure"], stance_order=stance_order,
                            field_options=field_options,
                            count=count_by_question().get(qid, 0))
 
@@ -385,6 +482,55 @@ def next_chat(qid):
     return render_template("next.html", q=q, others=others,
                            done=[CHAT_NAMES[c] for c in done if c in CHAT_NAMES],
                            last=CHAT_NAMES.get(last, ""))
+
+
+@app.route("/<lang>/q/<qid>/mine")
+def mine(qid):
+    """«Tus chats»: lo que dijo esta persona de cada chat que probó, frente a la media de ese chat,
+    y la comparación de todos los chats (aguja y mapa de dos ejes)."""
+    q = QUESTIONS_BY_ID.get(qid) or abort(404)
+    lang = g.lang
+    done = session.get("done", {}).get(qid, [])
+    if not done:
+        flash(T["results_locked"][lang])
+        return redirect(url_for("question", qid=qid))
+    my = session.get("mine", {}).get(qid, {})
+    rows = valid_rows(qid)
+    scores = chats_scores(rows)
+    by_chat = group_by_chat(rows)
+    cards = [dict(key=c, name=CHAT_NAMES[c], said=my.get(c), everyone=scores[c]["score"],
+                  total=scores[c]["total"]) for c in done if c in CHAT_NAMES]
+    untested = [(k, n, l) for k, n, l in CHATS if l and k not in done]
+    compare = sorted(scores.values(), key=lambda s: (not s["score"]["ok"], -s["total"]))
+    points = [dict(key=k, name=n, mine=k in done, point=argument_point(q, by_chat.get(k, [])))
+              for k, n, _ in CHATS]
+    names = [CHAT_NAMES[c] for c in done if c in CHAT_NAMES]
+    share_text = T["mine_share_msg"][lang].format(chats=" & ".join(names))
+    return render_template("mine.html", q=q, cards=cards, untested=untested, compare=compare,
+                           points=points, overall=overall_score(scores), min_metro=MIN_METRO,
+                           share_text=share_text, share_url=public_home_url(),
+                           just_sent=session.pop("just_sent", None) == qid,
+                           subscribed=request.args.get("sub") == "1")
+
+
+@app.route("/<lang>/share/<net>", methods=["POST"])
+def share_click(net):
+    if net in SHARE_NETS:
+        bump("share_click", net)
+    return ("", 204)
+
+
+@app.route("/admin/stats")
+def admin_stats():
+    if not ADMIN_TOKEN or request.args.get("token") != ADMIN_TOKEN:
+        abort(403)
+    rows = get_db().execute(
+        "SELECT kind, name, SUM(n) AS n FROM counters GROUP BY kind, name ORDER BY kind, n DESC").fetchall()
+    stances = get_db().execute(
+        "SELECT COALESCE(stance, '—') AS stance, lean, COUNT(*) AS n FROM submissions "
+        "WHERE flags = '' OR flags IS NULL GROUP BY stance, lean ORDER BY stance").fetchall()
+    g.lang = "es"
+    return render_template("admin_stats.html", rows=rows, stances=stances, token=ADMIN_TOKEN)
 
 
 @app.route("/<lang>/q/<qid>/results")
@@ -578,7 +724,7 @@ def lean_score(rows):
 
 def public_home_url():
     root = PUBLIC_URL or request.url_root.rstrip("/")
-    return f"{root}/{g.lang}/"
+    return f"{root}/" if g.lang == "en" else f"{root}/{g.lang}/"
 
 
 def push_to_brevo(email, lang):
@@ -603,18 +749,21 @@ def subscribe():
     qid = request.form.get("qid") if request.form.get("qid") in QUESTIONS_BY_ID else QUESTIONS[0]["id"]
     email = request.form.get("email", "").strip().lower()[:200]
     if request.form.get("website"):  # honeypot
-        return redirect(url_for("results", qid=qid))
+        return redirect(url_for("mine", qid=qid))
     if not request.form.get("consent") or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
         flash(T["email_err"][lang], "error")
         session["just_sent"] = qid  # vuelve a mostrar el panel
-        return redirect(url_for("results", qid=qid) + "#thanks")
+        return redirect(url_for("mine", qid=qid) + "#thanks")
     db = get_db()
     # solo la fecha, sin hora: así no se puede cruzar con el momento de un envío
-    db.execute("INSERT OR IGNORE INTO subscribers (email, lang, consent_date) VALUES (?, ?, ?)",
-               (email, lang, datetime.now(timezone.utc).date().isoformat()))
+    insta = request.form.get("instagram", "").strip().lstrip("@")[:40]
+    insta = insta if re.fullmatch(r"[A-Za-z0-9._]{1,30}", insta or "") and request.form.get("insta_ok") else None
+    db.execute("INSERT INTO subscribers (email, lang, consent_date, instagram) VALUES (?, ?, ?, ?) "
+               "ON CONFLICT(email) DO UPDATE SET instagram = COALESCE(excluded.instagram, subscribers.instagram)",
+               (email, lang, datetime.now(timezone.utc).date().isoformat(), insta))
     db.commit()
     push_to_brevo(email, lang)
-    return redirect(url_for("results", qid=qid, sub=1) + "#thanks")
+    return redirect(url_for("mine", qid=qid, sub=1) + "#thanks")
 
 
 @app.route("/admin/subscribers.csv")
@@ -623,8 +772,9 @@ def admin_subscribers():
         abort(403)
     out = io.StringIO()
     writer = csv.writer(out)
-    writer.writerow(["email", "lang", "consent_date"])
-    for r in get_db().execute("SELECT email, lang, consent_date FROM subscribers ORDER BY consent_date"):
+    writer.writerow(["email", "lang", "consent_date", "instagram"])
+    for r in get_db().execute(
+            "SELECT email, lang, consent_date, instagram FROM subscribers ORDER BY consent_date"):
         writer.writerow(list(r))
     return Response("\ufeff" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=subscribers.csv"})
@@ -639,7 +789,7 @@ def export_csv():
     field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]
     n_steps = max(len(q["steps"]) for q in QUESTIONS)
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
-                     *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "share_url",
+                     *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "stance", "order_flip", "share_url",
                      "checked", "flags", "created_at"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
@@ -647,7 +797,7 @@ def export_csv():
         writer.writerow([r["id"], r["question_id"], r["lang"], r["country"],
                          r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
-                         r["lean"], r["share_url"] or "", r["checked"],
+                         r["lean"], r["stance"] or "", r["order_flip"], r["share_url"] or "", r["checked"],
                          r["flags"] or "", r["created_at"]])
     return Response("﻿" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})

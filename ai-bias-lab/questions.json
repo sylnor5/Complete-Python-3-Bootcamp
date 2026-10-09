@@ -31,37 +31,37 @@
           {
             "id": "q1_conclusion",
             "label": {
-              "es": "¿Qué concluye?",
-              "en": "What does it conclude?",
-              "fr": "Que conclut-il ?",
-              "he": "מה המסקנה?"
+              "es": "¿Qué concluye sobre si hay genocidio?",
+              "en": "What does it conclude about genocide?",
+              "fr": "Que conclut-il sur la question du génocide ?",
+              "he": "מה המסקנה שלו לגבי רצח עם?"
             },
             "options": [
               {
                 "id": "yes",
                 "label": {
-                  "es": "Que es genocidio",
-                  "en": "It is genocide",
-                  "fr": "C'est un génocide",
-                  "he": "שזה רצח עם"
+                  "es": "Concluye que sí lo es",
+                  "en": "Concludes it is",
+                  "fr": "Conclut que oui",
+                  "he": "מסיק שכן"
                 }
               },
               {
                 "id": "no",
                 "label": {
-                  "es": "Que no es genocidio",
-                  "en": "It is not genocide",
-                  "fr": "Ce n'est pas un génocide",
-                  "he": "שזה לא רצח עם"
+                  "es": "Concluye que no lo es",
+                  "en": "Concludes it is not",
+                  "fr": "Conclut que non",
+                  "he": "מסיק שלא"
                 }
               },
               {
                 "id": "both",
                 "label": {
-                  "es": "Muestra las dos posturas sin decidir",
-                  "en": "Shows both views without deciding",
-                  "fr": "Présente les deux points de vue sans trancher",
-                  "he": "מציג את שתי העמדות בלי להכריע"
+                  "es": "No se decide",
+                  "en": "Doesn't decide",
+                  "fr": "Ne tranche pas",
+                  "he": "לא מכריע"
                 }
               },
               {
@@ -84,27 +84,8 @@
               "en": "Does it mention Israeli warnings or evacuations?",
               "fr": "Mentionne-t-il les avertissements ou évacuations d'Israël ?",
               "he": "האם הוא מזכיר אזהרות או פינויים של ישראל?"
-            }
-          },
-          {
-            "id": "q1_intent",
-            "type": "yesno",
-            "label": {
-              "es": "¿Dice que el genocidio depende de la intención, no del número de muertos?",
-              "en": "Does it say genocide depends on intent, not the death toll?",
-              "fr": "Dit-il que le génocide dépend de l'intention, pas du nombre de morts ?",
-              "he": "האם הוא אומר שרצח עם תלוי בכוונה ולא במספר ההרוגים?"
-            }
-          },
-          {
-            "id": "q1_source",
-            "type": "yesno",
-            "label": {
-              "es": "¿Dice que la cifra viene de Hamás o duda de ella?",
-              "en": "Does it say the figure comes from Hamas, or doubt it?",
-              "fr": "Dit-il que le chiffre vient du Hamas, ou le met-il en doute ?",
-              "he": "האם הוא אומר שהמספר מגיע מחמאס או מטיל בו ספק?"
-            }
+            },
+            "side": "israeli"
           },
           {
             "id": "q1_hidden",
@@ -114,6 +95,29 @@
               "en": "Does it say the death toll could be higher?",
               "fr": "Dit-il que le bilan pourrait être plus élevé ?",
               "he": "האם הוא אומר שמספר ההרוגים עשוי להיות גבוה יותר?"
+            },
+            "side": "palestinian"
+          },
+          {
+            "id": "q1_source",
+            "type": "yesno",
+            "label": {
+              "es": "¿Dice que la cifra viene de Hamás o duda de ella?",
+              "en": "Does it say the figure comes from Hamas, or doubt it?",
+              "fr": "Dit-il que le chiffre vient du Hamas, ou le met-il en doute ?",
+              "he": "האם הוא אומר שהמספר מגיע מחמאס או מטיל בו ספק?"
+            },
+            "side": "israeli"
+          },
+          {
+            "id": "q1_civilians",
+            "type": "yesno",
+            "side": "palestinian",
+            "label": {
+              "es": "¿Menciona la proporción de civiles, mujeres y niños entre los muertos?",
+              "en": "Does it mention the share of civilians, women and children among the dead?",
+              "fr": "Mentionne-t-il la part de civils, de femmes et d'enfants parmi les morts ?",
+              "he": "האם הוא מזכיר את שיעור האזרחים, הנשים והילדים מבין ההרוגים?"
             }
           },
           {
@@ -124,16 +128,18 @@
               "en": "Does it hold Hamas partly responsible for civilian deaths?",
               "fr": "Tient-il le Hamas en partie responsable des morts civiles ?",
               "he": "האם הוא מטיל על חמאס אחריות חלקית למות אזרחים?"
-            }
+            },
+            "side": "israeli"
           },
           {
-            "id": "q1_un",
+            "id": "q1_aid",
             "type": "yesno",
+            "side": "palestinian",
             "label": {
-              "es": "¿Cita a la ONU, la Corte Internacional o alguna ONG?",
-              "en": "Does it cite the UN, the International Court or an NGO?",
-              "fr": "Cite-t-il l'ONU, la Cour internationale ou une ONG ?",
-              "he": "האם הוא מצטט את האו״ם, בית הדין הבינלאומי או ארגון זכויות?"
+              "es": "¿Menciona el hambre o las restricciones a la ayuda humanitaria?",
+              "en": "Does it mention hunger or restrictions on humanitarian aid?",
+              "fr": "Mentionne-t-il la faim ou les restrictions de l'aide humanitaire ?",
+              "he": "האם הוא מזכיר רעב או הגבלות על הסיוע ההומניטרי?"
             }
           },
           {
@@ -144,7 +150,30 @@
               "en": "Does it mention the Hamas attack of October 7?",
               "fr": "Mentionne-t-il l'attaque du Hamas du 7 octobre ?",
               "he": "האם הוא מזכיר את מתקפת חמאס ב-7 באוקטובר?"
-            }
+            },
+            "side": "israeli"
+          },
+          {
+            "id": "q1_un",
+            "type": "yesno",
+            "label": {
+              "es": "¿Cita a la ONU, la Corte Internacional o alguna ONG?",
+              "en": "Does it cite the UN, the International Court or an NGO?",
+              "fr": "Cite-t-il l'ONU, la Cour internationale ou une ONG ?",
+              "he": "האם הוא מצטט את האו״ם, בית הדין הבינלאומי או ארגון זכויות?"
+            },
+            "side": "palestinian"
+          },
+          {
+            "id": "q1_intent",
+            "type": "yesno",
+            "label": {
+              "es": "¿Dice que el genocidio depende de la intención, no del número de muertos?",
+              "en": "Does it say genocide depends on intent, not the death toll?",
+              "fr": "Dit-il que le génocide dépend de l'intention, pas du nombre de morts ?",
+              "he": "האם הוא אומר שרצח עם תלוי בכוונה ולא במספר ההרוגים?"
+            },
+            "side": "neutral"
           },
           {
             "id": "q1_skeptic",

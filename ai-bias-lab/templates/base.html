@@ -32,7 +32,7 @@
     </a>
     {% block nav %}
     <nav class="top-nav">
-      {% if session.get('done', {}).get('gaza') %}<a class="top-link" href="{{ url_for('results', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
+      {% if session.get('done', {}).get('gaza') %}<a class="top-link" href="{{ url_for('mine', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
       <details class="lang-pick">
         <summary aria-label="{{ t('lang_menu') }}: {{ langs[lang] }}">{{ lang|upper }}
           <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>

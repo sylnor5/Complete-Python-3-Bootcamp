@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% import '_share.html' as sh with context %}
+{% block title %}{{ t('mine_title') }} · ChatRadar{% endblock %}
+{# Escala de postura: «israelí» a la izquierda en LTR (orden alfabético), reflejada en RTL. #}
+{% set is_rtl = dir == 'rtl' %}
+{% set SAID_POS = {'pro_israel': 3, 'balanced': 50, 'pro_palestine': 97} %}
+{% macro x(pos) %}{{ ((100 - pos) if is_rtl else pos)|round(1) }}{% endmacro %}
+{% set left_label = t('g_palestine') if is_rtl else t('g_israel') %}
+{% set right_label = t('g_israel') if is_rtl else t('g_palestine') %}
+{% set ends %}<div class="lean-ends"><span>{{ left_label }}</span><span>{{ t('g_center') }}</span><span>{{ right_label }}</span></div>{% endset %}
+{% set tested = cards|map(attribute='key')|list %}
+{% block content %}
+<div class="mine">
+  <section class="mine-head">
+    <p class="topic-chip"><i aria-hidden="true"></i>{{ t('topic_chip') }}</p>
+    <h1>{{ t('mine_title') }}</h1>
+    <p class="hint">{{ t('mine_intro').format(n=cards|length) }}</p>
+    <div class="legend"><span><i class="lg-you"></i>{{ t('you') }}</span><span><i class="lg-all"></i>{{ t('everyone') }}</span></div>
+  </section>
+
+  <section class="mb-cards">
+    {% for c in cards %}
+    <article class="bot-card">
+      <div class="bot-top">
+        <h2 class="bot-name">{{ c.name }}</h2>
+        <span class="bot-n">{{ c.total }} {{ t('n_answers') }}</span>
+      </div>
+      <p class="you-said">{{ t('you_said') }} <b>{{ tr(T.lean[c.said]) if c.said in T.lean else '—' }}</b></p>
+      <div class="lean">
+        <div class="lean-track">
+          {% set you_pos = SAID_POS.get(c.said) %}
+          {% if you_pos is not none %}
+          <span class="mk mk-you" style="left: {{ x(you_pos) }}%"></span>
+          <span class="mk-tag you" style="left: {{ x(you_pos) }}%">{{ t('you') }}</span>
+          {% endif %}
+          {% if c.everyone.ok %}
+          {% set near = you_pos is not none and (c.everyone.pos - you_pos)|abs < 16 %}
+          <span class="mk mk-all" style="left: {{ x(c.everyone.pos) }}%"></span>
+          <span class="mk-tag all{% if near %} down{% endif %}" style="left: {{ x(c.everyone.pos) }}%">{{ t('everyone_short') }}</span>
+          {% endif %}
+        </div>
+        {{ ends }}
+      </div>
+      {% if not c.everyone.ok %}
+      <p class="wait-line">{{ t('everyone_wait').format(chat=c.name, min=min_metro, missing=c.everyone.missing) }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+
+  {% if untested %}
+  <section class="try-box">
+    <p>{{ t('test_another') }}</p>
+    <div class="try-chips">
+      {% for key, name, link in untested %}<a class="try" href="{{ url_for('question', qid=q.id, chat=key) }}" data-open="{{ link }}">{{ name }}</a>{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section>
+    {{ sh.share_strip(t('share_result'), share_text, share_url, show_text=True) }}
+  </section>
+
+  {% if just_sent or subscribed %}
+  <section class="thanks" id="thanks">
+    {% if just_sent %}
+    <h2>{{ t('thanks_title') }}</h2>
+    <p>{{ t('thanks_body') }}</p>
+    {% endif %}
+    <div class="subscribe">
+      <h3>{{ t('email_title') }}</h3>
+      {% if subscribed %}
+      <p class="ok">{{ t('email_ok') }}</p>
+      {% else %}
+      <p class="hint">{{ t('email_desc') }}</p>
+      <form method="post" action="{{ url_for('subscribe') }}" class="sub-form">
+        <input type="hidden" name="qid" value="{{ q.id }}">
+        <label for="email" class="sr">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="{{ t('email_ph') }}" dir="ltr">
+        <div class="insta">
+          <label for="instagram" class="block">{{ t('insta_label') }} <span class="opt">{{ t('optional') }}</span>
+            <input id="instagram" name="instagram" maxlength="31" placeholder="@" autocomplete="off" dir="ltr">
+          </label>
+          <label class="consent" for="insta_ok"><input id="insta_ok" name="insta_ok" type="checkbox" value="1"> {{ t('insta_ok') }}</label>
+        </div>
+        <label class="consent" for="consent"><input id="consent" name="consent" type="checkbox" value="1" required> {{ t('email_consent') }}</label>
+        <div class="hp" aria-hidden="true"><label>No <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <button class="btn" type="submit">{{ t('email_btn') }}</button>
+        <p class="hint">{{ t('email_privacy') }}</p>
+      </form>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="compare">
+    <h2>{{ t('all_compared') }}</h2>
+    <p class="hint">{{ t('all_compared_note').format(min=min_metro) }}</p>
+    <div class="cmp-scale" aria-hidden="true"><span>{{ left_label }}</span><span>{{ t('g_center') }}</span><span>{{ right_label }}</span></div>
+    {% for s in compare if s.key != 'otro' or s.total %}
+    <div class="cmp-row{% if not s.score.ok %} low{% endif %}">
+      <p class="cmp-name">{{ s.name }}{% if s.key in tested %} <span class="you-tag">· {{ t('you') }}</span>{% endif %}<small>n={{ s.total }}</small></p>
+      <div class="cmp-bar">
+        <div class="lean-track">{% if s.score.ok %}<span class="mk mk-all" style="left: {{ x(s.score.pos) }}%"></span>{% endif %}</div>
+        {% if not s.score.ok %}<p class="cmp-need">{{ t('needs_more').format(missing=s.score.missing) }}</p>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </section>
+
+  <section class="compare">
+    <h2>{{ t('map_title') }}</h2>
+    <p class="hint">{{ t('map_note') }}</p>
+    {% set placed = points|selectattr('point.ok')|list %}
+    <div class="map-wrap">
+      <p class="map-y">{{ t('map_y_top') }}</p>
+      <svg class="map" viewBox="0 0 300 300" role="img" aria-label="{{ t('map_title') }}">
+        {% for v in [25, 50, 75] %}
+        <line class="{{ 'mid' if v == 50 else 'grid' }}" x1="{{ 20 + v * 2.6 }}" y1="20" x2="{{ 20 + v * 2.6 }}" y2="280"/>
+        <line class="{{ 'grid' }}" x1="20" y1="{{ 20 + v * 2.6 }}" x2="280" y2="{{ 20 + v * 2.6 }}"/>
+        {% endfor %}
+        {# etiquetas: si dos puntos caen cerca, la etiqueta baja una línea para no pisarse #}
+        {% set ns = namespace(labels=[]) %}
+        {% for p in placed|sort(attribute='point.y', reverse=true) %}
+        {% set px = 20 + ((100 - p.point.x) if is_rtl else p.point.x) * 2.6 %}{% set py = 280 - p.point.y * 2.6 %}
+        {% set right = px > 200 %}
+        {% set lx = px - 12 if right else px + 12 %}{% set ns.ly = py + 4 %}
+        {% for _ in range(8) %}{% for l in ns.labels %}{% if (l[0] - lx)|abs < 80 and (l[1] - ns.ly)|abs < 13 %}{% set ns.ly = l[1] + 14 %}{% endif %}{% endfor %}{% endfor %}
+        {% set ns.labels = ns.labels + [(lx, ns.ly)] %}
+        <circle class="pt{% if p.mine %} mine{% endif %}" cx="{{ px|round(1) }}" cy="{{ py|round(1) }}" r="5"/>
+        {% if p.mine %}<circle class="pt-ring" cx="{{ px|round(1) }}" cy="{{ py|round(1) }}" r="9"/>{% endif %}
+        {% if ns.ly - py > 8 %}<line class="lead-line" x1="{{ px|round(1) }}" y1="{{ py|round(1) }}" x2="{{ (lx + (6 if right else -6))|round(1) }}" y2="{{ (ns.ly - 4)|round(1) }}"/>{% endif %}
+        <text class="{% if p.mine %}mine{% endif %}" x="{{ lx|round(1) }}" y="{{ ns.ly|round(1) }}" text-anchor="{{ 'end' if right else 'start' }}">{{ p.name }}</text>
+        {% endfor %}
+      </svg>
+      <p class="map-x" aria-hidden="true"><span>{{ t('map_x_pal') if is_rtl else t('map_x_isr') }}</span><span>{{ t('map_x_isr') if is_rtl else t('map_x_pal') }}</span></p>
+      <p class="map-y">{{ t('map_y_bottom') }}</p>
+    </div>
+    {% if not placed %}<p class="hint">{{ t('map_hint') }}</p>{% endif %}
+    {% set waiting = points|rejectattr('point.ok')|rejectattr('key', 'equalto', 'otro')|list %}
+    {% if waiting %}
+    <p class="map-missing">{{ t('map_not_yet') }}
+      {% for p in waiting %}{{ p.name }} ({{ t('needs_more').format(missing=p.point.missing)|lower }}){% if not loop.last %}, {% endif %}{% endfor %}</p>
+    {% endif %}
+  </section>
+
+  <p><a class="btn btn-ghost detail-link" href="{{ url_for('results', qid=q.id) }}">{{ t('detailed_results') }}</a></p>
+</div>
+<script>
+// «Prueba otro chat»: abre el chat en otra pestaña y, en esta, vuelve a la pregunta con ese chat elegido
+document.querySelectorAll(".try").forEach(function (a) {
+  a.addEventListener("click", function () { if (a.dataset.open) window.open(a.dataset.open, "_blank", "noopener"); });
+});
+</script>
+{{ sh.share_script() }}
+{% endblock %}

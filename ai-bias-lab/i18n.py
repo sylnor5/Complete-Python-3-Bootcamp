@@ -638,3 +638,153 @@ for _key, _value in HE.items():
         T[_key]["he"] = _value
 _missing = [k for k, v in T.items() if k != "lean" and "he" not in v]
 assert not _missing, _missing
+
+
+# ------------------------------------------- ronda 5: neutralidad, «Tus chats», mapa
+def _add(key, es, en, fr, he):
+    T[key] = {"es": es, "en": en, "fr": fr, "he": he}
+
+
+T["stance"] = {
+    "isr_clear": {"es": "Claramente del lado israelí", "en": "Clearly on the Israeli side", "fr": "Clairement du côté israélien", "he": "בבירור בצד הישראלי"},
+    "isr_lean": {"es": "Más bien del lado israelí", "en": "Leaning to the Israeli side", "fr": "Plutôt du côté israélien", "he": "נוטה לצד הישראלי"},
+    "neither": {"es": "En medio / ninguno", "en": "In between / neither", "fr": "Entre les deux / aucun", "he": "באמצע / אף צד"},
+    "pal_lean": {"es": "Más bien del lado palestino", "en": "Leaning to the Palestinian side", "fr": "Plutôt du côté palestinien", "he": "נוטה לצד הפלסטיני"},
+    "pal_clear": {"es": "Claramente del lado palestino", "en": "Clearly on the Palestinian side", "fr": "Clairement du côté palestinien", "he": "בבירור בצד הפלסטיני"},
+    "skip": {"es": "Prefiero no decirlo", "en": "Prefer not to say", "fr": "Je préfère ne pas le dire", "he": "מעדיף/ה לא לומר"},
+}
+_add("stance_q", "¿Dónde te sitúas tú en este conflicto?", "Where do you stand on this conflict?",
+     "Où vous situez-vous dans ce conflit ?", "איפה את/ה עומד/ת בסכסוך הזה?")
+_add("stance_hint",
+     "Solo sirve para ver si las personas de cada lado valoran distinto las mismas respuestas. Nunca se muestra junto a tu respuesta.",
+     "Only used to see whether people on each side rate the same answers differently. It's never shown with your answer.",
+     "Sert uniquement à voir si les personnes de chaque côté évaluent différemment les mêmes réponses. Jamais affiché avec votre réponse.",
+     "משמש רק כדי לבדוק אם אנשים מכל צד מדרגים אחרת את אותן תשובות. לעולם לא מוצג לצד התשובה שלכם.")
+_add("loaded_note",
+     "La pregunta tiene un punto de vista a propósito. Medimos si cada IA lo sigue, lo corrige o lo equilibra.",
+     "This question has a point of view on purpose. We measure whether each AI follows it, corrects it or balances it.",
+     "Cette question a un point de vue, à dessein. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre.",
+     "לשאלה יש נקודת מבט בכוונה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה.")
+_add("gauge_locked",
+     "La aguja aparece cuando hayas participado, para que no influya en tu valoración.",
+     "The needle appears once you've taken part, so it doesn't influence your rating.",
+     "L'aiguille apparaît une fois que vous avez participé, pour ne pas influencer votre avis.",
+     "המחוג מופיע אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
+_add("gauge_rule",
+     "Los lados van en orden alfabético. La posición no tiene nada que ver con izquierda o derecha política.",
+     "Sides are in alphabetical order. Position says nothing about left- or right-wing politics.",
+     "Les côtés sont dans l'ordre alphabétique. La position n'a rien à voir avec la gauche ou la droite politique.",
+     "הצדדים מסודרים לפי סדר האלף־בית. המיקום לא קשור לשמאל או לימין פוליטי.")
+_add("gauge_all_note",
+     "Todos los chats juntos: cada chat pesa lo mismo y se mide por separado.",
+     "All chats together: each chat weighs the same and is measured on its own.",
+     "Tous les chats ensemble : chaque chat pèse autant et est mesuré séparément.",
+     "כל הצ'אטים יחד: לכל צ'אט אותו משקל, וכל אחד נמדד בנפרד.")
+_add("compare_chats", "Compara chats", "Compare chats", "Comparer les chats", "השוו צ'אטים")
+_add("all_short", "Todos", "All", "Tous", "הכול")
+_add("chat_answers", "respuestas de {chat}", "answers for {chat}", "réponses pour {chat}", "תשובות עבור {chat}")
+_add("chat_wait", "{chat}: faltan {missing} respuestas para ver su aguja.", "{chat}: {missing} more answers to show its needle.",
+     "{chat} : encore {missing} réponses pour voir son aiguille.", "{chat}: חסרות עוד {missing} תשובות כדי להציג את המחוג.")
+_add("mine_title", "Tus chats", "Your chats", "Vos chats", "הצ'אטים שלכם")
+_add("mine_intro",
+     "Probaste {n}. Esto es lo que dijiste, junto a la media de todos los que probaron el mismo chat.",
+     "You tested {n}. Here is what you said, next to everyone who tested the same chat.",
+     "Vous en avez testé {n}. Voici ce que vous avez dit, à côté de tous ceux qui ont testé le même chat.",
+     "בדקתם {n}. זה מה שאמרתם, לצד הממוצע של כל מי שבדק את אותו צ'אט.")
+_add("you", "Tú", "You", "Vous", "אתם")
+_add("you_said", "Dijiste:", "You said:", "Vous avez dit :", "אמרתם:")
+_add("everyone", "Todos (media)", "Everyone (average)", "Tout le monde (moyenne)", "כולם (ממוצע)")
+_add("everyone_wait",
+     "La media de {chat} aparece con {min} respuestas: faltan {missing}.",
+     "Everyone's average for {chat} appears at {min} answers: {missing} more to go.",
+     "La moyenne pour {chat} apparaît à {min} réponses : encore {missing}.",
+     "הממוצע של {chat} יופיע אחרי {min} תשובות: חסרות עוד {missing}.")
+_add("test_another", "Prueba otro chat. La misma pregunta, unos 3 minutos.", "Test another chat. Same question, about 3 minutes.",
+     "Testez un autre chat. Même question, environ 3 minutes.", "בדקו צ'אט נוסף. אותה שאלה, כ־3 דקות.")
+_add("share_result", "Comparte la prueba", "Share the test", "Partagez le test", "שתפו את המבחן")
+_add("share_btn", "Compartir", "Share", "Partager", "שיתוף")
+_add("mine_share_msg", "Probé {chats} en ChatRadar. ¿El tuyo respondió igual?", "I tested {chats} on ChatRadar. Did yours answer the same way?",
+     "J'ai testé {chats} sur ChatRadar. Le vôtre a-t-il répondu pareil ?", "בדקתי את {chats} ב-ChatRadar. האם שלכם ענה אותו דבר?")
+_add("all_compared", "Todos los chats comparados", "All chats compared", "Tous les chats comparés", "כל הצ'אטים בהשוואה")
+_add("all_compared_note",
+     "Cada marca es la media de quienes probaron ese chat. Cada chat se mide por separado: están entrenados de forma distinta y eso es justo lo que comparamos. Un chat aparece con {min} respuestas.",
+     "Each marker is the average of everyone who tested that chat. Each chat is measured on its own: they are trained differently, and that's exactly what we compare. A chat appears at {min} answers.",
+     "Chaque repère est la moyenne de ceux qui ont testé ce chat. Chaque chat est mesuré séparément : ils sont entraînés différemment, et c'est justement ce que nous comparons. Un chat apparaît à {min} réponses.",
+     "כל סימון הוא הממוצע של מי שבדק את אותו צ'אט. כל צ'אט נמדד בנפרד: הם מאומנים אחרת, וזה בדיוק מה שאנחנו משווים. צ'אט מופיע אחרי {min} תשובות.")
+_add("needs_more", "Faltan {missing} respuestas", "Needs {missing} more answers", "Encore {missing} réponses", "חסרות עוד {missing} תשובות")
+_add("map_title", "Dónde cae cada chat", "Where each chat lands", "Où se place chaque chat", "איפה כל צ'אט נוחת")
+_add("map_note",
+     "Horizontal: de qué lado son los argumentos que más menciona. Vertical: cuántos argumentos de ambos lados menciona. Sale de las casillas opcionales.",
+     "Horizontal: which side's arguments the answer mentions more. Vertical: how many arguments from both sides it mentions. Based on the optional boxes.",
+     "Horizontal : de quel côté sont les arguments qu'il mentionne le plus. Vertical : combien d'arguments des deux côtés il mentionne. D'après les cases facultatives.",
+     "אופקי: הטיעונים של איזה צד התשובה מזכירה יותר. אנכי: כמה טיעונים משני הצדדים היא מזכירה. מבוסס על התיבות האופציונליות.")
+_add("map_x_isr", "Más argumentos del lado israelí", "More Israeli-side arguments", "Plus d'arguments côté israélien", "יותר טיעונים מהצד הישראלי")
+_add("map_x_pal", "Más argumentos del lado palestino", "More Palestinian-side arguments", "Plus d'arguments côté palestinien", "יותר טיעונים מהצד הפלסטיני")
+_add("map_y_top", "Muchos argumentos de ambos lados", "Many arguments from both sides", "Beaucoup d'arguments des deux côtés", "הרבה טיעונים משני הצדדים")
+_add("map_y_bottom", "Pocos argumentos", "Few arguments", "Peu d'arguments", "מעט טיעונים")
+_add("map_hint", "Marca las casillas de «Más detalles» para que tu chat aparezca en el mapa.",
+     "Tick the boxes under “More details” to place your chat on the map.",
+     "Cochez les cases de « Plus de détails » pour placer votre chat sur la carte.",
+     "סמנו את התיבות ב„פרטים נוספים” כדי שהצ'אט שלכם יופיע במפה.")
+_add("map_share", "Mi chat cayó aquí. ¿Dónde cae el tuyo?", "My chat landed here. Where does yours land?",
+     "Mon chat s'est placé ici. Et le vôtre ?", "הצ'אט שלי נחת כאן. איפה נוחת שלכם?")
+_add("detailed_results", "Ver resultados detallados", "See detailed results", "Voir les résultats détaillés", "לתוצאות המפורטות")
+_add("insta_label", "Tu usuario de Instagram", "Your Instagram handle", "Votre compte Instagram", "שם המשתמש שלכם באינסטגרם")
+_add("insta_ok", "Podéis mencionarme en vuestras publicaciones", "You can mention me in your posts",
+     "Vous pouvez me mentionner dans vos publications", "אפשר לתייג אותי בפוסטים שלכם")
+_add("test2_note", "Pronto llega el Test #2, con una pregunta cargada desde el ángulo contrario.",
+     "Test #2 is coming, with a question loaded from the opposite angle.",
+     "Le test n° 2 arrive, avec une question orientée dans l'autre sens.",
+     "מבחן מס' 2 בדרך, עם שאלה טעונה מהכיוון ההפוך.")
+_add("origin_title", "Cómo empezó", "How it started", "Comment tout a commencé", "איך זה התחיל")
+
+# «Cómo funciona»: origen (la cita de ChatGPT se movió aquí desde la portada), regla de los lados,
+# medición por chat, mapa y postura propia
+_METHOD_EXTRA = {
+    "es": [
+        ("Cómo empezó", "Le hice a ChatGPT la pregunta de la prueba. Su respuesta me pareció inclinada hacia un lado y, cuando le discutí, respondió: «Tu crítica es válida respecto de mi respuesta anterior: presenté la cuestión de forma demasiado asimétrica.» De ahí nació la idea de comprobar si les pasa a todos."),
+        ("Una pregunta cargada a propósito", "La pregunta tiene un punto de vista, tal como la hizo una persona real. Lo que medimos es si cada IA lo sigue, lo corrige o lo equilibra. Habrá otras pruebas con preguntas cargadas desde el ángulo contrario."),
+        ("Izquierda y derecha", "En la escala, los lados van en orden alfabético en cada idioma («israelí» antes que «palestino»; en hebreo, que se lee de derecha a izquierda, queda a la derecha). La posición no tiene nada que ver con izquierda o derecha política. En el formulario, el orden de las opciones cambia al azar para cada visitante."),
+        ("Cada chat por separado", "Nunca mezclamos respuestas de chats distintos: cada chat tiene su propia aguja. En «Todos», cada chat pesa lo mismo, tenga más o menos respuestas."),
+        ("Dos medidas", "La aguja muestra cómo valoran las respuestas quienes participan. El mapa usa algo observable: qué argumentos de cada lado menciona la respuesta (4 de cada lado en las casillas opcionales). Así no dependemos solo de impresiones."),
+        ("Tu postura", "Al final puedes indicar, si quieres, de qué lado te sientes. Sirve para ver si cada lado valora distinto las mismas respuestas. Nunca se muestra junto a tu respuesta."),
+    ],
+    "en": [
+        ("How it started", "I asked ChatGPT the test question. Its answer seemed to lean to one side, and when I pushed back it replied: “Your criticism of my previous answer is valid: I presented the issue in a way that was too one-sided.” That's where the idea of checking whether it happens to everyone came from."),
+        ("A question loaded on purpose", "The question has a point of view, exactly as a real person asked it. What we measure is whether each AI follows it, corrects it or balances it. Other tests will use questions loaded from the opposite angle."),
+        ("Left and right", "On the scale, sides are in alphabetical order in each language (“Israeli” before “Palestinian”; in Hebrew, read right to left, it sits on the right). Position says nothing about left- or right-wing politics. In the form, the order of the options is shuffled for each visitor."),
+        ("Each chat on its own", "We never mix answers from different chats: each chat has its own needle. In “All”, every chat weighs the same, however many answers it has."),
+        ("Two measures", "The needle shows how participants rate the answers. The map uses something observable: which arguments from each side the answer mentions (4 per side in the optional boxes). So we don't rely on impressions alone."),
+        ("Your stance", "At the end you can say, if you like, which side you feel closer to. It shows whether each side rates the same answers differently. It's never shown with your answer."),
+    ],
+    "fr": [
+        ("Comment tout a commencé", "J'ai posé à ChatGPT la question du test. Sa réponse m'a semblé pencher d'un côté et, quand je l'ai contredit, il a répondu : « Votre critique de ma réponse précédente est fondée : j'ai présenté la question de manière trop asymétrique. » C'est de là qu'est née l'idée de vérifier si cela arrive à tout le monde."),
+        ("Une question orientée à dessein", "La question a un point de vue, telle qu'une vraie personne l'a posée. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre. D'autres tests utiliseront des questions orientées dans l'autre sens."),
+        ("Gauche et droite", "Sur l'échelle, les côtés sont dans l'ordre alphabétique de chaque langue (« israélien » avant « palestinien » ; en hébreu, qui se lit de droite à gauche, il est à droite). La position n'a rien à voir avec la gauche ou la droite politique. Dans le formulaire, l'ordre des options change au hasard pour chaque visiteur."),
+        ("Chaque chat séparément", "Nous ne mélangeons jamais les réponses de chats différents : chaque chat a sa propre aiguille. Dans « Tous », chaque chat pèse autant, quel que soit son nombre de réponses."),
+        ("Deux mesures", "L'aiguille montre comment les participants évaluent les réponses. La carte utilise un élément observable : les arguments de chaque côté que mentionne la réponse (4 par côté dans les cases facultatives). Nous ne dépendons donc pas que des impressions."),
+        ("Votre position", "À la fin, vous pouvez indiquer, si vous le souhaitez, de quel côté vous vous sentez. Cela montre si chaque côté évalue différemment les mêmes réponses. Ce n'est jamais affiché avec votre réponse."),
+    ],
+    "he": [
+        ("איך זה התחיל", "שאלתי את ChatGPT את שאלת המבחן. התשובה שלו נראתה לי נוטה לצד אחד, וכשהתווכחתי איתו הוא ענה: „הביקורת שלך על התשובה הקודמת שלי מוצדקת: הצגתי את הנושא באופן חד־צדדי מדי.” משם נולד הרעיון לבדוק אם זה קורה לכולם."),
+        ("שאלה טעונה בכוונה", "לשאלה יש נקודת מבט, בדיוק כפי שאדם אמיתי שאל אותה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה. במבחנים הבאים יהיו שאלות טעונות מהכיוון ההפוך."),
+        ("שמאל וימין", "בסולם, הצדדים מסודרים לפי סדר האלף־בית בכל שפה („ישראלי” לפני „פלסטיני”; בעברית, שנקראת מימין לשמאל, הוא מופיע מימין). המיקום לא קשור לשמאל או לימין פוליטי. בטופס, סדר האפשרויות מתחלף באקראי לכל מבקר."),
+        ("כל צ'אט בנפרד", "אנחנו אף פעם לא מערבבים תשובות של צ'אטים שונים: לכל צ'אט יש מחוג משלו. ב„הכול”, לכל צ'אט אותו משקל, לא משנה כמה תשובות יש לו."),
+        ("שני מדדים", "המחוג מראה איך המשתתפים מדרגים את התשובות. המפה משתמשת במשהו שניתן לראות: אילו טיעונים מכל צד התשובה מזכירה (4 מכל צד בתיבות האופציונליות). כך אנחנו לא תלויים רק ברושם."),
+        ("העמדה שלכם", "בסוף אפשר לציין, אם רוצים, לאיזה צד אתם מרגישים קרובים. זה מראה אם כל צד מדרג אחרת את אותן תשובות. זה לעולם לא מוצג לצד התשובה שלכם."),
+    ],
+}
+for _lang, _items in _METHOD_EXTRA.items():
+    T["method"][_lang] = _items + T["method"][_lang]
+
+# ------------------------------------------- ronda 5: textos extra de la interfaz
+_add("share_landing_title", "¿Conoces a alguien que probaría su chat?", "Know someone who'd test their chat?",
+     "Vous connaissez quelqu'un qui testerait son chat ?", "מכירים מישהו שיבדוק את הצ'אט שלו?")
+_add("insta_copied", "Enlace copiado. Pégalo en Instagram.", "Link copied. Paste it in Instagram.",
+     "Lien copié. Collez-le dans Instagram.", "הקישור הועתק. הדביקו אותו באינסטגרם.")
+_add("everyone_short", "Todos", "Everyone", "Tout le monde", "כולם")
+_add("map_not_yet", "Aún no están en el mapa:", "Not on the map yet:", "Pas encore sur la carte :", "עדיין לא במפה:")
+_add("thanks_body", "Tus respuestas ya cuentan. Abajo ves cómo responde cada chat.",
+     "Your answers now count. See below how each chat answers.",
+     "Vos réponses comptent maintenant. Voyez ci-dessous comment répond chaque chat.",
+     "התשובות שלכם כבר נספרות. למטה אפשר לראות איך כל צ'אט עונה.")

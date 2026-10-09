@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Estadísticas · ChatRadar{% endblock %}
+{% block content %}
+<h1>Estadísticas</h1>
+<p class="hint">Solo tú ves esta página. Contadores anónimos: no se sabe quién comparte, solo cuántas veces y por qué red.</p>
+<h2>De dónde llegan las visitas</h2>
+<table><thead><tr><th>Red</th><th class="n">Visitas</th></tr></thead><tbody>
+{% for r in rows if r.kind == 'visit_from' %}<tr><td>{{ r.name }}</td><td class="n">{{ r.n }}</td></tr>{% else %}<tr><td colspan="2">Todavía nada.</td></tr>{% endfor %}
+</tbody></table>
+<h2>Botones de compartir pulsados</h2>
+<table><thead><tr><th>Botón</th><th class="n">Clics</th></tr></thead><tbody>
+{% for r in rows if r.kind == 'share_click' %}<tr><td>{{ r.name }}</td><td class="n">{{ r.n }}</td></tr>{% else %}<tr><td colspan="2">Todavía nada.</td></tr>{% endfor %}
+</tbody></table>
+<h2>Cómo valora cada postura</h2>
+<p class="hint">Filas: postura que declaró la persona (opcional). Columnas: cómo valoró la respuesta de su chat.</p>
+<table><thead><tr><th>Postura</th><th>Valoración</th><th class="n">n</th></tr></thead><tbody>
+{% for r in stances %}<tr><td>{{ r.stance }}</td><td>{{ r.lean }}</td><td class="n">{{ r.n }}</td></tr>{% endfor %}
+</tbody></table>
+<p><a href="/export.csv?token={{ token }}">Descargar todas las respuestas (CSV)</a> · <a href="/admin/subscribers.csv?token={{ token }}">Emails e Instagram (CSV)</a> · <a href="/admin/proposals?token={{ token }}">Propuestas</a></p>
+{% endblock %}

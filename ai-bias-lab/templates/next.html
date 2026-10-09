@@ -14,7 +14,7 @@
   {% endif %}
   {% if done %}<p class="hint">{{ t('next_done') }}: {{ done|join(', ') }}</p>{% endif %}
 
-  <p><a class="btn big" href="{{ url_for('results', qid=q.id) }}#thanks">{{ t('next_no') }}</a></p>
+  <p><a class="btn big" href="{{ url_for('mine', qid=q.id) }}#thanks">{{ t('next_no') }}</a></p>
 </section>
 <script>
 // abre el chat en otra pestaña y, en esta, vuelve a la pregunta con ese chat ya elegido
