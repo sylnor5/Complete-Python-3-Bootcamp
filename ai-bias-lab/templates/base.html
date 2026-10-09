@@ -32,6 +32,7 @@
     </a>
     {% block nav %}
     <nav class="top-nav">
+      <a class="top-link" href="{{ url_for('method') }}">{{ t('nav_method') }}</a>
       {% if session.get('done', {}).get('gaza') %}<a class="top-link" href="{{ url_for('mine', qid='gaza') }}">{{ t('nav_results') }}</a>{% endif %}
       <details class="lang-pick">
         <summary aria-label="{{ t('lang_menu') }}: {{ langs[lang] }}">{{ lang|upper }}
@@ -63,6 +64,7 @@
       <nav class="foot-nav" aria-label="Footer">
         <a href="{{ url_for('method') }}">{{ t('foot_method') }}</a>
         <a href="{{ url_for('method') }}#privacy">{{ t('foot_privacy') }}</a>
+        <a href="{{ url_for('propose') }}">{{ t('nav_propose') }}</a>
         <span class="contact">{{ t('foot_contact') }}: <a href="mailto:hello@thechatradar.com" dir="ltr">hello@thechatradar.com</a></span>
       </nav>
       <div class="foot-langs">

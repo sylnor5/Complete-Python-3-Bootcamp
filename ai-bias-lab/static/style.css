@@ -597,3 +597,7 @@ blockquote { margin: 6px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; fo
 .map .lead-line { stroke: var(--pencil); stroke-width: .8; }
 .caption .msg { flex: 1 1 0; min-width: 0; }
 .caption { flex-wrap: nowrap; }
+
+/* menú superior: «Cómo funciona» siempre visible, también en el móvil */
+.top-nav { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 420px) { .top-nav { gap: 10px; } .top-link { font-size: .88rem; } }
