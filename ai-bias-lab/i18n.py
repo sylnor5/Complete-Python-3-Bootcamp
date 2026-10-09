@@ -793,3 +793,34 @@ _add("level_note",
      "We measure which way each chat leans, not who is right.",
      "Nous mesurons de quel côté penche chaque chat, pas qui a raison.",
      "אנחנו מודדים לאן נוטה כל צ'אט, לא מי צודק.")
+_add("loaded_note",
+     "La pregunta tiene un punto de vista a propósito. Medimos si cada IA analiza los hechos de los dos lados o toma partido.",
+     "This question has a point of view on purpose. We measure whether each AI weighs the facts on both sides or takes a side.",
+     "Cette question a un point de vue, à dessein. Nous mesurons si chaque IA analyse les faits des deux côtés ou prend parti.",
+     "לשאלה יש נקודת מבט בכוונה. אנחנו בודקים אם כל בינה מלאכותית מנתחת את העובדות של שני הצדדים או נוקטת צד.")
+_add("why_h", "Por qué existe ChatRadar", "Why ChatRadar exists", "Pourquoi ChatRadar existe", "למה ChatRadar קיים")
+_add("why_story",
+     "Le hice esta pregunta a ChatGPT. Tenía a mano toda la información del mundo, pero me dio una respuesta rápida, superficial y de un solo lado. Cuando le insistí, lo reconoció: «presenté la cuestión de forma demasiado asimétrica». ¿Le pasa a todo el mundo? ¿Con todos los chats?",
+     "I asked ChatGPT this question. It had all the world's information at hand, yet it gave me a quick, shallow, one-sided answer. When I pushed back, it admitted it: “I presented the issue in a way that was too one-sided.” Does this happen to everyone? With every chat?",
+     "J'ai posé cette question à ChatGPT. Il avait toute l'information du monde à portée de main, mais il m'a donné une réponse rapide, superficielle et d'un seul côté. Quand j'ai insisté, il l'a reconnu : « j'ai présenté la question de façon trop asymétrique ». Est-ce que ça arrive à tout le monde ? Avec tous les chats ?",
+     "שאלתי את ChatGPT את השאלה הזו. היה לו את כל המידע שבעולם, ובכל זאת הוא נתן לי תשובה מהירה, שטחית וחד־צדדית. כשהתעקשתי, הוא הודה: „הצגתי את הנושא בצורה חד־צדדית מדי”. האם זה קורה לכולם? עם כל הצ'אטים?")
+T["why_points"] = {
+    "es": [("Las redes nos muestran más de lo que ya pensamos.", "Vemos cada vez menos a quien piensa distinto, y muchos creen que eso nos ha separado."),
+           ("Ahora la IA nos explica el mundo.", "Millones de personas toman sus respuestas como neutrales. Si toma partido, aunque sea sin darse cuenta, empuja a millones hacia un lado."),
+           ("Si nadie lo mide, nadie lo sabe.", "Una conversación no prueba nada; miles, sí. Publicaremos los resultados chat por chat, y si un chat toma partido de forma clara, lo haremos público y pediremos a la empresa que lo revise.")],
+    "en": [("Social media shows us more of what we already think.", "We see less and less of people who think differently, and many believe that has pulled us apart."),
+           ("Now AI explains the world to us.", "Millions of people take its answers as neutral. If it takes sides, even without meaning to, it nudges millions toward one side."),
+           ("If nobody measures it, nobody knows.", "One conversation proves nothing; thousands can. We'll publish the results chat by chat, and if a chat clearly takes sides, we'll make it public and ask the company to review it.")],
+    "fr": [("Les réseaux sociaux nous montrent davantage ce que nous pensons déjà.", "Nous voyons de moins en moins ceux qui pensent autrement, et beaucoup pensent que cela nous a éloignés."),
+           ("Désormais, l'IA nous explique le monde.", "Des millions de personnes prennent ses réponses pour neutres. Si elle prend parti, même sans le vouloir, elle pousse des millions de personnes d'un côté."),
+           ("Si personne ne le mesure, personne ne le sait.", "Une conversation ne prouve rien ; des milliers, si. Nous publierons les résultats chat par chat, et si un chat prend clairement parti, nous le rendrons public et demanderons à l'entreprise de le revoir.")],
+    "he": [("הרשתות החברתיות מראות לנו עוד ממה שאנחנו כבר חושבים.", "אנחנו רואים פחות ופחות את מי שחושב אחרת, ורבים מאמינים שזה הרחיק אותנו זה מזה."),
+           ("עכשיו הבינה המלאכותית מסבירה לנו את העולם.", "מיליוני אנשים מקבלים את התשובות שלה כניטרליות. אם היא נוקטת צד, גם בלי כוונה, היא דוחפת מיליונים לצד אחד."),
+           ("אם אף אחד לא מודד, אף אחד לא יודע.", "שיחה אחת לא מוכיחה כלום; אלפים כן. נפרסם את התוצאות צ'אט אחר צ'אט, ואם צ'אט מסוים נוקט צד בבירור, נפרסם זאת ונבקש מהחברה לבדוק.")],
+}
+_add("og_desc",
+     "Prueba ciudadana: la misma pregunta sobre la guerra de Gaza en ChatGPT, Gemini, Claude y más. ¿Analizan los dos lados o toman partido? Anónimo, 3 minutos.",
+     "A citizen test: the same question about the Gaza war in ChatGPT, Gemini, Claude and more. Do they weigh both sides or take one? Anonymous, 3 minutes.",
+     "Un test citoyen : la même question sur la guerre à Gaza dans ChatGPT, Gemini, Claude et d'autres. Analysent-ils les deux côtés ou prennent-ils parti ? Anonyme, 3 minutes.",
+     "מבחן אזרחי: אותה שאלה על המלחמה בעזה ב-ChatGPT, Gemini, Claude ועוד. האם הם מנתחים את שני הצדדים או נוקטים צד? אנונימי, 3 דקות.")
+_add("why_link", "¿Por qué hacemos esto?", "Why are we doing this?", "Pourquoi faisons-nous cela ?", "למה אנחנו עושים את זה?")

@@ -619,3 +619,25 @@ p, li { max-width: 68ch; }
   .mark { font-size: 17px; gap: 7px; }
   .lang-pick summary { padding: 6px 7px 6px 9px; font-size: 13px; }
 }
+
+/* ================================================================ portada: el porqué (ronda 7)
+   Móvil: el botón entra en la primera pantalla; la nota y el nivel van justo debajo. */
+.why-link { grid-area: whylink; justify-self: start; display: inline-flex; align-items: center; gap: 6px; margin-top: 14px;
+  font-weight: 600; font-size: .95rem; text-decoration: none; color: var(--graphite); border-bottom: 1.5px solid var(--accent); padding-bottom: 3px; }
+.why-link svg { width: 14px; height: 14px; }
+.hero { grid-template-areas: "chip" "h1" "sub" "loaded" "gauge" "cta" "micro" "whylink"; }
+@media (min-width: 880px) {
+  .hero { grid-template-areas: "chip gauge" "h1 gauge" "sub gauge" "loaded gauge" "cta gauge" "micro gauge" "whylink gauge" ". gauge";
+    grid-template-rows: auto auto auto auto auto auto auto 1fr; }
+}
+@media (max-width: 879px) {
+  .hero { grid-template-areas: "chip" "h1" "sub" "cta" "micro" "whylink" "loaded" "gauge"; }
+  .hero .loaded-note { margin-top: 26px; }
+}
+.why-story { font-size: 1.08rem; line-height: 1.55; }
+.why-points { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 18px; counter-reset: why; }
+.why-points li { position: relative; padding-inline-start: 44px; color: var(--pencil); line-height: 1.5; counter-increment: why; }
+.why-points li::before { content: counter(why); position: absolute; inset-inline-start: 0; top: 0; width: 29px; height: 29px;
+  border-radius: 50%; border: 1.5px solid var(--edge); display: grid; place-items: center;
+  font: 700 14px/1 "Archivo", var(--f-text); color: var(--graphite); }
+.why-points strong { display: block; color: var(--graphite); font-weight: 600; margin-bottom: 2px; }

@@ -6,6 +6,15 @@
   <title>{% block title %}ChatRadar · {{ t('tagline') }}{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ t('tagline') }}{% endblock %}">
   <meta name="color-scheme" content="light dark">
+  {# vista previa al pegar el enlace en WhatsApp, X, etc.: lleva el porqué #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ChatRadar">
+  <meta property="og:title" content="{{ t('hero_title') }} {{ t('hero_title2') }}">
+  <meta property="og:description" content="{{ t('og_desc') }}">
+  <meta property="og:image" content="{{ public_url }}/static/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   {# Latin: Archivo (titulares, contador) + IBM Plex Sans (texto). Hebreo: Rubik (titulares) + IBM Plex Sans Hebrew (texto). #}
