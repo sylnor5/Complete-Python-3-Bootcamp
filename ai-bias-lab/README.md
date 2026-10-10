@@ -23,7 +23,7 @@ La primera prueba es la pregunta sobre Gaza que originó el proyecto (una sola p
 - **Metrónomo** (arriba de los resultados): una barra por chat que va de «hacia la postura israelí» a
   «hacia la postura palestina», con «equilibrado» en el centro. La posición sale de lo que marcaron quienes
   participaron (-1, 0, +1; «no estoy seguro» no cuenta). Punto lleno = todas las respuestas; círculo vacío =
-  solo las que tienen enlace. Un chat no aparece hasta tener `MIN_METRO` respuestas (por defecto 20).
+  solo las que tienen enlace. Un chat no aparece hasta tener `MIN_METRO` respuestas (ahora 1 para las pruebas internas; volver a 20 antes del lanzamiento).
   Respeta los filtros de idioma, país y tipo de respuesta.
 - **Tras enviar**, la persona llega al metrónomo con un panel de agradecimiento que ofrece:
   - **email opcional** con casilla de consentimiento. Se guarda en otra tabla (`subscribers`), sin ningún
@@ -104,7 +104,7 @@ gunicorn app:app
 | `GEOIP_DB`     | Ruta del fichero `.mmdb` (por defecto `geoip.mmdb`).        |
 | `MAX_PER_HOUR` | Envíos máximos por conexión y hora (por defecto 10).        |
 | `PUBLIC_URL`   | Dirección pública para compartir (por defecto thechatradar.com). |
-| `MIN_METRO`    | Respuestas mínimas por chat para mostrarlo en el metrónomo (20). |
+| `MIN_METRO`    | Respuestas mínimas por chat para mostrar su burbuja (ahora 1; volver a 20 antes del lanzamiento). |
 | `BREVO_API_KEY`, `BREVO_LIST_ID` | Opcional: enviar los emails a una lista de Brevo. |
 
 En hostings con disco efímero (p. ej. el plan gratuito de Render) SQLite se borra al reiniciar.

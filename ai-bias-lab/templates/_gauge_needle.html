@@ -1,0 +1,124 @@
+{# Instrumento de la portada. (La posición de cada chat ni siquiera va en el HTML hasta participar.)
+    pos: 0 = postura israelí, 50 = equilibrado, 100 = postura palestina.
+   En RTL se refleja (israelí a la derecha). La aguja solo se ve después de participar (`unlocked`);
+   antes, solo los contadores. Cada chat se mide por separado; los chips cambian de chat.
+   Sin porcentajes en la portada. Los dos extremos son idénticos. #}
+{% set is_rtl = dir == 'rtl' %}
+{% set show_needle = unlocked and gauge.ok %}
+{% set left_label = t('g_palestine') if is_rtl else t('g_israel') %}
+{% set right_label = t('g_israel') if is_rtl else t('g_palestine') %}
+{% set rot = ((((100 - gauge.pos) if is_rtl else gauge.pos) - 50) * 1.7)|round(1) if gauge.ok else 0 %}
+{% if not unlocked %}{% set aria = t('gauge_locked_n') %}
+{% elif gauge.ok %}{% set aria = t('gauge_aria_live').format(n=total_valid) %}
+{% else %}{% set aria = t('gauge_aria_wait').format(n=gauge.n, min=min_metro) %}{% endif %}
+<figure class="instrument" role="group" aria-label="{{ aria }}">
+  <div class="dial">
+    <div class="screws" aria-hidden="true"><span></span><span></span></div>
+    <div class="dial-face{% if not unlocked %} is-locked{% elif not gauge.ok %} waiting{% endif %}">
+      <svg class="gauge" viewBox="0 0 400 226" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line class="hatch-line" x1="0" y1="0" x2="0" y2="4"/>
+          </pattern>
+          <radialGradient id="cap" cx="40%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#5a5d62"/><stop offset="1" stop-color="#1a1b1d"/>
+          </radialGradient>
+        </defs>
+        <path d="M 172.56 44.40 A 158 158 0 0 1 227.44 44.40 L 224.83 59.17 A 143 143 0 0 0 175.17 59.17 Z" fill="url(#hatch)"/>
+        <path class="arc-out" d="M 42.60 186.23 A 158 158 0 0 1 357.40 186.23"/>
+        <path class="arc-in" d="M 66.51 188.32 A 134 134 0 0 1 333.49 188.32"/>
+        <g class="ticks">
+          {% for i in range(69) %}{% set a2 = 10 + 5 * i %}
+          <line x1="200" y1="42" x2="200" y2="{{ 57 if a2 % 60 == 0 else (52 if a2 % 20 == 0 else 48) }}" class="{{ 'tk-major' if a2 % 60 == 0 else ('tk-mid' if a2 % 20 == 0 else 'tk-minor') }}" transform="rotate({{ 85 - 2.5 * i }} 200 200)"/>
+          {% endfor %}
+        </g>
+        {% if unlocked %}
+        <g class="needle" id="needle" style="--rot: {{ rot }}deg; --from: {{ '30deg' if is_rtl else '-30deg' }}"{% if not show_needle %} hidden{% endif %}>
+          <path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/>
+        </g>
+        {% endif %}
+        <circle cx="200" cy="200" r="11" fill="url(#cap)"/>
+        <circle class="needle-pin" cx="200" cy="200" r="3"/>
+      </svg>
+      <span class="g-lbl g-top">{{ t('g_center') }}</span>
+      <span class="g-lbl g-left">{{ left_label }}</span>
+      <span class="g-lbl g-right">{{ right_label }}</span>
+    </div>
+    <div class="readout">
+      <span class="odo" id="odo" aria-hidden="true">{% for d in '%06d'|format(total_valid) %}{% set n = d|int %}<b data-p="{{ (n + 9) % 10 }}" data-n="{{ (n + 1) % 10 }}"{% if loop.last %} class="last"{% endif %}>{{ d }}</b>{% endfor %}</span>
+      <span class="sr" id="odo-sr">{{ total_valid }}</span>
+      <span class="odo-label" id="odo-label"><strong>{{ t('odo_label') }}</strong>{{ t('odo_label2') }}</span>
+    </div>
+  </div>
+  <figcaption class="caption" id="gauge-caption" aria-live="polite">
+    {% if not unlocked %}
+    <svg class="lock-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" stroke="currentColor" stroke-width="1.3"/></svg><span class="msg">{{ t('gauge_locked_n') }}</span>
+    {% elif gauge.ok %}
+    <span class="live"><i></i>{{ t('live') }}</span><span>· {{ t('live_caption') }}</span>
+    {% else %}
+    <span class="wait-icon" aria-hidden="true"></span><span class="msg">{{ t('gauge_wait_n').format(min=min_metro, missing=gauge.missing) }}</span>
+    {% endif %}
+  </figcaption>
+
+  <div class="selector">
+    <p class="selector-label" id="sel-label">{{ t('compare_chats') }}</p>
+    <div class="chat-chips" role="group" aria-labelledby="sel-label">
+      {% for s in selector if s.key != 'otro' or s.total %}
+      <button type="button" class="cchip{% if not s.score.ok %} low{% endif %}" aria-pressed="{{ 'true' if s.key == 'all' else 'false' }}"
+        data-key="{{ s.key }}" data-name="{{ s.name or t('all_short') }}" data-total="{{ s.total }}"
+        data-ok="{{ 1 if s.score.ok else 0 }}" data-pos="{{ s.score.pos if (unlocked and s.score.ok) else '' }}" data-missing="{{ s.score.missing if not s.score.ok else '' }}">{{ s.name or t('all_short') }}</button>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="fine">
+    <p>{{ t('gauge_rule') }}</p>
+    <p id="all-note">{{ t('gauge_all_note') }}</p>
+  </div>
+</figure>
+<script>
+// Selector de chat: cambia el contador y, solo si la persona ya participó, la aguja.
+(function () {
+  var S = {{ {
+      'unlocked': unlocked, 'rtl': is_rtl,
+      'live': t('live'), 'liveCaption': t('live_caption'), 'locked': t('gauge_locked_n'),
+      'allWait': t('gauge_wait_n').format(min=min_metro, missing='{missing}'),
+      'chatWait': t('chat_wait_n'), 'chatAnswers': t('chat_answers'),
+      'odo1': t('odo_label'), 'odo2': t('odo_label2')
+    }|tojson }};
+  var chips = document.querySelectorAll(".cchip"), odo = document.getElementById("odo"),
+      sr = document.getElementById("odo-sr"), label = document.getElementById("odo-label"),
+      cap = document.getElementById("gauge-caption"), needle = document.getElementById("needle"),
+      face = document.querySelector(".dial-face"), allNote = document.getElementById("all-note");
+  function esc(s) { var d = document.createElement("span"); d.textContent = s; return d.innerHTML; }
+  function digits(n) {
+    var s = ("000000" + n).slice(-6), out = "";
+    for (var i = 0; i < 6; i++) {
+      var d = +s[i];
+      out += '<b data-p="' + (d + 9) % 10 + '" data-n="' + (d + 1) % 10 + '"' + (i === 5 ? ' class="last"' : "") + ">" + d + "</b>";
+    }
+    return out;
+  }
+  function select(chip) {
+    var isAll = chip.dataset.key === "all", name = chip.dataset.name, ok = chip.dataset.ok === "1";
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
+    odo.innerHTML = digits(+chip.dataset.total);
+    sr.textContent = chip.dataset.total;
+    label.innerHTML = isAll ? "<strong>" + esc(S.odo1) + "</strong>" + esc(S.odo2)
+                            : "<strong>" + esc(S.chatAnswers.replace("{chat}", name)) + "</strong>";
+    allNote.hidden = !isAll;
+    if (!S.unlocked) return;  // antes de participar: solo contadores
+    if (ok) needle.removeAttribute("hidden"); else needle.setAttribute("hidden", "");
+    face.classList.toggle("waiting", !ok);
+    if (ok) {
+      var pos = +chip.dataset.pos; if (S.rtl) pos = 100 - pos;
+      needle.style.setProperty("--rot", ((pos - 50) * 1.7).toFixed(1) + "deg");
+      cap.innerHTML = '<span class="live"><i></i>' + esc(S.live) + "</span><span>· " + esc(S.liveCaption) + "</span>";
+    } else {
+      var msg = isAll ? S.allWait.replace("{missing}", chip.dataset.missing)
+                      : S.chatWait.replace("{chat}", name).replace("{missing}", chip.dataset.missing);
+      cap.innerHTML = '<span class="wait-icon" aria-hidden="true"></span><span class="msg">' + esc(msg) + "</span>";
+    }
+  }
+  chips.forEach(function (c) { c.addEventListener("click", function () { select(c); }); });
+})();
+</script>

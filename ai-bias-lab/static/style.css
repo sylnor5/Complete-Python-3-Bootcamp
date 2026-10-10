@@ -646,3 +646,4 @@ p, li { max-width: 68ch; }
   .top-link { white-space: nowrap; font-size: .8rem; }
   .top-nav { gap: 8px; }
 }
+.live { white-space: nowrap; }

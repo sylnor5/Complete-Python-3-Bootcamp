@@ -835,3 +835,19 @@ _add("link_why",
      "Avec le lien, tout le monde peut voir la conversation complète. C'est ce qui rend les résultats les plus crédibles.",
      "עם הקישור כל אחד יכול לראות את השיחה המלאה. זה מה שנותן לתוצאות הכי הרבה אמינות.")
 _add("recommended", "(opcional, muy recomendado)", "(optional, highly recommended)", "(facultatif, très recommandé)", "(רשות, מומלץ מאוד)")
+# variante «aguja» del indicador (solo para comparar en pruebas internas: /?v=needle)
+_add("gauge_locked_n",
+     "La aguja aparece cuando hayas participado, para que no influya en tu valoración.",
+     "The needle appears once you've taken part, so it doesn't influence your rating.",
+     "L'aiguille apparaît une fois que vous avez participé, pour ne pas influencer votre avis.",
+     "המחוג מופיע אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
+_add("gauge_wait_n",
+     "La aguja aparece con {min} respuestas. Faltan {missing}.",
+     "The needle appears at {min} answers. {missing} to go.",
+     "L'aiguille apparaît à {min} réponses. Plus que {missing}.",
+     "המחוג יופיע אחרי {min} תשובות. חסרות עוד {missing}.")
+_add("chat_wait_n",
+     "{chat}: faltan {missing} respuestas para ver su aguja.",
+     "{chat}: {missing} more answers to show its needle.",
+     "{chat} : encore {missing} réponses pour voir son aiguille.",
+     "{chat}: חסרות עוד {missing} תשובות כדי להציג את המחוג.")

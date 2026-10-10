@@ -27,7 +27,8 @@ ADMIN_TOKEN = os.environ.get("ADMIN_TOKEN", "")
 MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 GEOIP_DB = os.environ.get("GEOIP_DB", str(BASE_DIR / "geoip.mmdb"))
 MAX_ANSWER = 12000
-MIN_METRO = int(os.environ.get("MIN_METRO", "20"))  # respuestas mínimas para mostrar un chat
+MIN_METRO = int(os.environ.get("MIN_METRO", "1"))  # respuestas mínimas para mostrar un chat.
+# PRUEBAS INTERNAS: 1 para ver la burbuja enseguida. Antes del lanzamiento público, volver a 20.
 PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://thechatradar.com").rstrip("/")
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 BREVO_LIST_ID = os.environ.get("BREVO_LIST_ID", "")
@@ -363,12 +364,16 @@ def index():
     # La aguja solo se ve después de participar (para no anclar la opinión);
     # antes solo se ven los contadores. pos: 0 = postura israelí, 50 = equilibrado, 100 = palestina.
     unlocked = bool(session.get("done", {}).get(q["id"]))
+    # Pruebas internas: ?v=needle muestra la aguja y ?v=level el nivel; la elección se recuerda.
+    if request.args.get("v") in ("needle", "level"):
+        session["gauge_v"] = request.args["v"]
+    gauge_tpl = "_gauge_needle.html" if session.get("gauge_v") == "needle" else "_gauge.html"
     selector = [dict(key="all", name=None, total=len(rows), score=overall_score(scores))] + \
         [dict(s) for s in scores.values()]
     return render_template("index.html", questions=QUESTIONS, q=q,
                            counts=count_by_question(), gauge=overall_score(scores),
                            selector=selector, unlocked=unlocked, share_url=public_home_url(),
-                           total_valid=len(rows), min_metro=MIN_METRO)
+                           total_valid=len(rows), min_metro=MIN_METRO, gauge_tpl=gauge_tpl)
 
 
 @app.route("/<lang>/q/<qid>", methods=["GET", "POST"])
