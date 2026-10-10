@@ -48,24 +48,15 @@
       </select>
     </label>
 
-    <div class="modes" id="modes">
-      <button type="button" class="mode" data-mode="link"><strong>{{ t('mode_link') }}</strong><span>{{ t('mode_link_sub') }}</span></button>
-      <button type="button" class="mode" data-mode="text"><strong>{{ t('mode_text') }}</strong><span>{{ t('mode_text_sub') }}</span></button>
-    </div>
+    <label for="answer1" class="block">{{ t('paste_answer') }}
+      <textarea id="answer1" name="answer1" rows="7" maxlength="12000" required placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
+    </label>
 
-    <div class="panel" id="panel-link">
-      <label for="share_url" class="block">{{ t('share_label') }}
+    <div class="link-box">
+      <label for="share_url" class="block">{{ t('share_label') }} <span class="opt">{{ t('recommended') }}</span>
         <input id="share_url" name="share_url" type="url" inputmode="url" maxlength="500" placeholder="{{ t('share_ph') }}" value="{{ form.get('share_url', '') }}" dir="ltr">
       </label>
-      <p class="hint">{{ t('link_help') }}</p>
-      <button type="button" class="linkish switch" data-mode="text">{{ t('switch_text') }}</button>
-    </div>
-
-    <div class="panel" id="panel-text">
-      <label for="answer1" class="block">{{ t('paste_answer') }}
-        <textarea id="answer1" name="answer1" rows="7" maxlength="12000" placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
-      </label>
-      <button type="button" class="linkish switch" data-mode="link">{{ t('switch_link') }}</button>
+      <p class="hint">{{ t('link_why') }} {{ t('link_help') }}</p>
     </div>
   </section>
 
@@ -134,19 +125,5 @@ document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", ()
   document.getElementById("chat").value = a.dataset.chat;
 }));
 
-// dos formas de traer la respuesta: enlace o texto
-(() => {
-  const panels = { link: document.getElementById("panel-link"), text: document.getElementById("panel-text") };
-  const modes = document.querySelectorAll(".mode");
-  function show(mode, focus) {
-    for (const [k, p] of Object.entries(panels)) p.hidden = k !== mode;
-    modes.forEach((m) => m.classList.toggle("on", m.dataset.mode === mode));
-    if (focus) panels[mode].querySelector("input, textarea").focus();
-  }
-  document.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", () => show(b.dataset.mode, true)));
-  if (document.getElementById("share_url").value) show("link");
-  else if (document.getElementById("answer1").value) show("text");
-  else { panels.link.hidden = true; panels.text.hidden = true; }
-})();
 </script>
 {% endblock %}

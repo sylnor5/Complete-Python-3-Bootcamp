@@ -399,8 +399,8 @@ def question(qid):
             if len(text) > MAX_ANSWER:
                 errors.append(T["err_long"][lang])
             answers.append(text)
-        if not share_url and any(len(a) < 2 for a in answers):
-            errors.append(T["err_answer_or_link"][lang])
+        if any(len(a) < 2 for a in answers):  # el texto es obligatorio; el enlace, opcional
+            errors.append(T["err_answer"][lang])
 
         values, missing = {}, []
         for field in all_fields(q):

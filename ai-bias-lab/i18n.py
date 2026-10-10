@@ -391,13 +391,13 @@ T = {
     "steps_title": {"es": "3 pasos, unos 3 minutos", "en": "3 steps, about 3 minutes", "fr": "3 étapes, environ 3 minutes"},
     "steps3": {
         "es": [("Copia la pregunta.", "Te abrimos tu chat de IA."),
-               ("Trae la respuesta.", "Lo mejor es el enlace para compartir."),
+               ("Trae la respuesta.", "Pega el texto y, si puedes, también el enlace."),
                ("Responde 2 preguntas rápidas", "sobre lo que dijo.")],
         "en": [("Copy the question.", "We open your AI chat for you."),
-               ("Bring back the answer.", "A share link is best."),
+               ("Bring back the answer.", "Paste the text and, if you can, the link too."),
                ("Answer 2 quick questions", "about what it said.")],
         "fr": [("Copiez la question.", "Nous ouvrons votre chat d'IA pour vous."),
-               ("Rapportez la réponse.", "Le mieux\u00a0: un lien de partage."),
+               ("Rapportez la réponse.", "Collez le texte et, si possible, le lien aussi."),
                ("Répondez à 2 questions rapides", "sur ce qu'il a dit.")],
     },
     "steps_note": {
@@ -613,7 +613,7 @@ HE = {
     "story_kicker": "שיחה אחת לא מוכיחה כלום. אלפים כן.",
     "steps_title": "3 שלבים, בערך 3 דקות",
     "steps3": [("העתיקו את השאלה.", "אנחנו נפתח לכם את הצ'אט."),
-               ("החזירו את התשובה.", "הכי טוב: קישור שיתוף."),
+               ("החזירו את התשובה.", "הדביקו את הטקסט, ואם אפשר גם את הקישור."),
                ("ענו על 2 שאלות קצרות", "על מה שהוא אמר.")],
     "steps_note": "אחר כך, אם תרצו, נסו צ'אט נוסף. התוצאות נפתחות מיד אחרי זה.",
     "trust_title": "למה אפשר לסמוך על זה",
@@ -824,3 +824,14 @@ _add("og_desc",
      "Un test citoyen : la même question sur la guerre à Gaza dans ChatGPT, Gemini, Claude et d'autres. Analysent-ils les deux côtés ou prennent-ils parti ? Anonyme, 3 minutes.",
      "מבחן אזרחי: אותה שאלה על המלחמה בעזה ב-ChatGPT, Gemini, Claude ועוד. האם הם מנתחים את שני הצדדים או נוקטים צד? אנונימי, 3 דקות.")
 _add("why_link", "¿Por qué hacemos esto?", "Why are we doing this?", "Pourquoi faisons-nous cela ?", "למה אנחנו עושים את זה?")
+_add("err_answer",
+     "Pega el texto de la respuesta del chat.",
+     "Paste the text of the chat's answer.",
+     "Collez le texte de la réponse du chat.",
+     "הדביקו את טקסט התשובה של הצ'אט.")
+_add("link_why",
+     "Con el enlace, cualquiera puede ver la conversación completa. Es lo que más credibilidad da a los resultados.",
+     "With the link, anyone can see the full conversation. It's what gives the results the most credibility.",
+     "Avec le lien, tout le monde peut voir la conversation complète. C'est ce qui rend les résultats les plus crédibles.",
+     "עם הקישור כל אחד יכול לראות את השיחה המלאה. זה מה שנותן לתוצאות הכי הרבה אמינות.")
+_add("recommended", "(opcional, muy recomendado)", "(optional, highly recommended)", "(facultatif, très recommandé)", "(רשות, מומלץ מאוד)")
