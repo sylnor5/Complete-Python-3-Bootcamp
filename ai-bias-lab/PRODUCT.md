@@ -33,7 +33,7 @@ Instead of experts testing models in a lab, ordinary users test the chats they a
 - Share texts never include the participant's own verdict.
 - Must work at 390px wide and in RTL; four languages for every visible string.
 - Fake answers are filtered (share links, keyword checks, duplicates); admin moderation exists.
-- Undecided: who signs the project publicly (unsigned for now; do not invent a founder name, team or organization). Test #2 question not chosen yet.
+- Undecided: who signs the project publicly (unsigned for now; do not invent a founder name, team or organization). Test #2 question not chosen yet. Planned second measure: a fixed, randomly assigned pushback (mirrored for each side) to measure whether each chat reinforces whatever the user already believes (sycophancy); draft in ai-bias-lab/borradores/test-complacencia.md.
 
 ## Brand Commitments
 
