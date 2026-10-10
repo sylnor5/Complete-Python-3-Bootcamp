@@ -642,3 +642,7 @@ p, li { max-width: 68ch; }
   font: 700 14px/1 "Archivo", var(--f-text); color: var(--graphite); }
 .why-points strong { display: block; color: var(--graphite); font-weight: 600; margin-bottom: 2px; }
 .link-box { display: grid; gap: 8px; padding: 16px; border: 1px solid var(--edge); border-radius: 12px; background: var(--plate); }
+@media (max-width: 420px) {
+  .top-link { white-space: nowrap; font-size: .8rem; }
+  .top-nav { gap: 8px; }
+}
