@@ -364,10 +364,10 @@ def index():
     # La aguja solo se ve después de participar (para no anclar la opinión);
     # antes solo se ven los contadores. pos: 0 = postura israelí, 50 = equilibrado, 100 = palestina.
     unlocked = bool(session.get("done", {}).get(q["id"]))
-    # Pruebas internas: ?v=needle muestra la aguja y ?v=level el nivel; la elección se recuerda.
-    if request.args.get("v") in ("needle", "level"):
+    # Pruebas internas: ?v=needle (aguja), ?v=level (nivel) o ?v=seesaw (balancín); la elección se recuerda.
+    if request.args.get("v") in ("needle", "level", "seesaw"):
         session["gauge_v"] = request.args["v"]
-    gauge_tpl = "_gauge_needle.html" if session.get("gauge_v") == "needle" else "_gauge.html"
+    gauge_tpl = {"needle": "_gauge_needle.html", "seesaw": "_gauge_seesaw.html"}.get(session.get("gauge_v"), "_gauge.html")
     selector = [dict(key="all", name=None, total=len(rows), score=overall_score(scores))] + \
         [dict(s) for s in scores.values()]
     return render_template("index.html", questions=QUESTIONS, q=q,

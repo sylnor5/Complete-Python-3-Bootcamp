@@ -851,3 +851,19 @@ _add("chat_wait_n",
      "{chat}: {missing} more answers to show its needle.",
      "{chat} : encore {missing} réponses pour voir son aiguille.",
      "{chat}: חסרות עוד {missing} תשובות כדי להציג את המחוג.")
+# variante «balancín» (pruebas internas: /?v=seesaw)
+_add("gauge_locked_s",
+     "La barra se inclina cuando hayas participado, para que no influya en tu valoración.",
+     "The bar tilts once you've taken part, so it doesn't influence your rating.",
+     "La barre penche une fois que vous avez participé, pour ne pas influencer votre avis.",
+     "המוט נוטה אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
+_add("gauge_wait_s",
+     "La barra se inclina con {min} respuestas. Faltan {missing}.",
+     "The bar tilts at {min} answers. {missing} to go.",
+     "La barre penche à {min} réponses. Plus que {missing}.",
+     "המוט ינטה אחרי {min} תשובות. חסרות עוד {missing}.")
+_add("chat_wait_s",
+     "{chat}: faltan {missing} respuestas para inclinar su barra.",
+     "{chat}: {missing} more answers to tilt its bar.",
+     "{chat} : encore {missing} réponses pour faire pencher sa barre.",
+     "{chat}: חסרות עוד {missing} תשובות כדי שהמוט שלו ינטה.")

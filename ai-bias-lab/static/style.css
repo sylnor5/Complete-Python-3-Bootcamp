@@ -647,3 +647,19 @@ p, li { max-width: 68ch; }
   .top-nav { gap: 8px; }
 }
 .live { white-space: nowrap; }
+
+/* variante «balancín» (pruebas internas): la barra entera baja hacia el lado de las respuestas */
+.seesaw { position: relative; height: 96px; }
+.beam { position: absolute; left: 4%; right: 4%; top: 34px; height: 16px; border-radius: 8px; background: #D6D0C4;
+  border-bottom: 3px solid #A9A296; transform: rotate(var(--tilt, 0deg)); transform-origin: 50% 50%;
+  transition: transform .9s cubic-bezier(.2, .9, .25, 1.1); }
+.beam-end { position: absolute; top: -20px; width: 30px; height: 20px; border-radius: 6px 6px 2px 2px; background: var(--accent); }
+.beam-end:first-child { left: 6px; } .beam-end:last-child { right: 6px; }
+.seesaw-wrap.is-locked .beam-end, .seesaw-wrap.waiting .beam-end { background: #5A5650; }
+.pivot { position: absolute; left: 50%; top: 50px; width: 46px; height: 40px; transform: translateX(-50%);
+  background: #8E897F; clip-path: polygon(50% 0, 100% 100%, 0 100%); display: grid; place-items: end center; }
+.pivot .vial-lock { position: static; transform: none; width: 14px; height: 14px; color: #1F1E1C; margin-bottom: 5px; }
+@media (prefers-reduced-motion: no-preference) {
+  .beam { animation: beam-in 1.4s cubic-bezier(.2, .9, .25, 1.1) .15s both; }
+  @keyframes beam-in { from { transform: rotate(0deg); } }
+}
