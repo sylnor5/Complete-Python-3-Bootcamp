@@ -11,6 +11,7 @@ import re
 import sqlite3
 import unicodedata
 import urllib.request
+from urllib.parse import urlparse
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
@@ -119,7 +120,7 @@ def inject_helpers():
 
     return {"t": t, "tr": tr, "lang": lang, "langs": LANGS, "T": T,
             "flag": flag, "rtl": RTL, "dir": "rtl" if lang in RTL else "ltr",
-            "geoip_credit": os.path.exists(GEOIP_DB), "public_url": PUBLIC_URL}
+            "geoip_credit": os.path.exists(GEOIP_DB), "public_url": site_root()}
 
 
 _URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
@@ -875,8 +876,17 @@ def lean_score(rows):
             "pct": {k: round(100 * c[k] / n) for k in ("pro_israel", "balanced", "pro_palestine")}}
 
 
+def site_root():
+    """PUBLIC_URL si la visita llega por ese dominio; si no, la dirección por la que llegó
+    (así los enlaces para compartir funcionan en biaschecker.pythonanywhere.com antes de conectar el dominio)."""
+    host = urlparse(PUBLIC_URL).netloc
+    if not host or request.host in (host, host.removeprefix("www.")) or "www." + request.host == host:
+        return PUBLIC_URL or request.url_root.rstrip("/")
+    return "https://" + request.host
+
+
 def public_home_url():
-    root = PUBLIC_URL or request.url_root.rstrip("/")
+    root = site_root()
     return f"{root}/" if g.lang == "en" else f"{root}/{g.lang}/"
 
 
