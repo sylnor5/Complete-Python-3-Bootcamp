@@ -3244,6 +3244,49 @@
    },
    "note": "Nuance: Rafah let some aid trucks and evacuees through Oct 2023–May 2024; Egypt said Israeli inspections limited it; Israel took the crossing in May 2024. 'paso de rafah' also appears in neutral aid descriptions — review.",
    "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "minors_among_fighters",
+   "side": "israeli",
+   "text": {
+    "es": "Las cifras de 'niños' incluyen menores de 15-17 años que combatían con Hamás",
+    "en": "'Children' figures include 15-17-year-olds who fought with Hamas",
+    "fr": "Les chiffres d'« enfants » incluent des 15-17 ans qui combattaient avec le Hamas",
+    "he": "מספרי ה'ילדים' כוללים בני 15-17 שלחמו בשורות חמאס"
+   },
+   "triggers": {
+    "es": [
+     "menores de 18",
+     "menores reclutados",
+     "adolescentes armados",
+     "combatientes menores",
+     "15 a 17 anos",
+     "re:1[5-7] (y|a) 1[5-7] anos"
+    ],
+    "en": [
+     "under 18",
+     "under-18",
+     "teenage fighters",
+     "recruited minors",
+     "child soldiers",
+     "aged 15 to 17",
+     "15-17"
+    ],
+    "fr": [
+     "moins de 18 ans",
+     "mineurs recrutes",
+     "enfants soldats",
+     "15 a 17 ans"
+    ],
+    "he": [
+     "מתחת לגיל 18",
+     "בני נוער חמושים",
+     "ילדים לוחמים",
+     "בני 15 עד 17"
+    ]
+   },
+   "note": "Gaza MoH counts everyone under 18 as a child. Recruitment of teenagers is an Israeli claim; independent counts of how many minors were fighters do not exist. 'under 18' may also appear neutrally — review.",
+   "source": "revisión con la fundadora del proyecto"
   }
  ]
 }
