@@ -199,14 +199,23 @@
 // en otra pestaña y, en esta, vuelve a la pregunta con ese chat elegido y el aviso «Pregunta copiada».
 (function () {
   var PROMPT = {{ tr(q.steps[0].prompt)|tojson }};
+  function copySync(t) {  // copia en el mismo clic, antes de que la pestaña nueva le quite el foco a esta
+    try {
+      var ta = document.createElement("textarea"); ta.value = t; ta.setAttribute("readonly", "");
+      ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
+      var ok = document.execCommand("copy"); document.body.removeChild(ta); return ok;
+    } catch (err) { return false; }
+  }
   document.querySelectorAll(".try").forEach(function (a) {
     a.addEventListener("click", function (e) {
       if (!a.dataset.open) return;
       e.preventDefault();
       var go = function (ok) { location.href = a.href + (ok ? "&copied=1" : ""); };
+      // primero copiar (con foco en esta pestaña), después abrir el chat
+      var sync = copySync(PROMPT);
+      var p = navigator.clipboard ? navigator.clipboard.writeText(PROMPT) : Promise.reject();
       window.open(a.dataset.open, "_blank", "noopener");
-      if (navigator.clipboard) navigator.clipboard.writeText(PROMPT).then(function () { go(true); }, function () { go(false); });
-      else go(false);
+      p.then(function () { go(true); }, function () { go(sync); });
     });
   });
   // «Pídesela así»: copiar cada frase
