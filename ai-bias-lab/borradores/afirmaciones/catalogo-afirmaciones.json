@@ -3102,6 +3102,148 @@
    },
    "note": "Fact: Hamas official Ghazi Hamad, Lebanese TV LBC, Nov 2023, said Oct 7 would be repeated 'again and again'. 1988 charter calls for Israel's destruction; 2017 document softened wording. 'una y otra vez' / 'again and again' are weak alone — review.",
    "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "israel_self_defense",
+   "side": "israeli",
+   "text": {
+    "es": "Israel tiene derecho a defenderse",
+    "en": "Israel has the right to defend itself",
+    "fr": "Israël a le droit de se défendre",
+    "he": "לישראל יש זכות להגן על עצמה"
+   },
+   "triggers": {
+    "es": [
+     "derecho a defenderse",
+     "derecho a la legitima defensa",
+     "legitima defensa"
+    ],
+    "en": [
+     "right to defend itself",
+     "right to self-defense",
+     "right to self-defence",
+     "self-defense"
+    ],
+    "fr": [
+     "droit de se defendre",
+     "legitime defense"
+    ],
+    "he": [
+     "זכות להגן על עצמה",
+     "הגנה עצמית"
+    ]
+   },
+   "note": "Mirror: palestinian_state_right.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "palestinian_state_right",
+   "side": "palestinian",
+   "text": {
+    "es": "Los palestinos tienen derecho a un Estado",
+    "en": "Palestinians have the right to a state",
+    "fr": "Les Palestiniens ont droit à un État",
+    "he": "לפלסטינים יש זכות למדינה"
+   },
+   "triggers": {
+    "es": [
+     "derecho a un estado",
+     "estado palestino",
+     "autodeterminacion"
+    ],
+    "en": [
+     "right to a state",
+     "palestinian state",
+     "self-determination"
+    ],
+    "fr": [
+     "droit a un etat",
+     "etat palestinien",
+     "autodetermination"
+    ],
+    "he": [
+     "זכות למדינה",
+     "מדינה פלסטינית",
+     "הגדרה עצמית"
+    ]
+   },
+   "note": "Mirror chosen by the project founder (instead of 'right to resist occupation'). Many Israelis also support two states — reviewers may move it to balanced.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "gaza_disengagement_2005",
+   "side": "israeli",
+   "text": {
+    "es": "Israel salió de Gaza en 2005 y retiró a todos sus civiles y soldados",
+    "en": "Israel left Gaza in 2005, removing all its civilians and soldiers",
+    "fr": "Israël a quitté Gaza en 2005",
+    "he": "ישראל יצאה מעזה ב-2005 (ההתנתקות)"
+   },
+   "triggers": {
+    "es": [
+     "retirada de gaza",
+     "se retiro de gaza",
+     "salio de gaza",
+     "desconexion",
+     "plan de retirada"
+    ],
+    "en": [
+     "disengagement",
+     "withdrew from gaza",
+     "left gaza in 2005",
+     "pulled out of gaza"
+    ],
+    "fr": [
+     "desengagement",
+     "retrait de gaza",
+     "s'est retire de gaza"
+    ],
+    "he": [
+     "ההתנתקות",
+     "תוכנית ההתנתקות",
+     "יצאה מעזה"
+    ]
+   },
+   "note": "Fact: Aug–Sep 2005, 21 settlements evacuated (~8,000 settlers), army withdrew. Mirror of occupation_context (whether Gaza stayed 'occupied' via control of borders, airspace and sea is disputed; ICJ 2024 opinion said Israel kept obligations according to its control).",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "egypt_border",
+   "side": "israeli",
+   "text": {
+    "es": "Gaza también limita con Egipto, que mantiene su frontera cerrada",
+    "en": "Gaza also borders Egypt, which keeps its border closed",
+    "fr": "Gaza borde aussi l'Égypte, qui garde sa frontière fermée",
+    "he": "לעזה יש גבול גם עם מצרים, שסוגרת אותו"
+   },
+   "triggers": {
+    "es": [
+     "frontera con egipto",
+     "egipto mantiene",
+     "egipto cerro",
+     "egipto no abrio",
+     "paso de rafah"
+    ],
+    "en": [
+     "border with egypt",
+     "egypt has kept",
+     "egypt closed",
+     "egyptian border",
+     "rafah crossing"
+    ],
+    "fr": [
+     "frontiere avec l'egypte",
+     "l'egypte a ferme",
+     "passage de rafah"
+    ],
+    "he": [
+     "הגבול עם מצרים",
+     "מצרים סוגרת",
+     "מעבר רפיח"
+    ]
+   },
+   "note": "Nuance: Rafah let some aid trucks and evacuees through Oct 2023–May 2024; Egypt said Israeli inspections limited it; Israel took the crossing in May 2024. 'paso de rafah' also appears in neutral aid descriptions — review.",
+   "source": "revisión con la fundadora del proyecto"
   }
  ]
 }
