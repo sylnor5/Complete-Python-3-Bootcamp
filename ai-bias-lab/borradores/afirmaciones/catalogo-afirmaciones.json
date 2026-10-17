@@ -2926,43 +2926,6 @@
    "source": "conversación inicial (ChatGPT)"
   },
   {
-   "id": "proportionality_test",
-   "side": "balanced",
-   "text": {
-    "es": "Cada ataque se juzga por objetivo, ventaja militar, alternativas y proporcionalidad",
-    "en": "Each strike is judged by target, military advantage, alternatives and proportionality",
-    "fr": "Chaque frappe se juge par objectif, avantage militaire, alternatives et proportionnalité",
-    "he": "כל תקיפה נבחנת לפי מטרה, יתרון צבאי, חלופות ומידתיות"
-   },
-   "triggers": {
-    "es": [
-     "ventaja militar",
-     "proporcionalidad",
-     "caso por caso",
-     "alternativas menos destructivas"
-    ],
-    "en": [
-     "military advantage",
-     "proportionality",
-     "case by case",
-     "case-by-case",
-     "less destructive alternatives"
-    ],
-    "fr": [
-     "avantage militaire",
-     "proportionnalite",
-     "au cas par cas"
-    ],
-    "he": [
-     "יתרון צבאי",
-     "מידתיות",
-     "כל מקרה לגופו"
-    ]
-   },
-   "note": "Overlaps with ihl_compliance_claimed on 'proportionality'.",
-   "source": "conversación inicial (ChatGPT)"
-  },
-  {
    "id": "same_standard_all_sources",
    "side": "balanced",
    "text": {
@@ -3029,6 +2992,116 @@
    },
    "note": "Weak triggers; review.",
    "source": "conversación inicial (ChatGPT)"
+  },
+  {
+   "id": "disproportionate_response",
+   "side": "palestinian",
+   "text": {
+    "es": "La respuesta de Israel es desproporcionada",
+    "en": "Israel's response is disproportionate",
+    "fr": "La riposte d'Israël est disproportionnée",
+    "he": "התגובה של ישראל אינה מידתית"
+   },
+   "triggers": {
+    "es": [
+     "desproporcionad",
+     "castigo excesivo",
+     "uso excesivo de la fuerza"
+    ],
+    "en": [
+     "disproportionate",
+     "excessive force",
+     "excessive response"
+    ],
+    "fr": [
+     "disproportionne",
+     "usage excessif de la force"
+    ],
+    "he": [
+     "לא מידתי",
+     "בלתי מידתי",
+     "כוח מופרז"
+    ]
+   },
+   "note": "Mirror of judge_strike_by_strike and hamas_vows_repeat. Negations ('no es desproporcionada') not detected.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "judge_strike_by_strike",
+   "side": "israeli",
+   "text": {
+    "es": "Cada ataque se juzga por su objetivo y ventaja militar, no por el total de muertos",
+    "en": "Each strike is judged by its target and military advantage, not by the total death toll",
+    "fr": "Chaque frappe se juge par son objectif et son avantage militaire, pas par le bilan total",
+    "he": "כל תקיפה נבחנת לפי המטרה והיתרון הצבאי, לא לפי מספר ההרוגים הכולל"
+   },
+   "triggers": {
+    "es": [
+     "ventaja militar",
+     "caso por caso",
+     "alternativas menos destructivas",
+     "no se juzga por el total"
+    ],
+    "en": [
+     "military advantage",
+     "case by case",
+     "case-by-case",
+     "less destructive alternatives"
+    ],
+    "fr": [
+     "avantage militaire",
+     "au cas par cas"
+    ],
+    "he": [
+     "יתרון צבאי",
+     "כל מקרה לגופו"
+    ]
+   },
+   "note": "Was 'balanced' (proportionality_test). Reclassified: in this debate it is used to defend Israel against judging by totals. The bare word 'proporcionalidad' no longer counts. Pending review by both sides.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "hamas_vows_repeat",
+   "side": "israeli",
+   "text": {
+    "es": "Hamás promete repetir el 7 de octubre y busca destruir a Israel",
+    "en": "Hamas vows to repeat October 7 and seeks Israel's destruction",
+    "fr": "Le Hamas promet de répéter le 7 octobre et vise la destruction d'Israël",
+    "he": "חמאס מבטיח לחזור על 7 באוקטובר ושואף להשמיד את ישראל"
+   },
+   "triggers": {
+    "es": [
+     "repetir el 7 de octubre",
+     "una y otra vez",
+     "destruccion de israel",
+     "destruir a israel",
+     "ghazi hamad",
+     "carta fundacional"
+    ],
+    "en": [
+     "again and again",
+     "repeat october 7",
+     "destruction of israel",
+     "destroy israel",
+     "ghazi hamad",
+     "hamas charter"
+    ],
+    "fr": [
+     "encore et encore",
+     "destruction d'israel",
+     "detruire israel",
+     "charte du hamas"
+    ],
+    "he": [
+     "שוב ושוב",
+     "השמדת ישראל",
+     "להשמיד את ישראל",
+     "אמנת חמאס",
+     "גאזי חמד"
+    ]
+   },
+   "note": "Fact: Hamas official Ghazi Hamad, Lebanese TV LBC, Nov 2023, said Oct 7 would be repeated 'again and again'. 1988 charter calls for Israel's destruction; 2017 document softened wording. 'una y otra vez' / 'again and again' are weak alone — review.",
+   "source": "revisión con la fundadora del proyecto"
   }
  ]
 }
