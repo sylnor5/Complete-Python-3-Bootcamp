@@ -156,9 +156,9 @@ T = {
         "fr": "Vers où penchent les réponses de l'IA, selon les personnes qui les ont testées",
     },
     "gauge_wait": {
-        "es": "La burbuja aparece con {min} respuestas. Faltan {missing}.",
-        "en": "The bubble appears at {min} answers. {missing} to go.",
-        "fr": "La bulle apparaît à {min} réponses. Plus que {missing}.",
+        "es": "La aguja aparece con {min} respuestas. Faltan {missing}.",
+        "en": "The needle appears at {min} answers. {missing} to go.",
+        "fr": "L'aiguille apparaît à {min} réponses. Plus que {missing}.",
     },
     "gauge_aria": {
         "es": "Indicador: {isr}% hacia la postura israelí, {bal}% equilibradas, {pal}% hacia la postura palestina, sobre {n} respuestas.",
@@ -166,9 +166,9 @@ T = {
         "fr": "Indicateur : {isr} % vers la position israélienne, {bal} % équilibrées, {pal} % vers la position palestinienne, sur {n} réponses.",
     },
     "gauge_aria_wait": {
-        "es": "Indicador sin burbuja: aún no hay suficientes respuestas ({n} de {min}).",
-        "en": "Gauge without a bubble: not enough answers yet ({n} of {min}).",
-        "fr": "Indicateur sans bulle : pas encore assez de réponses ({n} sur {min}).",
+        "es": "Indicador sin aguja: aún no hay suficientes respuestas ({n} de {min}).",
+        "en": "Gauge without a needle: not enough answers yet ({n} of {min}).",
+        "fr": "Indicateur sans aiguille : pas encore assez de réponses ({n} sur {min}).",
     },
     "metro_all": {"es": "Todas", "en": "All", "fr": "Toutes"},
     "metro_link": {"es": "Con enlace", "en": "With link", "fr": "Avec lien"},
@@ -515,9 +515,9 @@ HE = {
     "metro_center": "מאוזן",
     "metro_palestine": "לעבר העמדה הפלסטינית",
     "gauge_caption": "לאן נוטות תשובות הבינה המלאכותית, לפי מי שבדקו אותן",
-    "gauge_wait": "הבועה תופיע אחרי {min} תשובות. חסרות עוד {missing}.",
+    "gauge_wait": "המחוג יופיע אחרי {min} תשובות. חסרות עוד {missing}.",
     "gauge_aria": "מד: {isr}% לעבר העמדה הישראלית, {bal}% מאוזנות, {pal}% לעבר העמדה הפלסטינית, מתוך {n} תשובות.",
-    "gauge_aria_wait": "מד ללא בועה: עדיין אין מספיק תשובות ({n} מתוך {min}).",
+    "gauge_aria_wait": "מד ללא מחוג: עדיין אין מספיק תשובות ({n} מתוך {min}).",
     "metro_all": "הכול",
     "metro_link": "עם קישור",
     "metro_missing": "חסרות עוד {n} תשובות כדי להציג",
@@ -666,10 +666,10 @@ _add("loaded_note",
      "Cette question a un point de vue, à dessein. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre.",
      "לשאלה יש נקודת מבט בכוונה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה.")
 _add("gauge_locked",
-     "La burbuja aparece cuando hayas participado, para que no influya en tu valoración.",
-     "The bubble appears once you've taken part, so it doesn't influence your rating.",
-     "La bulle apparaît une fois que vous avez participé, pour ne pas influencer votre avis.",
-     "הבועה מופיעה אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
+     "La aguja aparece cuando hayas participado, para que no influya en tu valoración.",
+     "The needle appears once you've taken part, so it doesn't influence your rating.",
+     "L'aiguille apparaît une fois que vous avez participé, pour ne pas influencer votre avis.",
+     "המחוג מופיע אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
 _add("gauge_rule",
      "Los lados van en orden alfabético. La posición no tiene nada que ver con izquierda o derecha política.",
      "Sides are in alphabetical order. Position says nothing about left- or right-wing politics.",
@@ -683,8 +683,8 @@ _add("gauge_all_note",
 _add("compare_chats", "Compara chats", "Compare chats", "Comparer les chats", "השוו צ'אטים")
 _add("all_short", "Todos", "All", "Tous", "הכול")
 _add("chat_answers", "respuestas de {chat}", "answers for {chat}", "réponses pour {chat}", "תשובות עבור {chat}")
-_add("chat_wait", "{chat}: faltan {missing} respuestas para ver su burbuja.", "{chat}: {missing} more answers to show its bubble.",
-     "{chat} : encore {missing} réponses pour voir sa bulle.", "{chat}: חסרות עוד {missing} תשובות כדי להציג את הבועה.")
+_add("chat_wait", "{chat}: faltan {missing} respuestas para ver su aguja.", "{chat}: {missing} more answers to show its needle.",
+     "{chat} : encore {missing} réponses pour voir son aiguille.", "{chat}: חסרות עוד {missing} תשובות כדי להציג את המחוג.")
 _add("mine_title", "Tus chats", "Your chats", "Vos chats", "הצ'אטים שלכם")
 _add("mine_intro",
      "Probaste {n}. Esto es lo que dijiste, junto a la media de todos los que probaron el mismo chat.",
@@ -745,32 +745,32 @@ _METHOD_EXTRA = {
         ("Cómo empezó", "Le hice a ChatGPT la pregunta de la prueba. Su respuesta me pareció inclinada hacia un lado y, cuando le discutí, respondió: «Tu crítica es válida respecto de mi respuesta anterior: presenté la cuestión de forma demasiado asimétrica.» De ahí nació la idea de comprobar si les pasa a todos."),
         ("Una pregunta cargada a propósito", "La pregunta tiene un punto de vista, tal como la hizo una persona real. Lo que medimos es si cada IA lo sigue, lo corrige o lo equilibra. Habrá otras pruebas con preguntas cargadas desde el ángulo contrario."),
         ("Izquierda y derecha", "En la escala, los lados van en orden alfabético en cada idioma («israelí» antes que «palestino»; en hebreo, que se lee de derecha a izquierda, queda a la derecha). La posición no tiene nada que ver con izquierda o derecha política. En el formulario, el orden de las opciones cambia al azar para cada visitante."),
-        ("Cada chat por separado", "Nunca mezclamos respuestas de chats distintos: cada chat tiene su propia burbuja. En «Todos», cada chat pesa lo mismo, tenga más o menos respuestas."),
-        ("Dos medidas", "La burbuja muestra cómo valoran las respuestas quienes participan. El mapa usa algo observable: qué argumentos de cada lado menciona la respuesta (4 de cada lado en las casillas opcionales). Así no dependemos solo de impresiones."),
+        ("Cada chat por separado", "Nunca mezclamos respuestas de chats distintos: cada chat tiene su propia aguja. En «Todos», cada chat pesa lo mismo, tenga más o menos respuestas."),
+        ("Dos medidas", "La aguja muestra cómo valoran las respuestas quienes participan. El mapa usa algo observable: qué argumentos de cada lado menciona la respuesta (4 de cada lado en las casillas opcionales). Así no dependemos solo de impresiones."),
         ("Tu postura", "Al final puedes indicar, si quieres, de qué lado te sientes. Sirve para ver si cada lado valora distinto las mismas respuestas. Nunca se muestra junto a tu respuesta."),
     ],
     "en": [
         ("How it started", "I asked ChatGPT the test question. Its answer seemed to lean to one side, and when I pushed back it replied: “Your criticism of my previous answer is valid: I presented the issue in a way that was too one-sided.” That's where the idea of checking whether it happens to everyone came from."),
         ("A question loaded on purpose", "The question has a point of view, exactly as a real person asked it. What we measure is whether each AI follows it, corrects it or balances it. Other tests will use questions loaded from the opposite angle."),
         ("Left and right", "On the scale, sides are in alphabetical order in each language (“Israeli” before “Palestinian”; in Hebrew, read right to left, it sits on the right). Position says nothing about left- or right-wing politics. In the form, the order of the options is shuffled for each visitor."),
-        ("Each chat on its own", "We never mix answers from different chats: each chat has its own bubble. In “All”, every chat weighs the same, however many answers it has."),
-        ("Two measures", "The bubble shows how participants rate the answers. The map uses something observable: which arguments from each side the answer mentions (4 per side in the optional boxes). So we don't rely on impressions alone."),
+        ("Each chat on its own", "We never mix answers from different chats: each chat has its own needle. In “All”, every chat weighs the same, however many answers it has."),
+        ("Two measures", "The needle shows how participants rate the answers. The map uses something observable: which arguments from each side the answer mentions (4 per side in the optional boxes). So we don't rely on impressions alone."),
         ("Your stance", "At the end you can say, if you like, which side you feel closer to. It shows whether each side rates the same answers differently. It's never shown with your answer."),
     ],
     "fr": [
         ("Comment tout a commencé", "J'ai posé à ChatGPT la question du test. Sa réponse m'a semblé pencher d'un côté et, quand je l'ai contredit, il a répondu : « Votre critique de ma réponse précédente est fondée : j'ai présenté la question de manière trop asymétrique. » C'est de là qu'est née l'idée de vérifier si cela arrive à tout le monde."),
         ("Une question orientée à dessein", "La question a un point de vue, telle qu'une vraie personne l'a posée. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre. D'autres tests utiliseront des questions orientées dans l'autre sens."),
         ("Gauche et droite", "Sur l'échelle, les côtés sont dans l'ordre alphabétique de chaque langue (« israélien » avant « palestinien » ; en hébreu, qui se lit de droite à gauche, il est à droite). La position n'a rien à voir avec la gauche ou la droite politique. Dans le formulaire, l'ordre des options change au hasard pour chaque visiteur."),
-        ("Chaque chat séparément", "Nous ne mélangeons jamais les réponses de chats différents : chaque chat a sa propre bulle. Dans « Tous », chaque chat pèse autant, quel que soit son nombre de réponses."),
-        ("Deux mesures", "La bulle montre comment les participants évaluent les réponses. La carte utilise un élément observable : les arguments de chaque côté que mentionne la réponse (4 par côté dans les cases facultatives). Nous ne dépendons donc pas que des impressions."),
+        ("Chaque chat séparément", "Nous ne mélangeons jamais les réponses de chats différents : chaque chat a sa propre aiguille. Dans « Tous », chaque chat pèse autant, quel que soit son nombre de réponses."),
+        ("Deux mesures", "L'aiguille montre comment les participants évaluent les réponses. La carte utilise un élément observable : les arguments de chaque côté que mentionne la réponse (4 par côté dans les cases facultatives). Nous ne dépendons donc pas que des impressions."),
         ("Votre position", "À la fin, vous pouvez indiquer, si vous le souhaitez, de quel côté vous vous sentez. Cela montre si chaque côté évalue différemment les mêmes réponses. Ce n'est jamais affiché avec votre réponse."),
     ],
     "he": [
         ("איך זה התחיל", "שאלתי את ChatGPT את שאלת המבחן. התשובה שלו נראתה לי נוטה לצד אחד, וכשהתווכחתי איתו הוא ענה: „הביקורת שלך על התשובה הקודמת שלי מוצדקת: הצגתי את הנושא באופן חד־צדדי מדי.” משם נולד הרעיון לבדוק אם זה קורה לכולם."),
         ("שאלה טעונה בכוונה", "לשאלה יש נקודת מבט, בדיוק כפי שאדם אמיתי שאל אותה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה. במבחנים הבאים יהיו שאלות טעונות מהכיוון ההפוך."),
         ("שמאל וימין", "בסולם, הצדדים מסודרים לפי סדר האלף־בית בכל שפה („ישראלי” לפני „פלסטיני”; בעברית, שנקראת מימין לשמאל, הוא מופיע מימין). המיקום לא קשור לשמאל או לימין פוליטי. בטופס, סדר האפשרויות מתחלף באקראי לכל מבקר."),
-        ("כל צ'אט בנפרד", "אנחנו אף פעם לא מערבבים תשובות של צ'אטים שונים: לכל צ'אט יש בועה משלו. ב„הכול”, לכל צ'אט אותו משקל, לא משנה כמה תשובות יש לו."),
-        ("שני מדדים", "הבועה מראה איך המשתתפים מדרגים את התשובות. המפה משתמשת במשהו שניתן לראות: אילו טיעונים מכל צד התשובה מזכירה (4 מכל צד בתיבות האופציונליות). כך אנחנו לא תלויים רק ברושם."),
+        ("כל צ'אט בנפרד", "אנחנו אף פעם לא מערבבים תשובות של צ'אטים שונים: לכל צ'אט יש מחוג משלו. ב„הכול”, לכל צ'אט אותו משקל, לא משנה כמה תשובות יש לו."),
+        ("שני מדדים", "המחוג מראה איך המשתתפים מדרגים את התשובות. המפה משתמשת במשהו שניתן לראות: אילו טיעונים מכל צד התשובה מזכירה (4 מכל צד בתיבות האופציונליות). כך אנחנו לא תלויים רק ברושם."),
         ("העמדה שלכם", "בסוף אפשר לציין, אם רוצים, לאיזה צד אתם מרגישים קרובים. זה מראה אם כל צד מדרג אחרת את אותן תשובות. זה לעולם לא מוצג לצד התשובה שלכם."),
     ],
 }
@@ -867,3 +867,31 @@ _add("chat_wait_s",
      "{chat}: {missing} more answers to tilt its bar.",
      "{chat} : encore {missing} réponses pour faire pencher sa barre.",
      "{chat}: חסרות עוד {missing} תשובות כדי שהמוט שלו ינטה.")
+# tablero de dos relojes (portada)
+_add("dash_title",
+     "¿Tu chat de IA te responde lo mismo en otro idioma? ¿Y en otro país?",
+     "Does your AI chat answer the same in another language? In another country?",
+     "Votre chat d'IA vous répond-il pareil dans une autre langue ? Et dans un autre pays ?",
+     "האם הצ'אט שלכם עונה אותו דבר בשפה אחרת? ובמדינה אחרת?")
+_add("dash_sub",
+     "Una sola pregunta sobre la guerra de Gaza, palabra por palabra. Pruébala en tu chat y compara con otros idiomas y países.",
+     "One question about the Gaza war, word for word. Try it in your chat and compare with other languages and countries.",
+     "Une seule question sur la guerre à Gaza, mot pour mot. Essayez-la dans votre chat et comparez avec d'autres langues et pays.",
+     "שאלה אחת על המלחמה בעזה, מילה במילה. נסו אותה בצ'אט שלכם והשוו לשפות ולמדינות אחרות.")
+_add("dash_cta", "Pregúntale a tu chat y desbloquea las agujas", "Ask your chat and unlock the needles",
+     "Interrogez votre chat et débloquez les aiguilles", "שאלו את הצ'אט שלכם ופתחו את המחוגים")
+_add("k_chat", "Chat", "Chat", "Chat", "צ'אט")
+_add("pick_chat", "Elige el chat", "Pick the chat", "Choisissez le chat", "בחרו צ'אט")
+_add("compare_by", "Compara {chat} por", "Compare {chat} by", "Comparer {chat} par", "השוו את {chat} לפי")
+_add("tab_lang", "Idioma", "Language", "Langue", "שפה")
+_add("tab_country", "País", "Country", "Pays", "מדינה")
+_add("n_answers", "{n} respuestas", "{n} answers", "{n} réponses", "{n} תשובות")
+_add("n_missing", "Faltan {missing}", "{missing} more needed", "Encore {missing}", "חסרות עוד {missing}")
+_add("no_countries", "Aún no hay respuestas por país.", "No answers by country yet.", "Pas encore de réponses par pays.", "עדיין אין תשובות לפי מדינה.")
+_add("dash_locked",
+     "Ya hay {n} respuestas. Las agujas aparecen cuando aportas la tuya.",
+     "There are already {n} answers. The needles appear once you add yours.",
+     "Il y a déjà {n} réponses. Les aiguilles apparaissent quand vous ajoutez la vôtre.",
+     "כבר יש {n} תשובות. המחוגים יופיעו אחרי שתוסיפו את שלכם.")
+_add("side_isr", "Lado israelí", "Israeli side", "Côté israélien", "הצד הישראלי")
+_add("side_pal", "Lado palestino", "Palestinian side", "Côté palestinien", "הצד הפלסטיני")

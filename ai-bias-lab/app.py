@@ -28,7 +28,10 @@ MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 GEOIP_DB = os.environ.get("GEOIP_DB", str(BASE_DIR / "geoip.mmdb"))
 MAX_ANSWER = 12000
 MIN_METRO = int(os.environ.get("MIN_METRO", "1"))  # respuestas mínimas para mostrar un chat.
-# PRUEBAS INTERNAS: 1 para ver la burbuja enseguida. Antes del lanzamiento público, volver a 20.
+# PRUEBAS INTERNAS: 1 para ver la aguja enseguida. Antes del lanzamiento público, volver a 20.
+# PRUEBAS INTERNAS: las agujas de la portada se ven sin haber participado, para que quienes prueban
+# den su opinión. Antes del lanzamiento público, poner PREVIEW_NEEDLES=0 (o cambiar aquí "1" por "0").
+PREVIEW_NEEDLES = os.environ.get("PREVIEW_NEEDLES", "1") == "1"
 PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://thechatradar.com").rstrip("/")
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 BREVO_LIST_ID = os.environ.get("BREVO_LIST_ID", "")
@@ -361,19 +364,37 @@ def index():
         bump("visit_from", src)
     rows = valid_rows(q["id"])
     scores = chats_scores(rows)
-    # La aguja solo se ve después de participar (para no anclar la opinión);
-    # antes solo se ven los contadores. pos: 0 = postura israelí, 50 = equilibrado, 100 = palestina.
+    # Tablero de dos relojes. Las agujas solo se ven después de participar (para no anclar
+    # la opinión); antes solo van los contadores: ni siquiera se envían las posiciones.
     unlocked = bool(session.get("done", {}).get(q["id"]))
-    # Pruebas internas: ?v=needle (aguja), ?v=level (nivel) o ?v=seesaw (balancín); la elección se recuerda.
-    if request.args.get("v") in ("needle", "level", "seesaw"):
-        session["gauge_v"] = request.args["v"]
-    gauge_tpl = {"needle": "_gauge_needle.html", "seesaw": "_gauge_seesaw.html"}.get(session.get("gauge_v"), "_gauge.html")
-    selector = [dict(key="all", name=None, total=len(rows), score=overall_score(scores))] + \
-        [dict(s) for s in scores.values()]
-    return render_template("index.html", questions=QUESTIONS, q=q,
-                           counts=count_by_question(), gauge=overall_score(scores),
-                           selector=selector, unlocked=unlocked, share_url=public_home_url(),
-                           total_valid=len(rows), min_metro=MIN_METRO, gauge_tpl=gauge_tpl)
+    tested = session.get("done", {}).get(q["id"]) or []
+    return render_template("index.html", questions=QUESTIONS, q=q, counts=count_by_question(),
+                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested), unlocked=unlocked,
+                           preview=PREVIEW_NEEDLES and not unlocked,
+                           share_url=public_home_url(), total_valid=len(rows), min_metro=MIN_METRO)
+
+
+def dashboard_data(rows, show, tested):
+    """Reloj izquierdo: cada chat por separado. Reloj derecho: ese chat por idioma o por país.
+    pos: 0 = postura israelí, 50 = ni un lado ni otro, 100 = postura palestina."""
+    def gauge(rs):
+        sc = lean_score(rs)
+        return {"n": sc["n"], "pos": sc["pos"] if (show and sc["ok"]) else None,
+                "missing": sc.get("missing", 0)}
+    by_chat = group_by_chat(rows)
+    chats = []
+    for key, name, _ in CHATS:
+        if key == "otro":
+            continue
+        rs = by_chat.get(key, [])
+        langs = [dict(code=c, label=LANGS[c], **gauge([r for r in rs if r["lang"] == c])) for c in LANGS]
+        per_country = Counter(r["country"] for r in rs if r["country"] and len(r["country"]) == 2)
+        countries = [dict(code=c, label=c, **gauge([r for r in rs if r["country"] == c]))
+                     for c, _ in per_country.most_common(8)]
+        chats.append(dict(key=key, name=name, langs=langs, countries=countries, **gauge(rs)))
+    first = next((c["key"] for c in chats if c["key"] in tested), None) \
+        or max(chats, key=lambda c: c["n"])["key"]
+    return {"chats": chats, "first": first}
 
 
 @app.route("/<lang>/q/<qid>", methods=["GET", "POST"])
