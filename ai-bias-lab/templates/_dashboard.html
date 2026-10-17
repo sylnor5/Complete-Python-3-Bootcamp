@@ -26,7 +26,7 @@
       <div class="face">
         <span class="pod-k">{{ t('k_chat') }}</span>
         <span class="pod-v" id="l-name"></span>
-        <span class="pod-mid">{{ t('g_center') }}</span>
+        <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('l-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
         <p class="pod-n" id="l-n"></p>
@@ -40,7 +40,7 @@
       <div class="face">
         <span class="pod-k" id="r-k"></span>
         <span class="pod-v" id="r-name"></span>
-        <span class="pod-mid">{{ t('g_center') }}</span>
+        <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('r-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
         <p class="pod-n" id="r-n"></p>
@@ -65,7 +65,7 @@
   var D = {{ dash|tojson }}, S = {{ {'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
       'compareBy': t('compare_by'), 'nAnswers': t('n_answers_fmt'), 'nAnswerOne': t('n_answers_one'), 'nMissing': t('n_missing'), 'noCountries': t('no_countries')}|tojson }};
   var byKey = {}; D.chats.forEach(function (c) { byKey[c.key] = c; });
-  var cur = byKey[D.first] || D.chats[0], tab = "langs", val = S.lang;
+  var cur = byKey[D.first] || D.chats[0], tab = "langs", val = S.lang, autoPick = true;
   var regionName = (window.Intl && Intl.DisplayNames) ? new Intl.DisplayNames([S.lang], {type: "region"}) : null;
   function label(item) {
     if (tab === "countries" && regionName) { try { return regionName.of(item.code); } catch (e) {} }
@@ -91,12 +91,17 @@
     $("l-name").textContent = cur.name; setNeedle($("l-needle"), cur); count($("l-n"), cur);
     var box = $("l-chips"); box.innerHTML = "";
     D.chats.forEach(function (c) {
-      box.appendChild(chip(c.name.replace(" (Mistral)", ""), c === cur, !c.n, function () { cur = c; draw(); }));
+      box.appendChild(chip(c.name.replace(" (Mistral)", ""), c === cur, !c.n, function () { cur = c; autoPick = true; draw(); }));
     });
   }
   function drawRight() {
     var list = cur[tab], item = list.filter(function (x) { return x.code === val; })[0];
-    if (!item) { item = list.slice().sort(function (a, b) { return b.n - a.n; })[0]; val = item ? item.code : null; }
+    if (!item || (autoPick && !item.n)) {
+      // Elegido por nosotros (no por un clic): ir a la opción con más respuestas para que se vea una aguja.
+      var best = list.slice().sort(function (a, b) { return b.n - a.n; })[0];
+      if (best && (!item || best.n)) { item = best; }
+      val = item ? item.code : null;
+    }
     $("r-k").textContent = cur.name + " · " + (tab === "langs" ? S.tabLang : S.tabCountry);
     $("r-h").textContent = S.compareBy.replace("{chat}", cur.name);
     document.querySelectorAll(".seg2 button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tab === tab ? "true" : "false"); });
@@ -105,11 +110,11 @@
       $("r-name").textContent = "—"; $("r-needle").setAttribute("hidden", ""); $("r-n").textContent = S.noCountries; return;
     }
     $("r-name").textContent = label(item); setNeedle($("r-needle"), item); count($("r-n"), item);
-    list.forEach(function (x) { box.appendChild(chip(label(x), x === item, !x.n, function () { val = x.code; drawRight(); })); });
+    list.forEach(function (x) { box.appendChild(chip(label(x), x === item, !x.n, function () { val = x.code; autoPick = false; drawRight(); })); });
   }
   function draw() { drawLeft(); drawRight(); }
   document.querySelectorAll(".seg2 button").forEach(function (b) {
-    b.addEventListener("click", function () { tab = b.dataset.tab; val = tab === "langs" ? S.lang : null; drawRight(); });
+    b.addEventListener("click", function () { tab = b.dataset.tab; val = tab === "langs" ? S.lang : null; autoPick = true; drawRight(); });
   });
   draw();
 })();

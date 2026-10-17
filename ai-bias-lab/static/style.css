@@ -633,7 +633,8 @@ p, li { max-width: 68ch; }
 .pod-k { font: 600 10.5px/1.25 var(--f-text); letter-spacing: .06em; text-transform: uppercase; color: var(--pencil); }
 :lang(he) .pod-k { letter-spacing: 0; font-size: 12px; }
 .pod-v { font: 700 18px/1.25 var(--f-head); color: var(--graphite); min-height: 1.25em; }
-.pod-mid { font: 600 10.5px/1.2 var(--f-text); color: var(--graphite); margin-top: 6px; }
+.pod-mid { font: 600 10.5px/1.2 var(--f-text); color: var(--pencil); margin-top: 8px; margin-bottom: -4px; display: flex; flex-direction: column; align-items: center; }
+.pod-mid > span { font-size: 9px; line-height: 1; opacity: .7; }
 .face .gauge { width: 100%; margin-top: 2px; }
 .face .ends { display: flex; justify-content: space-between; gap: 6px; width: 100%; font: 600 10.5px/1.2 var(--f-text); color: var(--pencil); direction: ltr; margin-top: -2px; }
 .face .ends span:last-child { text-align: right; }
