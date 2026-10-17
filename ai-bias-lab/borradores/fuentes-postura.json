@@ -1,0 +1,1311 @@
+{
+ "scale": {
+  "israeli": "Más cerca de la postura israelí",
+  "mixed": "Mixta / sin postura clara",
+  "palestinian": "Más cerca de la postura palestina",
+  "n/a": "No es un medio (tribunal, base de datos, enciclopedia…)"
+ },
+ "rule": "La postura se juzga por la línea editorial general y el encuadre del medio u organización sobre Israel y Gaza en los últimos años, no por artículos sueltos: qué vocabulario usa (p. ej. 'terroristas' o 'resistencia', 'genocidio' o 'guerra contra Hamás'), qué afirmaciones de cada parte presenta como hechos y cuáles como alegaciones, qué defienden sus editoriales y páginas de opinión, y qué declaran sus propietarios o estatutos. Los órganos oficiales y combatientes de una de las partes se asignan a esa parte. Las agencias de noticias y los organismos oficiales neutrales (ONU, tribunales, estadística) son 'mixed' o 'n/a' salvo pruebas documentadas sólidas. Las acusaciones de sesgo de una parte no se adoptan como hecho: si un medio es acusado por ambos lados, se marca 'mixed'. Se aplica el mismo criterio en ambas direcciones y, ante la duda, se usa 'mixed' con confianza baja. Es un borrador para revisión humana.",
+ "stance": {
+  "972mag.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Revista israelí-palestina; enmarca la situación como ocupación y apartheid, usa 'genocidio' para Gaza; gobierno israelí la critica."
+  },
+  "aa.com.tr": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Agencia estatal turca; sigue la línea de Erdogan, que califica la guerra de genocidio y a Hamás de movimiento de liberación."
+  },
+  "abc.net.au": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Cadena pública o generalista anglosajona; acusada de sesgo por ambos lados."
+  },
+  "abcnews.go.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio generalista estadounidense; acusado de sesgo por ambos lados, sin línea editorial militante."
+  },
+  "acleddata.com": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Proyecto de datos sobre conflicto/armamento; no es medio."
+  },
+  "acri.org.il": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Asociación israelí de derechos civiles; critica medidas en territorios ocupados pero centrada en libertades dentro de Israel."
+  },
+  "addameer.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de apoyo a presos; Israel la declaró 'organización terrorista' en 2021, extremo que la UE no aceptó."
+  },
+  "adl.org": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Liga Antidifamación; lucha contra el antisemitismo y apoya públicamente a Israel."
+  },
+  "afp.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Agencia de noticias; estilo descriptivo, atribuye cifras a cada parte."
+  },
+  "aipac.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Lobby proisraelí estadounidense."
+  },
+  "airwars.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Proyecto de datos sobre conflicto/armamento; no es medio."
+  },
+  "al-monitor.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio de Washington sobre Oriente Medio con periodistas regionales e israelíes; plural."
+  },
+  "al-shabaka.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Red de análisis política palestina; defiende derechos palestinos y critica la ocupación."
+  },
+  "alarabiya.net": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Saudí; crítica con Israel pero también con Hamás e Irán; acusada por ambos lados."
+  },
+  "alayyam.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Diario palestino de Cisjordania; encuadre nacional palestino, cercano a la ANP."
+  },
+  "aldameer.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "alhaq.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "aljazeera.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Catarí estatal; foco en víctimas palestinas y corresponsales en Gaza. Israel la prohibió (2024) y acusa a periodistas de vínculos con Hamás."
+  },
+  "aljazeera.net": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Al Jazeera árabe; emite íntegros comunicados y vídeos de Hamás; encuadre más marcado que la versión inglesa."
+  },
+  "allafrica.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Agregador de medios africanos; la postura depende del medio republicado."
+  },
+  "alquds.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Diario palestino de Cisjordania; encuadre nacional palestino, cercano a la ANP."
+  },
+  "alresalah.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio palestino afín a Hamás; difunde comunicados y encuadre de la facción."
+  },
+  "amnesty.org": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Concluyó apartheid (2022) y genocidio en Gaza (2024), alineado con la postura palestina; Israel lo rechaza. También condena crímenes de Hamás."
+  },
+  "anera.org": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "ONG de ayuda a palestinos y refugiados; mensajes públicos centrados en necesidades palestinas."
+  },
+  "aoav.org.uk": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Proyecto de datos sobre conflicto/armamento; no es medio."
+  },
+  "apnews.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Agencia; criticada por ambos lados (fotógrafos del 7-O; lenguaje sobre Gaza). Estilo neutro."
+  },
+  "aqsatv.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Al-Aqsa TV, canal de Hamás."
+  },
+  "arabnews.com": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Saudí; editoriales críticos con la guerra israelí y pro-Estado palestino, pero hostiles a Hamás."
+  },
+  "axios.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio político estadounidense; Politico pertenece a Axel Springer, que pide a empleados apoyar a Israel."
+  },
+  "badil.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "bbc.co.uk": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Acusada por ambos lados: personal y críticos pro-palestinos denuncian sesgo pro-Israel; Israel y grupos judíos, lo contrario (documental Gaza 2025)."
+  },
+  "bbc.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Acusada por ambos lados: personal y críticos pro-palestinos denuncian sesgo pro-Israel; Israel y grupos judíos, lo contrario (documental Gaza 2025)."
+  },
+  "bernama.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Agencia estatal malasia; Malasia no reconoce a Israel y su gobierno defiende con fuerza la causa palestina."
+  },
+  "besacenter.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Centro Begin-Sadat (Bar-Ilan), línea de seguridad conservadora favorable a la postura del gobierno israelí."
+  },
+  "bloomberg.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio económico de referencia; cobertura analítica, editoriales críticos con ambas partes."
+  },
+  "breakingthesilence.org.il": {
+   "s": "palestinian",
+   "conf": "mixed",
+   "why": "Exsoldados israelíes que publican testimonios contra la ocupación y la conducta en Gaza; el gobierno la critica duramente."
+  },
+  "bringthemhomenow.net": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Campaña de familias de rehenes; centrada en víctimas israelíes del 7-O, aunque crítica con el gobierno de Netanyahu."
+  },
+  "britannica.com": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Enciclopedia o base de datos académica; no es medio."
+  },
+  "brookings.edu": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "btselem.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG israelí; califica el régimen de apartheid (2021) y la guerra de Gaza de genocidio (2025). Israel la rechaza."
+  },
+  "c14.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Probable dominio antiguo/alternativo del Canal 14 israelí (derecha). Verificar dominio."
+  },
+  "cair.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Organización musulmana estadounidense de derechos civiles; muy crítica con la guerra en Gaza."
+  },
+  "calcalist.co.il": {
+   "s": "israeli",
+   "conf": "baja",
+   "why": "Diario económico israelí; cubre la guerra desde marco israelí corriente, sin línea editorial militante."
+  },
+  "calcalistech.com": {
+   "s": "israeli",
+   "conf": "baja",
+   "why": "Diario económico israelí; cubre la guerra desde marco israelí corriente, sin línea editorial militante."
+  },
+  "camera.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Grupo que vigila medios por 'sesgo anti-Israel'; defensa proisraelí declarada."
+  },
+  "care.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "carnegieendowment.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "cbc.ca": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Cadena pública o generalista anglosajona; acusada de sesgo por ambos lados."
+  },
+  "cbs.gov.il": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Oficina Central de Estadística de Israel; datos oficiales, no medio."
+  },
+  "cbsnews.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio generalista estadounidense; acusado de sesgo por ambos lados, sin línea editorial militante."
+  },
+  "cfr.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "channelafrica.co.za": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Pública sudafricana; sigue la línea del gobierno que llevó a Israel ante la CIJ por genocidio."
+  },
+  "chathamhouse.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "clarin.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Diario argentino generalista; sin línea editorial marcada en el conflicto."
+  },
+  "cnn.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Empleados denunciaron directrices pro-israelíes (2024); grupos proisraelíes la acusan de lo contrario. Cobertura generalista."
+  },
+  "cogat.mod.gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "congress.gov": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Base de datos legislativa; no es medio."
+  },
+  "cpj.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG de libertad de prensa; documentan periodistas muertos en Gaza y presiones en ambos lados."
+  },
+  "crisisgroup.org": {
+   "s": "mixed",
+   "conf": "alta",
+   "why": "International Crisis Group; análisis de resolución de conflictos, critica a ambas partes."
+  },
+  "csis.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "dailymail.co.uk": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Tabloide británico conservador; encuadre generalmente favorable a Israel y crítico con manifestaciones pro-palestinas."
+  },
+  "dci-palestine.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "doctorswithoutborders.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "dropsitenews.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Drop Site News; periodismo de investigación muy crítico con Israel y EE. UU. en Gaza."
+  },
+  "dw.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Estatal alemana; Alemania es aliado firme de Israel y empleados denunciaron sesgo pro-israelí; otros la acusan de lo contrario."
+  },
+  "ecfr.eu": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "economist.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio económico de referencia; cobertura analítica, editoriales críticos con ambas partes."
+  },
+  "eeas.europa.eu": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Instituciones de la UE; apoyan dos Estados, condenan a Hamás y critican la conducta israelí."
+  },
+  "efe.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Agencia de noticias; estilo descriptivo, atribuye cifras a cada parte."
+  },
+  "eldiario.es": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Diario español de izquierda; usa habitualmente 'genocidio' en Gaza y línea muy crítica con Israel."
+  },
+  "electronicintifada.net": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Publicación pro-palestina (Ali Abunimah); apoya BDS y critica el sionismo."
+  },
+  "elmundo.es": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Diario español de centroderecha; opinión más favorable a Israel, noticias generalistas."
+  },
+  "elpais.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Diario español de referencia; editoriales críticos con la guerra israelí y con Hamás."
+  },
+  "emro.who.int": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "en.globes.co.il": {
+   "s": "israeli",
+   "conf": "baja",
+   "why": "Diario económico israelí; cubre la guerra desde marco israelí corriente, sin línea editorial militante."
+  },
+  "en.idi.org.il": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Israel Democracy Institute, centrista; encuestas y análisis institucional, sin militancia clara en el conflicto."
+  },
+  "english.wafa.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "WAFA, agencia oficial de la Autoridad Palestina."
+  },
+  "euronews.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Cadena paneuropea; estilo informativo, sin línea marcada."
+  },
+  "europa.eu": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Instituciones de la UE; apoyan dos Estados, condenan a Hamás y critican la conducta israelí."
+  },
+  "europapress.es": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Agencia de noticias; estilo descriptivo, atribuye cifras a cada parte."
+  },
+  "fao.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "fatah.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "fdd.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Foundation for Defense of Democracies; think tank halcón, cercano a la postura israelí sobre Irán y Hamás."
+  },
+  "felesteen.news": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio palestino afín a Hamás; difunde comunicados y encuadre de la facción."
+  },
+  "forensic-architecture.org": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Investigaciones atribuyen ataques a Israel y se usaron en el caso de Sudáfrica ante la CIJ."
+  },
+  "foxnews.com": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Cadena conservadora estadounidense; línea editorial y presentadores abiertamente proisraelíes."
+  },
+  "france24.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Estatal francesa; acusada por ambos lados, incluida su cadena árabe (despidos de periodistas en 2023)."
+  },
+  "ft.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio económico de referencia; cobertura analítica, editoriales críticos con ambas partes."
+  },
+  "gazatlm.gov.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Oficina oficial del gobierno de Gaza (Hamás); parte en el conflicto. Dominio a verificar."
+  },
+  "gisha.org": {
+   "s": "palestinian",
+   "conf": "mixed",
+   "why": "ONG israelí por la libertad de movimiento de gazatíes; denuncia restricciones israelíes a la entrada de ayuda."
+  },
+  "globes.co.il": {
+   "s": "israeli",
+   "conf": "baja",
+   "why": "Diario económico israelí; cubre la guerra desde marco israelí corriente, sin línea editorial militante."
+  },
+  "gmo.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Oficina oficial del gobierno de Gaza (Hamás); parte en el conflicto. Dominio a verificar."
+  },
+  "gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "gov.uk": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Gobierno británico; aliado de Israel pero reconoció Palestina (2025) y suspendió algunas licencias de armas."
+  },
+  "haaretz.co.il": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Diario israelí liberal; editoriales y columnistas (Levy, Hass) muy críticos con la guerra; el gobierno lo boicoteó en 2024. Noticias siguen fuentes israelíes."
+  },
+  "haaretz.com": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Diario israelí liberal; editoriales y columnistas (Levy, Hass) muy críticos con la guerra; el gobierno lo boicoteó en 2024. Noticias siguen fuentes israelíes."
+  },
+  "hamas.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Sitio oficial de Hamás o su brazo armado; parte combatiente."
+  },
+  "hamasinfo.info": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Sitio oficial de Hamás o su brazo armado; parte combatiente."
+  },
+  "hostagesandmissingfamilies.org": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Campaña de familias de rehenes; centrada en víctimas israelíes del 7-O, aunque crítica con el gobierno de Netanyahu."
+  },
+  "hrw.org": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Concluyó apartheid (2021) y actos de genocidio/exterminio en Gaza (2024); también documentó crímenes del 7-O. Israel lo rechaza."
+  },
+  "i24news.tv": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Canal israelí internacional (Patrick Drahi); cobertura desde perspectiva israelí, con presentadores muy críticos con Hamás."
+  },
+  "icc-cpi.int": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Tribunal internacional; dicta resoluciones, no es medio. Ambas partes han criticado sus decisiones."
+  },
+  "icj-cij.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Tribunal internacional; dicta resoluciones, no es medio. Ambas partes han criticado sus decisiones."
+  },
+  "icj-web.leman.un-icc.cloud": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Infraestructura informática de la ONU; no es medio."
+  },
+  "icrc.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Cruz Roja/Media Luna Roja; neutralidad institucional, no es medio."
+  },
+  "idf.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "idi.org.il": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Israel Democracy Institute, centrista; encuestas y análisis institucional, sin militancia clara en el conflicto."
+  },
+  "ifrc.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Cruz Roja/Media Luna Roja; neutralidad institucional, no es medio."
+  },
+  "iiss.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "ilo.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "imeu.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Institute for Middle East Understanding; defensa de la causa palestina en EE. UU."
+  },
+  "imf.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Institución financiera internacional; datos económicos, no es medio."
+  },
+  "independent.co.uk": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Cobertura y columnas muy críticas con la conducta israelí en Gaza; no adopta el discurso de Hamás."
+  },
+  "infobae.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Portal argentino; usa a menudo fuentes israelíes, pero sin línea editorial declarada."
+  },
+  "inss.org.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Think tank de seguridad (Univ. Tel Aviv) ligado al establishment militar; análisis desde intereses israelíes."
+  },
+  "ipcinfo.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "israel-alma.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Centro Alma, investigación sobre amenazas de Hizbulá y Hamás desde perspectiva de seguridad israelí."
+  },
+  "israelhayom.co.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Diario gratuito fundado por Sheldon Adelson, línea favorable a Netanyahu y a la guerra."
+  },
+  "israelhayom.com": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Diario gratuito fundado por Sheldon Adelson, línea favorable a Netanyahu y a la guerra."
+  },
+  "israelnationalnews.com": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Arutz Sheva, medio afín al movimiento colono y la derecha religiosa."
+  },
+  "jcpa.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Jerusalem Center for Public Affairs (dirigido por exdiplomático Dore Gold); defiende posiciones del gobierno israelí."
+  },
+  "jewishinsider.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Medio judío estadounidense, encuadre proisraelí."
+  },
+  "jewishvirtuallibrary.org": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Enciclopedia en línea de AICE (Mitchell Bard), con enfoque proisraelí."
+  },
+  "jns.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Jewish News Syndicate; agencia abiertamente proisraelí de línea conservadora."
+  },
+  "jpost.com": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Jerusalem Post; línea editorial de centroderecha pro-Israel desde 2004; editoriales apoyan la guerra contra Hamás."
+  },
+  "jstor.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Enciclopedia o base de datos académica; no es medio."
+  },
+  "kan.org.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Radiotelevisión pública israelí; encuadre del consenso israelí, aunque el gobierno la acusa de izquierdista."
+  },
+  "knesset.gov.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Parlamento israelí; recoge todas las facciones, pero es institución del Estado parte del conflicto."
+  },
+  "kohelet.org.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Kohelet Policy Forum, think tank conservador detrás de la reforma judicial; apoya soberanía en Cisjordania."
+  },
+  "latimes.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio generalista estadounidense; acusado de sesgo por ambos lados, sin línea editorial militante."
+  },
+  "lavanguardia.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Diario español generalista; sin línea marcada en el conflicto."
+  },
+  "lefigaro.fr": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Diario conservador francés; opinión más favorable a Israel que Le Monde, pero noticias sin línea marcada."
+  },
+  "lemonde.fr": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Referencia francesa; editoriales críticos con la guerra y con Hamás; acusaciones cruzadas."
+  },
+  "localcall.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Sicha Mekomit, versión hebrea de +972; misma línea editorial crítica con la ocupación y la guerra."
+  },
+  "maannews.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Agencia Ma'an (Belén), independiente de facciones pero con encuadre palestino."
+  },
+  "maannews.net": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Agencia Ma'an (Belén), independiente de facciones pero con encuadre palestino."
+  },
+  "maariv.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Diario israelí de centroderecha; encuadre israelí, columnistas mayormente de derecha."
+  },
+  "mako.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Canal 12, el más visto en Israel; centrista, encuadre del consenso israelí y fuentes militares."
+  },
+  "map.org.uk": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Medical Aid for Palestinians: ONG británica de solidaridad con palestinos, defiende sus derechos además de prestar ayuda."
+  },
+  "mdais.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Magen David Adom, servicio de emergencias médicas israelí; no es medio."
+  },
+  "memri.org": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Traduce medios árabes/iraníes; críticos señalan selección que favorece la narrativa israelí; fundado por exoficial de inteligencia israelí."
+  },
+  "mezan.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "mfa.gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "mg.co.za": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Mail & Guardian; opinión mayoritariamente crítica con Israel, en línea con el debate sudafricano."
+  },
+  "middleeasteye.net": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Londres, financiación atribuida a Catar; línea editorial crítica con Israel; Israel y críticos la acusan de sesgo."
+  },
+  "middleeastmonitor.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Londres; abiertamente pro-palestino, críticos lo vinculan a la Hermandad Musulmana."
+  },
+  "misgavins.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Instituto Misgav, think tank de seguridad nacional y sionismo, línea de derecha."
+  },
+  "mitvim.org.il": {
+   "s": "mixed",
+   "conf": "mixed",
+   "why": "Think tank israelí de política exterior pacifista; apoya dos Estados desde perspectiva israelí."
+  },
+  "mod.gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "mofa.gov.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "mofa.pna.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "moh.gov.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Ministerio de Salud palestino (en Gaza bajo Hamás); parte en el conflicto, aunque ONU y estudios usan sus cifras."
+  },
+  "moh.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Ministerio de Salud palestino (en Gaza bajo Hamás); parte en el conflicto, aunque ONU y estudios usan sus cifras."
+  },
+  "mondoweiss.net": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Publicación pro-palestina y antisionista declarada."
+  },
+  "msf.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "n12.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Canal 12, el más visto en Israel; centrista, encuadre del consenso israelí y fuentes militares."
+  },
+  "nad.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "nature.com": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Revista científica; no es medio de opinión."
+  },
+  "nbcnews.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio generalista estadounidense; acusado de sesgo por ambos lados, sin línea editorial militante."
+  },
+  "newarab.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "The New Arab, ligado a Catar; línea editorial pro-palestina."
+  },
+  "news.un.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Sitio de la ONU; recoge posiciones de Estados y órganos. Israel acusa a la ONU de sesgo; no se adopta como hecho."
+  },
+  "newsweek.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Medio generalista estadounidense; mezcla de enfoques, sin línea marcada."
+  },
+  "newyorker.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Revista estadounidense; reportajes críticos sobre Gaza y ensayos proisraelíes; The Atlantic dirigida por J. Goldberg."
+  },
+  "ngo-monitor.org": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Organización que critica a ONG pro-palestinas; Israel cita sus informes contra UNRWA y ONG."
+  },
+  "nli.org.il": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Biblioteca Nacional de Israel; archivo, no medio."
+  },
+  "now14.co.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Canal 14, derechista y progubernamental; comentaristas han pedido arrasar Gaza (reportado por medios israelíes)."
+  },
+  "npr.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Público estadounidense; recibe quejas de ambos lados sobre su cobertura."
+  },
+  "nrc.no": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "nypost.com": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Tabloide conservador (Murdoch); portadas y editoriales abiertamente proisraelíes."
+  },
+  "nytimes.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Criticado por ambos: memo interno sobre 'genocidio' y artículo sobre violencia sexual del 7-O; también acusado de antiisraelí."
+  },
+  "ochaopt.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Coordinación humanitaria de la ONU; datos y situación humanitaria, cita cifras de ambas partes."
+  },
+  "ohchr.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Oficina de DD.HH. de la ONU, incluye relatores (p.ej. Albanese) muy críticos con Israel; Israel la acusa de sesgo."
+  },
+  "oxfam.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "palestine-studies.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Institute for Palestine Studies; investigación académica desde perspectiva palestina."
+  },
+  "palestinechronicle.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio pro-palestino fundado por Ramzy Baroud."
+  },
+  "palestinercs.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Media Luna Roja Palestina, servicio de emergencias; no es medio."
+  },
+  "palestineun.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "palinfo.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio palestino afín a Hamás; difunde comunicados y encuadre de la facción."
+  },
+  "pbs.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Público estadounidense; recibe quejas de ambos lados sobre su cobertura."
+  },
+  "pcbs.gov.ps": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Oficina Central de Estadística palestina; datos oficiales, no medio."
+  },
+  "pchrgaza.org": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "peacenow.org.il": {
+   "s": "mixed",
+   "conf": "mixed",
+   "why": "Movimiento sionista de izquierda; se opone a los asentamientos y apoya dos Estados, desde marco israelí."
+  },
+  "phr.org.il": {
+   "s": "palestinian",
+   "conf": "mixed",
+   "why": "Médicos por los DD.HH.-Israel; denuncia ataques al sistema sanitario de Gaza y trato a detenidos palestinos."
+  },
+  "plo.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "pmo.gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "pmo.gov.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Órgano oficial o partido palestino (ANP/OLP/Fatah), parte en el conflicto; presenta su postura."
+  },
+  "pngo.net": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "ONG palestina de DD.HH.; documenta violaciones israelíes. Varias fueron designadas 'terroristas' por Israel, lo que niegan."
+  },
+  "pnn.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Palestine News Network (Belén); medio palestino con encuadre nacional palestino."
+  },
+  "police.gov.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Órgano oficial del Estado de Israel, parte en el conflicto; presenta la postura gubernamental."
+  },
+  "politico.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio político estadounidense; Politico pertenece a Axel Springer, que pide a empleados apoyar a Israel."
+  },
+  "presstv.ir": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Estatal iraní; Irán financia a Hamás; llama 'resistencia' a grupos armados y 'régimen sionista' a Israel."
+  },
+  "qassam.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Sitio oficial de Hamás o su brazo armado; parte combatiente."
+  },
+  "qudsnen.co": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Quds News Network; red de corresponsales palestinos con encuadre militante pro-palestino."
+  },
+  "rand.org": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "reliefweb.int": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Coordinación humanitaria de la ONU; datos y situación humanitaria, cita cifras de ambas partes."
+  },
+  "reuters.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Agencia; acusada de sesgo pro-israelí por críticos y antiisraelí por grupos proisraelíes. Estilo neutro."
+  },
+  "rfi.fr": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Radio pública francesa; estilo informativo, sin línea militante."
+  },
+  "rsf.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG de libertad de prensa; documentan periodistas muertos en Gaza y presiones en ambos lados."
+  },
+  "rt.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Estatal rusa; encuadre antioccidental y crítico con Israel y EE. UU."
+  },
+  "rtve.es": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Pública española; la embajada israelí la acusó de sesgo; España reconoció Palestina. Noticias generalistas."
+  },
+  "sabcnews.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Pública sudafricana; sigue la línea del gobierno que llevó a Israel ante la CIJ por genocidio."
+  },
+  "safa.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio palestino afín a Hamás; difunde comunicados y encuadre de la facción."
+  },
+  "savethechildren.net": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "savethechildren.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "ONG humanitaria, no medio; sus comunicados denuncian restricciones israelíes a la ayuda, lo que Israel discute."
+  },
+  "shehabnews.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Medio palestino afín a Hamás; difunde comunicados y encuadre de la facción."
+  },
+  "sipri.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Proyecto de datos sobre conflicto/armamento; no es medio."
+  },
+  "sky.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Cadena pública o generalista anglosajona; acusada de sesgo por ambos lados."
+  },
+  "spiegel.de": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Semanario alemán; cobertura crítica con ambas partes."
+  },
+  "state.gov": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Gobierno de EE. UU., principal aliado militar de Israel; vetó resoluciones de alto el fuego."
+  },
+  "statista.com": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Agregador de datos; no es medio."
+  },
+  "t.me": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Plataforma; la postura depende del canal o la cuenta."
+  },
+  "tabletmag.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Revista judía estadounidense; opinión mayoritariamente proisraelí."
+  },
+  "taubcenter.org.il": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Taub Center, investigación socioeconómica israelí; no trata el conflicto como línea editorial."
+  },
+  "telegraph.co.uk": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Diario conservador británico; editoriales y columnistas mayoritariamente proisraelíes."
+  },
+  "terrorism-info.org.il": {
+   "s": "israeli",
+   "conf": "alta",
+   "why": "Centro Meir Amit, vinculado a inteligencia israelí; difunde análisis basados en material de las FDI."
+  },
+  "theatlantic.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Revista estadounidense; reportajes críticos sobre Gaza y ensayos proisraelíes; The Atlantic dirigida por J. Goldberg."
+  },
+  "thefp.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "The Free Press (Bari Weiss); línea editorial proisraelí."
+  },
+  "theguardian.com": {
+   "s": "palestinian",
+   "conf": "baja",
+   "why": "Editoriales piden embargo de armas y critican duramente la guerra, también condenan a Hamás; grupos proisraelíes lo acusan de sesgo."
+  },
+  "thelancet.com": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Revista médica; publicó estimaciones de muertes en Gaza discutidas por Israel. No es medio de opinión."
+  },
+  "themarker.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Diario económico del grupo Haaretz; cobertura centrada en economía, sin línea fuerte propia sobre el conflicto."
+  },
+  "thenationalnews.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Emiratí (país de los Acuerdos de Abraham); critica la guerra en Gaza pero mantiene línea anti-Hamás."
+  },
+  "thetimes.com": {
+   "s": "israeli",
+   "conf": "baja",
+   "why": "Diario británico de centroderecha (Murdoch); páginas de opinión mayoritariamente proisraelíes; noticias más equilibradas."
+  },
+  "time.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Medio generalista estadounidense; mezcla de enfoques, sin línea marcada."
+  },
+  "timesofisrael.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Times of Israel; centrista y plural, pero encuadre israelí corriente y plataforma de blogs proisraelí."
+  },
+  "timesofisrael.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Times of Israel; centrista y plural, pero encuadre israelí corriente y plataforma de blogs proisraelí."
+  },
+  "trtworld.com": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "Radiodifusora estatal turca; mismo encuadre del gobierno turco, muy crítico con Israel."
+  },
+  "un-icc.cloud": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Infraestructura informática de la ONU; no es medio."
+  },
+  "un.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Sitio de la ONU; recoge posiciones de Estados y órganos. Israel acusa a la ONU de sesgo; no se adopta como hecho."
+  },
+  "unctad.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "undp.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unesco.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unfpa.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unicc.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Infraestructura informática de la ONU; no es medio."
+  },
+  "unicef.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unitar.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unocha.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Coordinación humanitaria de la ONU; datos y situación humanitaria, cita cifras de ambas partes."
+  },
+  "unops.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unosat.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "unrwa.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia de la ONU para refugiados palestinos; Israel la acusa de infiltración de Hamás y la prohibió en 2024."
+  },
+  "unwomen.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "usatoday.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Medio generalista estadounidense; acusado de sesgo por ambos lados, sin línea editorial militante."
+  },
+  "voanews.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Radiodifusora del gobierno estadounidense; estilo informativo, en un país aliado de Israel."
+  },
+  "vox.com": {
+   "s": "mixed",
+   "conf": "baja",
+   "why": "Medio generalista estadounidense; mezcla de enfoques, sin línea marcada."
+  },
+  "wafa.ps": {
+   "s": "palestinian",
+   "conf": "alta",
+   "why": "WAFA, agencia oficial de la Autoridad Palestina."
+  },
+  "walla.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Portal israelí generalista; cobertura con encuadre israelí corriente."
+  },
+  "warontherocks.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Think tank de política exterior; análisis plural, sin línea única sobre el conflicto."
+  },
+  "washingtoninstitute.org": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "WINEP, fundado en 1985 por exdirigentes vinculados a AIPAC; análisis cercano a la postura israelí."
+  },
+  "washingtonpost.com": {
+   "s": "mixed",
+   "conf": "media",
+   "why": "Cobertura generalista con investigaciones críticas sobre Gaza; páginas de opinión mayormente proisraelíes. Acusaciones cruzadas."
+  },
+  "wfp.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "whitehouse.gov": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Gobierno de EE. UU., principal aliado militar de Israel; vetó resoluciones de alto el fuego."
+  },
+  "who.int": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Agencia técnica u operativa de la ONU; datos e informes, no es medio."
+  },
+  "wikipedia.org": {
+   "s": "n/a",
+   "conf": "media",
+   "why": "Enciclopedia colaborativa; ambos lados acusan de sesgo a sus editores (arbitraje 2025). No es medio."
+  },
+  "worldbank.org": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Institución financiera internacional; datos económicos, no es medio."
+  },
+  "wsj.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Noticias equilibradas, pero su página editorial es firmemente proisraelí."
+  },
+  "x.com": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Plataforma; la postura depende del canal o la cuenta."
+  },
+  "yesh-din.org": {
+   "s": "palestinian",
+   "conf": "mixed",
+   "why": "ONG israelí que documenta violencia de colonos e impunidad; considera la ocupación incompatible con derechos palestinos."
+  },
+  "ynet.co.il": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Yedioth/Ynet, centrista y mayoritario en Israel; encuadre del consenso israelí, críticas al gobierno en política interna."
+  },
+  "ynetnews.com": {
+   "s": "israeli",
+   "conf": "media",
+   "why": "Yedioth/Ynet, centrista y mayoritario en Israel; encuadre del consenso israelí, críticas al gobierno en política interna."
+  },
+  "youtube.com": {
+   "s": "n/a",
+   "conf": "alta",
+   "why": "Plataforma; la postura depende del canal o la cuenta."
+  },
+  "zeteo.com": {
+   "s": "palestinian",
+   "conf": "media",
+   "why": "Medio de Mehdi Hasan; muy crítico con la guerra israelí en Gaza."
+  }
+ }
+}
