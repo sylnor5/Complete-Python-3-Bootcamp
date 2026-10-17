@@ -68,6 +68,15 @@
     {% block content %}{% endblock %}
   </main>
 
+  {# «Comparte la prueba» en todas las páginas (la portada y «Tus chats» ya lo tienen en su sitio) #}
+  {% block share_footer %}
+  {% import '_share.html' as sh with context %}
+  <section class="wrap share-foot">
+    {{ sh.share_strip(t('share_landing_title'), t('share_msg'), (public_url or request.url_root.rstrip('/')) ~ ('/' if lang == 'en' else '/' ~ lang ~ '/')) }}
+  </section>
+  {{ sh.share_script() }}
+  {% endblock %}
+
   <footer class="foot wrap">
     <div class="foot-row">
       <nav class="foot-nav" aria-label="Footer">

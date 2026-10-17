@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block share_footer %}{% endblock %}
 {% set q = questions[0] %}
 {% set start_url = url_for('question', qid=q.id) %}
 {% import '_share.html' as sh with context %}

@@ -713,3 +713,4 @@ details.ask[open] { display: grid; gap: 12px; }
 .src-chats { display: grid; gap: 12px; }
 @media (min-width: 880px) { .src-chats { grid-template-columns: 1fr 1fr; } }
 .srcpage > * { grid-area: auto; justify-self: stretch; } .srcpage > .topic-chip { justify-self: start; }
+.share-foot { padding-block: 28px 8px; border-top: 1px solid var(--hair); }
