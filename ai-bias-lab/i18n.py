@@ -671,7 +671,7 @@ _add("gauge_locked",
      "L'aiguille apparaît une fois que vous avez participé, pour ne pas influencer votre avis.",
      "המחוג מופיע אחרי שתשתתפו, כדי שלא ישפיע על הדירוג שלכם.")
 _add("gauge_rule",
-     "Los lados van en orden alfabético.",
+     "Los lados están en orden alfabético.",
      "Sides are in alphabetical order.",
      "Les côtés sont dans l'ordre alphabétique.",
      "הצדדים מסודרים לפי סדר האלף־בית.")
@@ -744,7 +744,7 @@ _METHOD_EXTRA = {
     "es": [
         ("Cómo empezó", "Le hice a ChatGPT la pregunta de la prueba. Su respuesta me pareció inclinada hacia un lado y, cuando le discutí, respondió: «Tu crítica es válida respecto de mi respuesta anterior: presenté la cuestión de forma demasiado asimétrica.» De ahí nació la idea de comprobar si les pasa a todos."),
         ("Una pregunta cargada a propósito", "La pregunta tiene un punto de vista, tal como la hizo una persona real. Lo que medimos es si cada IA lo sigue, lo corrige o lo equilibra."),
-        ("Izquierda y derecha", "En la escala, los lados van en orden alfabético en cada idioma («israelí» antes que «palestino»). En el formulario, el orden de las opciones cambia al azar para cada visitante."),
+        ("Izquierda y derecha", "En la escala, los lados están en orden alfabético en cada idioma («israelí» antes que «palestino»). En el formulario, el orden de las opciones cambia al azar para cada visitante."),
         ("Cada chat por separado", "ChatGPT, Gemini, Claude y los demás se miden cada uno por separado: nunca mezclamos las respuestas de un chat con las de otro. Cada chat tiene su propia aguja, porque cada uno es de una empresa distinta y está entrenado de forma distinta."),
         ("Dos medidas", "La aguja muestra cómo valoran las respuestas quienes participan. El mapa usa algo observable: qué argumentos de cada lado menciona la respuesta (4 de cada lado en las casillas opcionales). Así no dependemos solo de impresiones."),
         ("Tu postura", "Al final puedes indicar, si quieres, de qué lado te sientes. Sirve para ver si cada lado valora distinto las mismas respuestas. Nunca se muestra junto a tu respuesta."),
