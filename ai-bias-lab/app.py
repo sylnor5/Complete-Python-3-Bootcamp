@@ -122,6 +122,13 @@ def inject_helpers():
             "geoip_credit": os.path.exists(GEOIP_DB), "public_url": PUBLIC_URL}
 
 
+@app.template_filter("clean_answer")
+def clean_answer(text):
+    """Al mostrar una respuesta pegada, quita los iconos de fuentes que algunos chats copian como
+    imágenes en Markdown (![](https://…favicons…)). El texto guardado no cambia."""
+    return re.sub(r"!\[[^\]]*\]\([^)]*\)\s*", "", text or "")
+
+
 def flag(code):
     if not code or len(code) != 2 or not code.isalpha():
         return "🏳️"
@@ -157,7 +164,8 @@ def detect_country():
     if _geo_reader:
         try:
             rec = _geo_reader.get(client_ip()) or {}
-            code = (rec.get("country") or {}).get("iso_code", "")
+            # formato MaxMind/DB-IP oficial ({"country": {"iso_code"}}) o el de ip-location-db ({"country_code"})
+            code = (rec.get("country") or {}).get("iso_code", "") or rec.get("country_code", "")
             return code.upper() if code else ""
         except ValueError:
             return ""

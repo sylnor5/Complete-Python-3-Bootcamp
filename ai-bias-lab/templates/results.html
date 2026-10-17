@@ -149,7 +149,7 @@ document.getElementById("copy-link").addEventListener("click", async (e) => {
       {% for text in a.answers %}
       <details {% if loop.first %}open{% endif %}>
         <summary>{{ t('question_n') }}{% if a.answers|length > 1 %} {{ loop.index }}{% endif %}</summary>
-        <blockquote>{{ text }}</blockquote>
+        <blockquote>{{ text|clean_answer }}</blockquote>
       </details>
       {% endfor %}
       {% if a.share_url %}<p><a href="{{ a.share_url }}" target="_blank" rel="noopener nofollow ugc">{{ t('see_original') }}</a></p>{% endif %}
