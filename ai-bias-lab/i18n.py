@@ -902,16 +902,10 @@ _add("copy_note",
      "A real person's question, written from their point of view. Copy it exactly as it is.",
      "C'est la vraie question d'une personne, écrite de son point de vue. Copiez-la telle quelle, sans rien changer.",
      "זו שאלה אמיתית של אדם, שנכתבה מנקודת המבט שלו. העתיקו אותה בדיוק כמו שהיא, בלי לשנות דבר.")
-# «Cómo funciona»: la pregunta original, literal, y por qué se editó
-_ORIG_Q = "«Hamás dice que Israel mató 70 mil personas en estos 3 años. El mundo dice que Israel está haciendo genocidio en Gaza. ¿Cómo es que no pudieron aún matar más de 70 mil personas en 3 años? ¿Qué les impide?»"
-_ORIG_ITEM = {
-    "es": ("La pregunta original", "Esta es la pregunta tal como se le hizo a ChatGPT: " + _ORIG_Q + " La editamos solo para que se entienda a la primera (quién es el sujeto y de qué años se habla). El punto de vista se mantiene, y es la misma en los cuatro idiomas."),
-    "en": ("The original question", "This is the question exactly as it was asked to ChatGPT, in Spanish: " + _ORIG_Q + " We edited it only so it's understood at first read (who the subject is and which years). The point of view is unchanged, and it means the same in all four languages."),
-    "fr": ("La question d'origine", "Voici la question telle qu'elle a été posée à ChatGPT, en espagnol : " + _ORIG_Q + " Nous l'avons modifiée uniquement pour qu'elle se comprenne du premier coup (qui est le sujet et de quelles années on parle). Le point de vue est inchangé, et elle dit la même chose dans les quatre langues."),
-    "he": ("השאלה המקורית", "זו השאלה כפי שנשאלה את ChatGPT, בספרדית: " + _ORIG_Q + " ערכנו אותה רק כדי שתובן מהקריאה הראשונה (מי הנושא ועל אילו שנים מדובר). נקודת המבט לא השתנתה, והיא אומרת אותו דבר בכל ארבע השפות."),
-}
-for _lang, _item in _ORIG_ITEM.items():
-    T["method"][_lang].insert(1, _item)
+# «Cómo funciona»: la pregunta tal cual, en el idioma de la página ({question} lo rellena la plantilla)
+_Q_ITEM = {"es": "La pregunta", "en": "The question", "fr": "La question", "he": "השאלה"}
+for _lang, _title in _Q_ITEM.items():
+    T["method"][_lang].insert(1, (_title, "{question}"))
 # aviso al abrir un chat: la pregunta ya está copiada (el portapapeles podía tener la respuesta anterior)
 _add("q_copied_to",
      "✓ Pregunta copiada. Pégala en {chat} y vuelve aquí con la respuesta.",

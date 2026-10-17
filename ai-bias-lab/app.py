@@ -859,7 +859,7 @@ def admin_delete_proposal(pid):
 
 @app.route("/<lang>/method")
 def method():
-    return render_template("method.html")
+    return render_template("method.html", question=QUESTIONS[0]["steps"][0]["prompt"])
 
 
 def lean_score(rows):

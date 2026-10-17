@@ -6,7 +6,7 @@
   {% for heading, body in t('method') %}
   <section{% if loop.last %} id="privacy"{% endif %}>
     <h2>{{ heading }}</h2>
-    <p>{{ body }}</p>
+    {% if body == '{question}' %}<p class="prompt">«{{ tr(question) }}»</p>{% else %}<p>{{ body }}</p>{% endif %}
   </section>
   {% endfor %}
 </div>
