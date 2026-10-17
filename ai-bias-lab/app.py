@@ -123,6 +123,30 @@ def inject_helpers():
             "geoip_credit": os.path.exists(GEOIP_DB), "public_url": site_root()}
 
 
+_STOP = {
+    "es": " el la los las que de del y en es por una con para como pero sus fue han ha se ".split(),
+    "en": " the and of to is that in for with as are was have has it this by not ".split(),
+    "fr": " le la les des et est que une pour dans pas qui sur avec il a du au ".split(),
+}
+
+
+def answer_lang(text, fallback):
+    """Idioma en que respondió el chat (el de la pregunta que se le hizo), no el de la página.
+    Si no está claro, el idioma de la página."""
+    if len(re.findall(r"[\u0590-\u05FF]", text or "")) > 30:
+        return "he"
+    words = re.findall(r"[a-zà-ÿ']+", (text or "").lower())
+    score = {k: sum(1 for w in words if w in v) for k, v in _STOP.items()}
+    best = sorted(score, key=score.get, reverse=True)
+    if score[best[0]] >= 8 and score[best[0]] >= 1.5 * score[best[1]]:
+        return best[0]
+    return fallback
+
+
+def row_lang(r):
+    return (r["alang"] if "alang" in r.keys() else None) or r["lang"]
+
+
 _URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
 
 
@@ -284,13 +308,17 @@ def init_db():
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0"),
                           ("stance", "TEXT"), ("order_flip", "INTEGER"), ("qversion", "INTEGER"),
-                          ("sources", "TEXT"), ("sources_text", "TEXT")]:
+                          ("sources", "TEXT"), ("sources_text", "TEXT"), ("alang", "TEXT")]:
             if col not in cols:
                 db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
                 if col == "sources":  # rellenar las respuestas que ya estaban guardadas
                     for rid, answers in db.execute("SELECT id, answers FROM submissions").fetchall():
                         doms = source_domains(" ".join(json.loads(answers or "[]")))
                         db.execute("UPDATE submissions SET sources = ? WHERE id = ?", (",".join(doms), rid))
+                if col == "alang":  # idioma de las respuestas ya guardadas
+                    for rid, answers, plang in db.execute("SELECT id, answers, lang FROM submissions").fetchall():
+                        db.execute("UPDATE submissions SET alang = ? WHERE id = ?",
+                                   (answer_lang(" ".join(json.loads(answers or "[]")), plang), rid))
         sub_cols = {r[1] for r in db.execute("PRAGMA table_info(subscribers)")}
         if "instagram" not in sub_cols:
             db.execute("ALTER TABLE subscribers ADD COLUMN instagram TEXT")
@@ -461,7 +489,7 @@ def dashboard_data(rows, show, tested):
         if key == "otro":
             continue
         rs = by_chat.get(key, [])
-        langs = [dict(code=c, label=LANGS[c], **gauge([r for r in rs if r["lang"] == c])) for c in LANGS]
+        langs = [dict(code=c, label=LANGS[c], **gauge([r for r in rs if row_lang(r) == c])) for c in LANGS]
         per_country = Counter(r["country"] for r in rs if r["country"] and len(r["country"]) == 2)
         countries = [dict(code=c, label=c, **gauge([r for r in rs if r["country"] == c]))
                      for c, _ in per_country.most_common(8)]
@@ -537,15 +565,16 @@ def question(qid):
             cur = db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
-                   share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources, sources_text)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)""",
+                   share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources, sources_text, alang)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash,
                  stance, int(bool(session.get("flip"))), q.get("version", 1),
-                 ",".join(source_domains(" ".join(answers), sources_text)), sources_text or None))
+                 ",".join(source_domains(" ".join(answers), sources_text)), sources_text or None,
+                 answer_lang(" ".join(answers), lang)))
             db.commit()
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
@@ -708,7 +737,7 @@ def results(qid):
     f_country = request.args.get("c", "")
     f_quality = request.args.get("v", "")
     rows = [r for r in every
-            if (not f_lang or r["lang"] == f_lang)
+            if (not f_lang or row_lang(r) == f_lang)
             and (not f_country or (r["country"] or "") == f_country)
             and (f_quality != "link" or r["share_url"])
             and (f_quality != "checked" or r["checked"])]
@@ -752,7 +781,7 @@ def results(qid):
     by_lang = defaultdict(list)
     by_country = defaultdict(list)
     for r in rows:
-        by_lang[r["lang"]].append(r)
+        by_lang[row_lang(r)].append(r)
         by_country[r["country"] or ""].append(r)
     lean_tables = [
         (T["chat"][lang], lean_rows([(CHAT_NAMES[c], by_chat[c]) for c in chat_order])),
@@ -766,7 +795,7 @@ def results(qid):
     choice_fields = {f["id"] for f in all_fields(q) if f.get("type") != "yesno"}
     latest = [{
         "id": r["id"], "chat": CHAT_NAMES.get(r["chat"], r["chat"]),
-        "model": r["model"], "lang": LANGS.get(r["lang"], r["lang"]),
+        "model": r["model"], "lang": LANGS.get(row_lang(r), row_lang(r)),
         "country": r["country"], "answers": json.loads(r["answers"]),
         "lean": T["lean"].get(r["lean"], {}).get(lang, ""),
         "share_url": r["share_url"], "checked": r["checked"], "flags": r["flags"],
@@ -951,13 +980,13 @@ def export_csv():
     writer = csv.writer(out)
     field_ids = [f["id"] for q in QUESTIONS for f in all_fields(q)]
     n_steps = max(len(q["steps"]) for q in QUESTIONS)
-    writer.writerow(["id", "question", "lang", "country", "chat", "model",
+    writer.writerow(["id", "question", "page_lang", "answer_lang", "country", "chat", "model",
                      *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "stance", "order_flip", "share_url",
                      "checked", "flags", "created_at", "question_version", "sources", "sources_text"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
         fields = json.loads(r["fields"])
-        writer.writerow([r["id"], r["question_id"], r["lang"], r["country"],
+        writer.writerow([r["id"], r["question_id"], r["lang"], row_lang(r), r["country"],
                          r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
                          r["lean"], r["stance"] or "", r["order_flip"], r["share_url"] or "", r["checked"],
