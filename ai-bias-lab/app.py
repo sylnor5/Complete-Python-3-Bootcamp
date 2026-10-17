@@ -218,7 +218,7 @@ def init_db():
         cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0"),
-                          ("stance", "TEXT"), ("order_flip", "INTEGER")]:
+                          ("stance", "TEXT"), ("order_flip", "INTEGER"), ("qversion", "INTEGER")]:
             if col not in cols:
                 db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
         sub_cols = {r[1] for r in db.execute("PRAGMA table_info(subscribers)")}
@@ -294,8 +294,12 @@ def bump(kind, name):
 
 
 def valid_rows(qid):
+    """Envíos que cuentan: sin señales de calidad y respondidos con la versión vigente de la
+    pregunta (las respuestas a otra redacción no se mezclan; las antiguas no tienen versión = 1)."""
+    version = QUESTIONS_BY_ID[qid].get("version", 1) if qid in QUESTIONS_BY_ID else 1
     return [r for r in get_db().execute(
-        "SELECT * FROM submissions WHERE question_id = ?", (qid,)) if not r["flags"]]
+        "SELECT * FROM submissions WHERE question_id = ?", (qid,))
+        if not r["flags"] and (r["qversion"] or 1) == version]
 
 
 def group_by_chat(rows):
@@ -462,14 +466,14 @@ def question(qid):
             db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
-                   share_url, flags, answers_hash, checked, stance, order_flip)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)""",
+                   share_url, flags, answers_hash, checked, stance, order_flip, qversion)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash,
-                 stance, int(bool(session.get("flip")))))
+                 stance, int(bool(session.get("flip"))), q.get("version", 1)))
             db.commit()
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
@@ -816,7 +820,7 @@ def export_csv():
     n_steps = max(len(q["steps"]) for q in QUESTIONS)
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
                      *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "stance", "order_flip", "share_url",
-                     "checked", "flags", "created_at"])
+                     "checked", "flags", "created_at", "question_version"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
         fields = json.loads(r["fields"])
@@ -824,7 +828,7 @@ def export_csv():
                          r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
                          r["lean"], r["stance"] or "", r["order_flip"], r["share_url"] or "", r["checked"],
-                         r["flags"] or "", r["created_at"]])
+                         r["flags"] or "", r["created_at"], r["qversion"] or 1])
     return Response("﻿" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})
 

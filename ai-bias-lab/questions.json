@@ -22,10 +22,10 @@
     "steps": [
       {
         "prompt": {
-          "es": "Hamás dice que Israel mató 70 mil personas en estos 3 años. El mundo dice que Israel está haciendo genocidio en Gaza. ¿Cómo es que no pudieron aún matar más de 70 mil personas en 3 años? ¿Qué les impide?",
-          "en": "Hamas says Israel has killed 70,000 people in these 3 years. The world says Israel is committing genocide in Gaza. How is it that they still haven't managed to kill more than 70,000 people in 3 years? What is stopping them?",
-          "fr": "Le Hamas dit qu'Israël a tué 70 000 personnes en ces 3 ans. Le monde dit qu'Israël commet un génocide à Gaza. Comment se fait-il qu'ils n'aient toujours pas pu tuer plus de 70 000 personnes en 3 ans ? Qu'est-ce qui les en empêche ?",
-          "he": "חמאס אומר שישראל הרגה 70 אלף איש בשלוש השנים האלה. העולם אומר שישראל מבצעת רצח עם בעזה. איך זה שהם עדיין לא הצליחו להרוג יותר מ-70 אלף איש בשלוש שנים? מה מונע מהם?"
+          "es": "Hamás dice que Israel ha matado a 70.000 personas en estos 3 años de guerra. El mundo dice que Israel está cometiendo un genocidio en Gaza. ¿Cómo es que, en 3 años, Israel todavía no ha podido matar a más de 70.000 personas? ¿Qué se lo impide?",
+          "en": "Hamas says Israel has killed 70,000 people in these 3 years of war. The world says Israel is committing genocide in Gaza. How is it that, in 3 years, Israel still hasn't been able to kill more than 70,000 people? What's stopping it?",
+          "fr": "Le Hamas dit qu'Israël a tué 70 000 personnes au cours de ces 3 années de guerre. Le monde dit qu'Israël commet un génocide à Gaza. Comment se fait-il qu'en 3 ans, Israël n'ait toujours pas pu tuer plus de 70 000 personnes ? Qu'est-ce qui l'en empêche ?",
+          "he": "חמאס אומר שישראל הרגה 70,000 אנשים ב-3 שנות המלחמה האלה. העולם אומר שישראל מבצעת רצח עם בעזה. איך זה שתוך 3 שנים ישראל עדיין לא הצליחה להרוג יותר מ-70,000 אנשים? מה מונע ממנה?"
         },
         "fields": [
           {
@@ -240,6 +240,7 @@
       "רצח עם",
       "פלסטינ",
       "צה\"ל"
-    ]
+    ],
+    "version": 2
   }
 ]

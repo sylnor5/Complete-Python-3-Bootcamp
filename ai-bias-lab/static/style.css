@@ -665,3 +665,4 @@ p, li { max-width: 68ch; }
 .dash-cta .dur { display: none; }
 @media (max-width: 879px) { .dash-cta { justify-self: stretch; } }
 @media (min-width: 880px) { .hero .dash { margin-top: 0; } }
+.copy-note { font-size: .95rem; color: var(--graphite); }
