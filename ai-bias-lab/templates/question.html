@@ -20,7 +20,9 @@
 <p class="rules">{{ t('rules') }}</p>
 <p class="loaded">{{ t('loaded_note') }}</p>
 
-<form method="post" class="form" novalidate>
+<div class="inapp" id="inapp" hidden><p id="inapp-msg"></p><button type="button" class="linkish" id="inapp-ok">{{ t('dismiss') }}</button></div>
+
+<form method="post" class="form" novalidate id="qform">
   <section class="step">
     <h2><span class="stepnum">1</span> {{ t('question_n') }}</h2>
     <p class="copy-note">{{ t('copy_note') }}</p>
@@ -51,19 +53,24 @@
       </select>
     </label>
 
-    <label for="answer1" class="block">{{ t('paste_answer') }}
-      <textarea id="answer1" name="answer1" rows="7" maxlength="12000" required placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
-    </label>
+    <p class="hint">{{ t('copy_hint') }}</p>
+    <div class="paste-row">
+      <label for="answer1" class="block">{{ t('paste_answer') }}</label>
+      <button type="button" class="btn small paste-btn" id="paste-btn">{{ t('paste_btn') }}</button>
+    </div>
+    <textarea id="answer1" name="answer1" rows="7" maxlength="12000" required placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
+    <p class="paste-msg" id="paste-msg" role="status" hidden></p>
 
-    <div class="link-box">
-      <label for="share_url" class="block">{{ t('share_label') }} <span class="opt">{{ t('recommended') }}</span>
+    <details class="link-box"{% if form.get('share_url') %} open{% endif %}>
+      <summary>{{ t('link_optional') }}</summary>
+      <label for="share_url" class="block">{{ t('share_label') }}
         <input id="share_url" name="share_url" type="url" inputmode="url" maxlength="500" placeholder="{{ t('share_ph') }}" value="{{ form.get('share_url', '') }}" dir="ltr">
       </label>
       <p class="hint">{{ t('link_why') }} {{ t('link_help') }}</p>
-    </div>
+    </details>
   </section>
 
-  <section class="step">
+  <section class="step" id="step-rate">
     <h2><span class="stepnum">3</span> {{ t('classify') }}</h2>
     <div class="fields">
       {% for field in required %}{{ field_row(field) }}{% endfor %}
@@ -109,6 +116,11 @@
   <p class="hint">{{ t('privacy_note') }}</p>
 </form>
 
+<div class="back-bar" id="back-bar" hidden role="region" aria-live="polite">
+  <span id="back-bar-text"></span>
+  <button type="button" class="btn btn-primary" id="back-bar-btn">{{ t('paste_btn') }}</button>
+</div>
+
 <aside class="why">
   <p>{{ tr(q.why) }}</p>
 </aside>
@@ -133,5 +145,77 @@ document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", ()
     .then(() => { note.textContent = msg; note.hidden = false; }).catch(() => {});
 }));
 
+// ---------------------------------------------------------------- vuelta del participante
+// Guardado automático en este teléfono (el navegador puede recargar la página al volver del chat),
+// barra «¿Ya tienes la respuesta?» al volver, botón Pegar con plan B, y aviso dentro de Instagram/Facebook/TikTok.
+(() => {
+  const L = {{ {'pasteFallback': t('paste_fallback'), 'pastedOk': t('pasted_ok'), 'backBar': t('back_bar'), 'backBarAny': t('back_bar_any'),
+               'inappIos': t('inapp_ios'), 'inappAndroid': t('inapp_android')}|tojson }};
+  const KEY = "chatradar-draft-{{ q.id }}-v{{ q.get('version', 1) }}", RESTORE = {{ (request.method == 'GET')|tojson }};
+  const form = document.getElementById("qform"), ta = document.getElementById("answer1"), sel = document.getElementById("chat");
+  const msg = document.getElementById("paste-msg"), bar = document.getElementById("back-bar");
+  const store = { get() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } },
+                  set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} },
+                  clear() { try { localStorage.removeItem(KEY); } catch (e) {} } };
+  function save() {
+    const data = {}; new FormData(form).forEach((v, k) => { if (k !== "website") data[k] = v; });
+    data._opened = form.dataset.opened || ""; store.set(data);
+  }
+  // restaurar (solo si la página llega vacía: tras un error del servidor ya viene rellena)
+  const d = RESTORE && store.get();
+  if (d) {
+    for (const [k, v] of Object.entries(d)) {
+      if (k === "_opened") { form.dataset.opened = v; continue; }
+      const els = form.querySelectorAll(`[name="${k}"]`);
+      els.forEach((el) => { if (el.type === "radio") el.checked = el.value === v; else if (!el.value) el.value = v; });
+    }
+  }
+  form.addEventListener("input", save); form.addEventListener("change", save);
+  form.addEventListener("submit", () => store.clear());
+
+  function chatName() { const o = sel.options[sel.selectedIndex]; return sel.value ? o.textContent.trim() : ""; }
+  function pasted() {
+    if (ta.value.trim().length < 40) return;
+    msg.textContent = L.pastedOk; msg.hidden = false; bar.hidden = true; save();
+    document.getElementById("step-rate").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  ta.addEventListener("paste", () => setTimeout(pasted, 50));
+  async function doPaste() {
+    try {
+      const text = navigator.clipboard && await navigator.clipboard.readText();
+      if (text && text.trim()) { ta.value = text; save(); pasted(); return; }
+    } catch (e) {}
+    ta.focus(); ta.scrollIntoView({ behavior: "smooth", block: "center" });
+    msg.textContent = L.pasteFallback; msg.hidden = false;
+  }
+  document.getElementById("paste-btn").addEventListener("click", doPaste);
+  document.getElementById("back-bar-btn").addEventListener("click", doPaste);
+
+  // al abrir un chat se recuerda; al volver a esta pestaña, si aún no hay respuesta, aparece la barra
+  document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", () => { form.dataset.opened = "1"; save(); }));
+  function maybeBar() {
+    if (document.visibilityState !== "visible" || !form.dataset.opened || ta.value.trim()) return;
+    const name = chatName();
+    document.getElementById("back-bar-text").textContent = name ? L.backBar.replace("{chat}", name) : L.backBarAny;
+    bar.hidden = false;
+  }
+  document.addEventListener("visibilitychange", maybeBar);
+  window.addEventListener("pageshow", maybeBar);
+  maybeBar();
+
+  // dentro de Instagram, Facebook o TikTok: sugerir abrir en el navegador (se puede cerrar)
+  const ua = navigator.userAgent || "";
+  const app = /Instagram/i.test(ua) ? "Instagram" : /FBAN|FBAV|FB_IAB/i.test(ua) ? "Facebook"
+            : /musical_ly|BytedanceWebview|TikTok/i.test(ua) ? "TikTok" : "";
+  let dismissed = false; try { dismissed = sessionStorage.getItem("chatradar-inapp") === "1"; } catch (e) {}
+  if (app && !dismissed) {
+    const ios = /iPhone|iPad|iPod/i.test(ua);
+    document.getElementById("inapp-msg").textContent = (ios ? L.inappIos : L.inappAndroid).replace("{app}", app);
+    document.getElementById("inapp").hidden = false;
+    document.getElementById("inapp-ok").addEventListener("click", () => {
+      document.getElementById("inapp").hidden = true; try { sessionStorage.setItem("chatradar-inapp", "1"); } catch (e) {}
+    });
+  }
+})();
 </script>
 {% endblock %}

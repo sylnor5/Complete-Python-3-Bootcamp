@@ -918,3 +918,32 @@ _add("q_copied_to",
      "✓ Question copied. Paste it into {chat} and come back here with the answer.",
      "✓ Question copiée. Collez-la dans {chat} et revenez ici avec la réponse.",
      "✓ השאלה הועתקה. הדביקו אותה ב-{chat} וחזרו לכאן עם התשובה.")
+# vuelta del participante (móvil): pegar, guardado automático, aviso dentro de Instagram/Facebook/TikTok
+_add("paste_btn", "Pegar respuesta", "Paste answer", "Coller la réponse", "הדבקת התשובה")
+_add("paste_fallback",
+     "Mantén pulsado dentro del recuadro y elige «Pegar».",
+     "Press and hold inside the box and choose “Paste”.",
+     "Restez appuyé dans le cadre et choisissez « Coller ».",
+     "לחצו לחיצה ארוכה בתוך התיבה ובחרו „הדבק”.")
+_add("pasted_ok", "✓ Respuesta pegada. Ahora, dos preguntas rápidas.", "✓ Answer pasted. Now, two quick questions.",
+     "✓ Réponse collée. Maintenant, deux questions rapides.", "✓ התשובה הודבקה. עכשיו, שתי שאלות קצרות.")
+_add("back_bar", "¿Ya tienes la respuesta de {chat}?", "Got {chat}'s answer?", "Vous avez la réponse de {chat} ?", "יש לכם את התשובה של {chat}?")
+_add("back_bar_any", "¿Ya tienes la respuesta de tu chat?", "Got your chat's answer?", "Vous avez la réponse de votre chat ?", "יש לכם את התשובה של הצ'אט?")
+_add("copy_hint",
+     "En tu chat, toca el icono de copiar (⧉) debajo de la respuesta y vuelve a esta página.",
+     "In your chat, tap the copy icon (⧉) under the answer and come back to this page.",
+     "Dans votre chat, touchez l'icône copier (⧉) sous la réponse et revenez sur cette page.",
+     "בצ'אט, לחצו על סמל ההעתקה (⧉) מתחת לתשובה וחזרו לעמוד הזה.")
+_add("link_optional", "¿Tienes el enlace de la conversación? Añádelo (opcional)", "Have the conversation link? Add it (optional)",
+     "Vous avez le lien de la conversation ? Ajoutez-le (facultatif)", "יש לכם קישור לשיחה? הוסיפו אותו (רשות)")
+_add("inapp_ios",
+     "Estás dentro de {app}. Para usar la app de tu chat, abre esta página en el navegador: toca ⋯ arriba y elige «Abrir en el navegador». Lo que escribas aquí se guarda.",
+     "You're inside {app}. To use your chat app, open this page in your browser: tap ⋯ at the top and choose “Open in browser”. What you type here is saved.",
+     "Vous êtes dans {app}. Pour utiliser l'app de votre chat, ouvrez cette page dans le navigateur : touchez ⋯ en haut et choisissez « Ouvrir dans le navigateur ». Ce que vous écrivez ici est enregistré.",
+     "אתם בתוך {app}. כדי להשתמש באפליקציית הצ'אט, פתחו את העמוד בדפדפן: לחצו על ⋯ למעלה ובחרו „פתיחה בדפדפן”. מה שתכתבו כאן נשמר.")
+_add("inapp_android",
+     "Estás dentro de {app}. Para usar la app de tu chat, abre esta página en Chrome: toca ⋮ arriba y elige «Abrir en Chrome». Lo que escribas aquí se guarda.",
+     "You're inside {app}. To use your chat app, open this page in Chrome: tap ⋮ at the top and choose “Open in Chrome”. What you type here is saved.",
+     "Vous êtes dans {app}. Pour utiliser l'app de votre chat, ouvrez cette page dans Chrome : touchez ⋮ en haut et choisissez « Ouvrir dans Chrome ». Ce que vous écrivez ici est enregistré.",
+     "אתם בתוך {app}. כדי להשתמש באפליקציית הצ'אט, פתחו את העמוד ב-Chrome: לחצו על ⋮ למעלה ובחרו „פתיחה ב-Chrome”. מה שתכתבו כאן נשמר.")
+_add("dismiss", "Entendido", "Got it", "Compris", "הבנתי")
