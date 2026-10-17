@@ -109,7 +109,8 @@
   "trtworld.com",
   "middleeasteye.net",
   "middleeastmonitor.com",
-  "newarab.com"
+  "newarab.com",
+  "bernama.com"
  ],
  "un_courts": [
   "emro.who.int",
@@ -236,7 +237,11 @@
   "nature.com",
   "rt.com",
   "thelancet.com",
-  "wikipedia.org"
+  "wikipedia.org",
+  "channelafrica.co.za",
+  "mg.co.za",
+  "allafrica.com",
+  "sabcnews.com"
  ],
  "labels": {
   "israeli": "Israelíes",
@@ -341,7 +346,11 @@
   "zeteo.com": "other: medio digital EE.UU.",
   "dropsitenews.com": "other: medio digital EE.UU. Verificar.",
   "aoav.org.uk": "Action on Armed Violence, ONG con sede en Reino Unido.",
-  "warontherocks.com": "Revista de análisis de seguridad, EE. UU."
+  "warontherocks.com": "Revista de análisis de seguridad, EE. UU.",
+  "bernama.com": "Agencia de noticias estatal de Malasia (país de mayoría musulmana). Grupo de países musulmanes por la regla de propiedad.",
+  "channelafrica.co.za": "Radio internacional de la SABC, emisora pública de Sudáfrica (el país que llevó a Israel ante la CIJ). Otras.",
+  "mg.co.za": "Mail & Guardian, semanario independiente de Sudáfrica. Otras.",
+  "allafrica.com": "Agregador de noticias de medios africanos; el origen real es el medio que republica. Otras."
  },
  "rule": "Cada fuente va al grupo del país que la posee o la financia principalmente; si no se sabe, al país donde se edita. Las organizaciones internacionales (ONU, tribunales, ONG) van en sus grupos propios.",
  "aliases": {
