@@ -105,6 +105,7 @@ gunicorn app:app
 | `MAX_PER_HOUR` | Envíos máximos por conexión y hora (por defecto 10).        |
 | `PUBLIC_URL`   | Dirección pública para compartir (por defecto thechatradar.com). |
 | `MIN_METRO`    | Respuestas mínimas por chat para mostrar su burbuja (por defecto 1). |
+| `MIN_QVERSION` | Desde qué versión de la pregunta cuentan las respuestas (por defecto 1: todas). Con 2 dejan de contar las de la primera redacción, sin borrarlas. |
 | `BREVO_API_KEY`, `BREVO_LIST_ID` | Opcional: enviar los emails a una lista de Brevo. |
 
 En hostings con disco efímero (p. ej. el plan gratuito de Render) SQLite se borra al reiniciar.

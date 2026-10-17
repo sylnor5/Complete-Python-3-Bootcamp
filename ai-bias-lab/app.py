@@ -448,13 +448,18 @@ def bump(kind, name):
     db.commit()
 
 
+# Desde qué versión de la pregunta cuentan las respuestas. Decisión del proyecto: la v2 cambió muy poco,
+# así que las pocas respuestas de prueba con la v1 también cuentan. Para dejarlas fuera: MIN_QVERSION=2
+# (no se borran, solo dejan de contar).
+MIN_QVERSION = int(os.environ.get("MIN_QVERSION", "1"))
+
+
 def valid_rows(qid):
-    """Envíos que cuentan: sin señales de calidad y respondidos con la versión vigente de la
-    pregunta (las respuestas a otra redacción no se mezclan; las antiguas no tienen versión = 1)."""
-    version = QUESTIONS_BY_ID[qid].get("version", 1) if qid in QUESTIONS_BY_ID else 1
+    """Envíos que cuentan: sin señales de calidad y con una versión de la pregunta >= MIN_QVERSION
+    (las antiguas no tienen versión = 1)."""
     return [r for r in get_db().execute(
         "SELECT * FROM submissions WHERE question_id = ?", (qid,))
-        if not r["flags"] and (r["qversion"] or 1) == version]
+        if not r["flags"] and (r["qversion"] or 1) >= MIN_QVERSION]
 
 
 def group_by_chat(rows):
