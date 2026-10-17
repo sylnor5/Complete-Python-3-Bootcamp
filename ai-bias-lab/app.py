@@ -122,6 +122,24 @@ def inject_helpers():
             "geoip_credit": os.path.exists(GEOIP_DB), "public_url": PUBLIC_URL}
 
 
+_URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
+
+
+def source_domains(text):
+    """Dominios de las fuentes que el chat incluyó en su respuesta, sin repetir y en orden.
+    ChatGPT copia cada fuente como icono de Google (…/s2/favicons?domain=https://www.reuters.com…):
+    de esos se toma el dominio de la fuente, no el de Google. Se guarda solo el dominio, sin la ruta."""
+    found = []
+    for url in _URL_RE.findall(text or ""):
+        url = url.rstrip(".,;:")
+        m = re.search(r"[?&]domain=(?:https?://)?([^&/\s]+)", url)
+        host = m.group(1) if m else urlparse(url).hostname or ""
+        host = host.lower().strip("\\").removeprefix("www.")  # el texto copiado a veces trae «\&»
+        if host and "." in host and host not in found:
+            found.append(host)
+    return found
+
+
 @app.template_filter("clean_answer")
 def clean_answer(text):
     """Al mostrar una respuesta pegada, quita los iconos de fuentes que algunos chats copian como
@@ -226,9 +244,14 @@ def init_db():
         cols = {r[1] for r in db.execute("PRAGMA table_info(submissions)")}
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0"),
-                          ("stance", "TEXT"), ("order_flip", "INTEGER"), ("qversion", "INTEGER")]:
+                          ("stance", "TEXT"), ("order_flip", "INTEGER"), ("qversion", "INTEGER"),
+                          ("sources", "TEXT")]:
             if col not in cols:
                 db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
+                if col == "sources":  # rellenar las respuestas que ya estaban guardadas
+                    for rid, answers in db.execute("SELECT id, answers FROM submissions").fetchall():
+                        doms = source_domains(" ".join(json.loads(answers or "[]")))
+                        db.execute("UPDATE submissions SET sources = ? WHERE id = ?", (",".join(doms), rid))
         sub_cols = {r[1] for r in db.execute("PRAGMA table_info(subscribers)")}
         if "instagram" not in sub_cols:
             db.execute("ALTER TABLE subscribers ADD COLUMN instagram TEXT")
@@ -474,14 +497,15 @@ def question(qid):
             db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
-                   share_url, flags, answers_hash, checked, stance, order_flip, qversion)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)""",
+                   share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash,
-                 stance, int(bool(session.get("flip"))), q.get("version", 1)))
+                 stance, int(bool(session.get("flip"))), q.get("version", 1),
+                 ",".join(source_domains(" ".join(answers)))))
             db.commit()
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
@@ -831,7 +855,7 @@ def export_csv():
     n_steps = max(len(q["steps"]) for q in QUESTIONS)
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
                      *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "stance", "order_flip", "share_url",
-                     "checked", "flags", "created_at", "question_version"])
+                     "checked", "flags", "created_at", "question_version", "sources"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
         fields = json.loads(r["fields"])
@@ -839,7 +863,7 @@ def export_csv():
                          r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
                          r["lean"], r["stance"] or "", r["order_flip"], r["share_url"] or "", r["checked"],
-                         r["flags"] or "", r["created_at"], r["qversion"] or 1])
+                         r["flags"] or "", r["created_at"], r["qversion"] or 1, r["sources"] or ""])
     return Response("﻿" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})
 
