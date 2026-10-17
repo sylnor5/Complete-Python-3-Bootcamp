@@ -3390,6 +3390,55 @@
    },
    "note": "Fact: US donors bought ~3,000 greenhouses for the Palestinian Authority (2005); crowds looted part of them right after withdrawal; the rest worked in 2006 but exports were hit by crossing closures. Looters were not identified as Hamas specifically.",
    "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "disengagement_both_views",
+   "side": "balanced",
+   "text": {
+    "es": "Israel salió de Gaza en 2005; los palestinos dicen que siguió controlando fronteras, aire y mar; Israel lo atribuye a la seguridad",
+    "en": "Israel left Gaza in 2005; Palestinians say it kept control of borders, air and sea; Israel cites security",
+    "fr": "Israël a quitté Gaza en 2005 ; les Palestiniens disent qu'il a gardé le contrôle des frontières, de l'air et de la mer ; Israël invoque la sécurité",
+    "he": "ישראל יצאה מעזה ב-2005; הפלסטינים אומרים שהמשיכה לשלוט בגבולות, באוויר ובים; ישראל מסבירה זאת בביטחון"
+   },
+   "triggers": {
+    "es": [
+     "re:(retiro|retirada|salio|desconexion).{0,200}(espacio aereo|control de las fronteras)",
+     "re:(espacio aereo|control de las fronteras).{0,200}(retiro|retirada|salio de gaza|desconexion)"
+    ],
+    "en": [
+     "re:(disengagement|withdrew|withdrawal).{0,200}(airspace|control of the borders|border control)",
+     "re:(airspace|border control).{0,200}(disengagement|withdrew|withdrawal)"
+    ],
+    "fr": [
+     "re:(desengagement|retrait|retire).{0,200}(espace aerien|controle des frontieres)"
+    ],
+    "he": [
+     "re:(ההתנתקות|יצאה מעזה).{0,200}(המרחב האווירי|שליטה בגבולות)"
+    ]
+   },
+   "note": "Counts only when the withdrawal and the remaining control appear close together. Overlaps with gaza_disengagement_2005 and occupation_context; when this matches, the scorer should not also count those two.",
+   "source": "revisión con la fundadora del proyecto"
   }
- ]
+ ],
+ "labels": {
+  "_note": "Internal keys stay israeli/palestinian/balanced. A side label says which side uses the fact in this debate, not whether it is true.",
+  "israeli": {
+   "es": "Argumento del lado israelí",
+   "en": "Israeli-side argument",
+   "fr": "Argument du côté israélien",
+   "he": "טיעון של הצד הישראלי"
+  },
+  "palestinian": {
+   "es": "Argumento del lado palestino",
+   "en": "Palestinian-side argument",
+   "fr": "Argument du côté palestinien",
+   "he": "טיעון של הצד הפלסטיני"
+  },
+  "balanced": {
+   "es": "Presenta ambos lados",
+   "en": "Presents both sides",
+   "fr": "Présente les deux côtés",
+   "he": "מציג את שני הצדדים"
+  }
+ }
 }
