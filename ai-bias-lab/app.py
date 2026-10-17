@@ -593,7 +593,10 @@ def question(qid):
         share_url = form.get("share_url", "").strip()[:500]
         sources_text = form.get("sources_text", "").strip()[:6000]  # fuentes que el chat mostró aparte (opcional)
         if share_url and not valid_share_url(share_url):
-            errors.append(T["err_share"][lang])
+            # El enlace es opcional: si no es de un chat conocido, la respuesta se guarda igual,
+            # sin enlace verificable (se conserva junto a las fuentes para revisarlo a mano).
+            sources_text = (sources_text + "\n" if sources_text else "") + "Enlace no reconocido: " + share_url
+            share_url = ""
 
         # basta con el enlace a la conversación o con el texto de la respuesta
         answers = []
