@@ -3287,6 +3287,109 @@
    },
    "note": "Gaza MoH counts everyone under 18 as a child. Recruitment of teenagers is an Israeli claim; independent counts of how many minors were fighters do not exist. 'under 18' may also appear neutrally — review.",
    "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "blockade_security_reasons",
+   "side": "israeli",
+   "text": {
+    "es": "El bloqueo se impuso por razones de seguridad: cohetes, secuestro de Shalit y la toma de Gaza por Hamás",
+    "en": "The blockade was imposed for security reasons: rockets, Shalit's abduction and Hamas's takeover",
+    "fr": "Le blocus a été imposé pour des raisons de sécurité : roquettes, enlèvement de Shalit, prise de Gaza par le Hamas",
+    "he": "המצור הוטל מטעמי ביטחון: רקטות, חטיפת שליט והשתלטות חמאס"
+   },
+   "triggers": {
+    "es": [
+     "gilad shalit",
+     "contrabando de armas",
+     "bloqueo se impuso",
+     "tras la toma de gaza",
+     "razones de seguridad"
+    ],
+    "en": [
+     "gilad shalit",
+     "weapons smuggling",
+     "blockade was imposed",
+     "after hamas took",
+     "security reasons"
+    ],
+    "fr": [
+     "gilad shalit",
+     "contrebande d'armes",
+     "raisons de securite"
+    ],
+    "he": [
+     "גלעד שליט",
+     "הברחת נשק",
+     "טעמי ביטחון",
+     "המצור הוטל"
+    ]
+   },
+   "note": "Mirror of aid_restrictions_blockade / occupation_context: gives the cause. Israel kept airspace and sea control from 2005 under the disengagement plan; the blockade tightened after June 2006 (Shalit) and June 2007 (takeover). Egypt also closed Rafah.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "hamas_2007_takeover",
+   "side": "israeli",
+   "text": {
+    "es": "Hamás tomó Gaza por la fuerza en 2007 y mató a rivales de Fatah",
+    "en": "Hamas seized Gaza by force in 2007, killing Fatah rivals",
+    "fr": "Le Hamas a pris Gaza par la force en 2007",
+    "he": "חמאס השתלט על עזה בכוח ב-2007 והרג יריבים מפת\"ח"
+   },
+   "triggers": {
+    "es": [
+     "tomo el control de gaza",
+     "toma de gaza",
+     "golpe de hamas",
+     "enfrentamientos con fatah",
+     "expulso a fatah"
+    ],
+    "en": [
+     "seized control of gaza",
+     "took over gaza",
+     "hamas takeover",
+     "violent takeover",
+     "ousted fatah"
+    ],
+    "fr": [
+     "pris le controle de gaza",
+     "prise de gaza par le hamas",
+     "chasse le fatah"
+    ],
+    "he": [
+     "השתלטות חמאס",
+     "ההפיכה בעזה",
+     "גירוש פת\"ח"
+    ]
+   },
+   "note": "Fact: Hamas won the Jan 2006 legislative elections (observers called them largely fair); in June 2007 it took Gaza by force, over 100 killed in the fighting. No elections since.",
+   "source": "revisión con la fundadora del proyecto"
+  },
+  {
+   "id": "greenhouses_2005",
+   "side": "israeli",
+   "text": {
+    "es": "Israel dejó los invernaderos de los asentamientos y fueron saqueados",
+    "en": "Israel left the settlements' greenhouses and they were looted",
+    "fr": "Israël a laissé les serres des colonies, qui ont été pillées",
+    "he": "ישראל השאירה את החממות של ההתנחלויות והן נבזזו"
+   },
+   "triggers": {
+    "es": [
+     "invernaderos"
+    ],
+    "en": [
+     "greenhouses"
+    ],
+    "fr": [
+     "serres"
+    ],
+    "he": [
+     "חממות"
+    ]
+   },
+   "note": "Fact: US donors bought ~3,000 greenhouses for the Palestinian Authority (2005); crowds looted part of them right after withdrawal; the rest worked in 2006 but exports were hit by crossing closures. Looters were not identified as Hamas specifically.",
+   "source": "revisión con la fundadora del proyecto"
   }
  ]
 }
