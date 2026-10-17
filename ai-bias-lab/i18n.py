@@ -1045,3 +1045,12 @@ T["src_how"] = {
                 "fr": "ChatGPT inclut généralement les sources quand on copie la réponse. Sinon, touchez « Sources » sous la réponse, copiez la liste et collez-la ici.",
                 "he": "ChatGPT בדרך כלל כולל את המקורות כשמעתיקים את התשובה. אם הם לא הופיעו, לחצו על „מקורות” מתחת לתשובה, העתיקו את הרשימה והדביקו כאן."},
 }
+
+# Segunda aguja: lista de afirmaciones (en prueba)
+_add("cn_people", "Personas", "People", "Personnes", "אנשים")
+_add("cn_claims_n", "Lista de afirmaciones · {n} analizadas", "Claims list · {n} analyzed", "Liste d'affirmations · {n} analysées", "רשימת טענות · {n} נותחו")
+_add("cn_claims_one", "Lista de afirmaciones · 1 analizada", "Claims list · 1 analyzed", "Liste d'affirmations · 1 analysée", "רשימת טענות · 1 נותחה")
+_add("cn_note", "Aguja con círculo: cuenta qué argumentos de cada lado menciona la respuesta, con una lista fija de afirmaciones. Está en prueba.",
+     "Needle with a circle: counts which arguments from each side the answer mentions, using a fixed list of claims. It's being tested.",
+     "Aiguille avec un cercle : compte les arguments de chaque côté que mentionne la réponse, avec une liste fixe d'affirmations. En test.",
+     "המחוג עם העיגול: סופר אילו טיעונים של כל צד התשובה מזכירה, לפי רשימה קבועה של טענות. בשלב ניסוי.")

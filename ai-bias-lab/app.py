@@ -33,6 +33,9 @@ MIN_METRO = int(os.environ.get("MIN_METRO", "1"))  # respuestas mínimas para mo
 # sin haber participado. Las pruebas con personas reales quedan como base inicial de datos.
 # (Para volver a ocultarlas hasta participar: PREVIEW_NEEDLES=0.)
 PREVIEW_NEEDLES = os.environ.get("PREVIEW_NEEDLES", "1") == "1"
+# Segunda aguja (lista de afirmaciones, en prueba): visible para todos durante las pruebas con testers.
+# Para mostrarla solo a la administración: CLAIMS_NEEDLE=0.
+CLAIMS_NEEDLE = os.environ.get("CLAIMS_NEEDLE", "1") == "1"
 PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://thechatradar.com").rstrip("/")
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
 BREVO_LIST_ID = os.environ.get("BREVO_LIST_ID", "")
@@ -529,9 +532,10 @@ def index():
     elif request.args.get("token") == "salir":
         session.pop("admin", None)
     admin = bool(ADMIN_TOKEN) and session.get("admin", False)
+    claims_needle = CLAIMS_NEEDLE or admin
     return render_template("index.html", questions=QUESTIONS, q=q, counts=count_by_question(),
-                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, admin), unlocked=unlocked,
-                           admin=admin,
+                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, claims_needle), unlocked=unlocked,
+                           admin=admin, claims_needle=claims_needle,
                            preview=PREVIEW_NEEDLES and not unlocked,
                            share_url=public_home_url(), total_valid=len(rows), min_metro=MIN_METRO)
 
@@ -545,6 +549,8 @@ def dashboard_data(rows, show, tested, admin=False):
                "missing": sc.get("missing", 0)}
         if admin:
             out["apos"], out["an"] = claims_pos(rs)
+            if not show:  # misma regla que la aguja de las personas
+                out["apos"] = None
         return out
     by_chat = group_by_chat(rows)
     chats = []

@@ -13,7 +13,7 @@
     <line x1="200" y1="42" x2="200" y2="{{ 57 if a2 % 60 == 0 else (52 if a2 % 20 == 0 else 48) }}" class="{{ 'tk-major' if a2 % 60 == 0 else ('tk-mid' if a2 % 20 == 0 else 'tk-minor') }}" transform="rotate({{ 85 - 2.5 * i }} 200 200)"/>
     {% endfor %}
   </g>
-  {% if admin %}<g class="needle needle-a" id="{{ id }}-a" hidden><path class="needle-body" d="M200 70 L201.6 196 L201 212 L199 212 L198.4 196 Z"/><circle class="needle-ring" cx="200" cy="62" r="8"/></g>{% endif %}
+  {% if claims_needle %}<g class="needle needle-a" id="{{ id }}-a" hidden><path class="needle-body" d="M200 70 L201.6 196 L201 212 L199 212 L198.4 196 Z"/><circle class="needle-ring" cx="200" cy="62" r="8"/></g>{% endif %}
   <g class="needle" id="{{ id }}" hidden><path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/></g>
   <circle class="hub" cx="200" cy="200" r="13"/>
   <circle class="needle-pin" cx="200" cy="200" r="3.5"/>
@@ -30,8 +30,8 @@
         <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('l-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
-        <p class="pod-n{{ ' with-sw' if admin }}" id="l-n"></p>
-        {% if admin %}<p class="pod-n pod-na" id="l-na"></p>{% endif %}
+        <p class="pod-n{{ ' with-sw' if claims_needle }}" id="l-n"></p>
+        {% if claims_needle %}<p class="pod-n pod-na" id="l-na"></p>{% endif %}
       </div>
       <div class="ctrl">
         <p class="ctrl-h">{{ t('pick_chat') }}</p>
@@ -45,8 +45,8 @@
         <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('r-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
-        <p class="pod-n{{ ' with-sw' if admin }}" id="r-n"></p>
-        {% if admin %}<p class="pod-n pod-na" id="r-na"></p>{% endif %}
+        <p class="pod-n{{ ' with-sw' if claims_needle }}" id="r-n"></p>
+        {% if claims_needle %}<p class="pod-n pod-na" id="r-na"></p>{% endif %}
       </div>
       <div class="ctrl">
         <p class="ctrl-h" id="r-h"></p>
@@ -62,11 +62,11 @@
   </p>
   {% if not unlocked %}<a class="btn btn-primary dash-cta" href="{{ url_for('question', qid=q.id) }}">{{ t('dash_cta') }} <span class="dur">{{ t('dur') }}</span></a>{% endif %}
   <p class="fine">{{ t('gauge_rule') }}</p>
-  {% if admin %}<p class="fine admin-legend">Aguja con círculo: lista de afirmaciones (borrador, solo administración). <a href="?token=salir">Ocultar</a></p>{% endif %}
+  {% if claims_needle %}<p class="fine admin-legend">{{ t('cn_note') }}{% if admin %} <a href="?token=salir">Salir de administración</a>{% endif %}</p>{% endif %}
 </section>
 <script>
 (function () {
-  var D = {{ dash|tojson }}, S = {{ {'admin': admin|default(false), 'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
+  var D = {{ dash|tojson }}, S = {{ {'cn': claims_needle|default(false), 'people': t('cn_people'), 'claimsN': t('cn_claims_n'), 'claimsOne': t('cn_claims_one'), 'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
       'compareBy': t('compare_by'), 'nAnswers': t('n_answers_fmt'), 'nAnswerOne': t('n_answers_one'), 'nMissing': t('n_missing'), 'noCountries': t('no_countries')}|tojson }};
   var byKey = {}; D.chats.forEach(function (c) { byKey[c.key] = c; });
   var cur = byKey[D.first] || D.chats[0], tab = "langs", val = S.lang, autoPick = true;
@@ -85,10 +85,10 @@
   function adminNeedle(id, g) {  // segunda aguja: lista de afirmaciones (solo administración)
     var el = $(id); if (!el) return;
     setNeedle(el, {pos: g.apos});
-    $(id.charAt(0) + "-na").textContent = "Lista de afirmaciones · " + (g.an || 0) + ((g.an || 0) === 1 ? " analizada" : " analizadas");
+    $(id.charAt(0) + "-na").textContent = ((g.an || 0) === 1 ? S.claimsOne : S.claimsN.replace("{n}", g.an || 0));
   }
   function count(el, g) {
-    el.textContent = (S.admin ? "Personas · " : "") + (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
+    el.textContent = (S.cn ? S.people + " · " : "") + (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
   }
   function chip(text, on, low, onClick) {
     var b = document.createElement("button");
