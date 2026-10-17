@@ -28,9 +28,9 @@ MAX_PER_HOUR = int(os.environ.get("MAX_PER_HOUR", "10"))
 GEOIP_DB = os.environ.get("GEOIP_DB", str(BASE_DIR / "geoip.mmdb"))
 MAX_ANSWER = 12000
 MIN_METRO = int(os.environ.get("MIN_METRO", "1"))  # respuestas mínimas para mostrar un chat.
-# PRUEBAS INTERNAS: 1 para ver la aguja enseguida. Antes del lanzamiento público, volver a 20.
-# PRUEBAS INTERNAS: las agujas de la portada se ven sin haber participado, para que quienes prueban
-# den su opinión. Antes del lanzamiento público, poner PREVIEW_NEEDLES=0 (o cambiar aquí "1" por "0").
+# Decisión de la fundadora: con 1 respuesta ya se ve la aguja, y las agujas de la portada se ven
+# sin haber participado. Las pruebas con personas reales quedan como base inicial de datos.
+# (Para volver a ocultarlas hasta participar: PREVIEW_NEEDLES=0.)
 PREVIEW_NEEDLES = os.environ.get("PREVIEW_NEEDLES", "1") == "1"
 PUBLIC_URL = os.environ.get("PUBLIC_URL", "https://thechatradar.com").rstrip("/")
 BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
