@@ -129,6 +129,7 @@ ORIGIN_GROUPS = ["israeli", "palestinian", "muslim_countries", "un_courts", "int
 with open(BASE_DIR / "source_origins.json", encoding="utf-8") as fh:
     _origins = json.load(fh)
 ORIGIN_OF = {dom: grp for grp in ORIGIN_GROUPS if grp != "other" for dom in _origins.get(grp, [])}
+SOURCE_ALIASES = _origins.get("aliases", {})  # nombre con que un chat muestra la fuente → dominio
 
 
 def source_origin(domain):
@@ -142,18 +143,38 @@ def source_origin(domain):
     return "other"
 
 
-def source_domains(text):
+def source_names(text):
+    """Fuentes pegadas aparte (p. ej. la ventana «Sources» de Gemini, que da nombres y no direcciones):
+    una línea que es el nombre de un medio u organización conocido, o un título que termina en
+    « - Nombre» o « | Nombre». Se devuelven sus dominios."""
+    found = []
+    for line in (text or "").splitlines():
+        low = re.sub(r"\s+", " ", line).strip().lower()
+        if not low:
+            continue
+        for name, dom in SOURCE_ALIASES.items():
+            if low == name or low.endswith((" - " + name, " | " + name, " – " + name)):
+                if dom not in found:
+                    found.append(dom)
+                break
+    return found
+
+
+def source_domains(text, extra=""):
     """Dominios de las fuentes que el chat incluyó en su respuesta, sin repetir y en orden.
     ChatGPT copia cada fuente como icono de Google (…/s2/favicons?domain=https://www.reuters.com…):
     de esos se toma el dominio de la fuente, no el de Google. Se guarda solo el dominio, sin la ruta."""
     found = []
-    for url in _URL_RE.findall(text or ""):
+    for url in _URL_RE.findall((text or "") + "\n" + (extra or "")):
         url = url.rstrip(".,;:")
         m = re.search(r"[?&]domain=(?:https?://)?([^&/\s]+)", url)
         host = m.group(1) if m else urlparse(url).hostname or ""
         host = host.lower().strip("\\").removeprefix("www.")  # el texto copiado a veces trae «\&»
         if host and "." in host and host not in found:
             found.append(host)
+    for dom in source_names(extra):
+        if dom not in found:
+            found.append(dom)
     return found
 
 
@@ -262,7 +283,7 @@ def init_db():
         for col, kind in [("share_url", "TEXT"), ("flags", "TEXT DEFAULT ''"),
                           ("answers_hash", "TEXT"), ("checked", "INTEGER DEFAULT 0"),
                           ("stance", "TEXT"), ("order_flip", "INTEGER"), ("qversion", "INTEGER"),
-                          ("sources", "TEXT")]:
+                          ("sources", "TEXT"), ("sources_text", "TEXT")]:
             if col not in cols:
                 db.execute(f"ALTER TABLE submissions ADD COLUMN {col} {kind}")
                 if col == "sources":  # rellenar las respuestas que ya estaban guardadas
@@ -467,6 +488,7 @@ def question(qid):
             errors.append(T["err_chat"][lang])
 
         share_url = form.get("share_url", "").strip()[:500]
+        sources_text = form.get("sources_text", "").strip()[:6000]  # fuentes que el chat mostró aparte (opcional)
         if share_url and not valid_share_url(share_url):
             errors.append(T["err_share"][lang])
 
@@ -514,15 +536,15 @@ def question(qid):
             cur = db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
-                   share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)""",
+                   share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources, sources_text)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)""",
                 (qid, lang, detect_country(), chat, form.get("model", "").strip()[:80],
                  json.dumps(answers, ensure_ascii=False),
                  json.dumps(values, ensure_ascii=False), lean, ip_hash(),
                  datetime.now(timezone.utc).isoformat(),
                  share_url or None, ",".join(flags), answers_hash,
                  stance, int(bool(session.get("flip"))), q.get("version", 1),
-                 ",".join(source_domains(" ".join(answers)))))
+                 ",".join(source_domains(" ".join(answers), sources_text)), sources_text or None))
             db.commit()
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
@@ -921,7 +943,7 @@ def export_csv():
     n_steps = max(len(q["steps"]) for q in QUESTIONS)
     writer.writerow(["id", "question", "lang", "country", "chat", "model",
                      *[f"answer{i}" for i in range(1, n_steps + 1)], *field_ids, "lean", "stance", "order_flip", "share_url",
-                     "checked", "flags", "created_at", "question_version", "sources"])
+                     "checked", "flags", "created_at", "question_version", "sources", "sources_text"])
     for r in get_db().execute("SELECT * FROM submissions ORDER BY id"):
         answers = (json.loads(r["answers"]) + [""] * n_steps)[:n_steps]
         fields = json.loads(r["fields"])
@@ -929,7 +951,7 @@ def export_csv():
                          r["chat"], r["model"], *answers,
                          *[fields.get(f, "") for f in field_ids],
                          r["lean"], r["stance"] or "", r["order_flip"], r["share_url"] or "", r["checked"],
-                         r["flags"] or "", r["created_at"], r["qversion"] or 1, r["sources"] or ""])
+                         r["flags"] or "", r["created_at"], r["qversion"] or 1, r["sources"] or "", r["sources_text"] or ""])
     return Response("﻿" + out.getvalue(), mimetype="text/csv",
                     headers={"Content-Disposition": "attachment; filename=ai-bias-lab.csv"})
 

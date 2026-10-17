@@ -1029,3 +1029,25 @@ _add("srcpage_propose", "¿Crees que una fuente está en el grupo equivocado? Es
      "Une source vous semble mal classée ? Écrivez à hello@thechatradar.com.",
      "חושבים שמקור משויך לקבוצה הלא נכונה? כתבו לנו: hello@thechatradar.com.")
 _add("n_answers_one", "1 respuesta", "1 answer", "1 réponse", "תשובה אחת")
+# fuentes que el chat muestra aparte (caja opcional, con instrucciones por chat)
+_add("src_box", "¿Tu chat mostró fuentes aparte? Pégalas aquí (opcional)", "Did your chat show sources separately? Paste them here (optional)",
+     "Votre chat a affiché des sources à part ? Collez-les ici (facultatif)", "הצ'אט הציג מקורות בנפרד? הדביקו אותם כאן (רשות)")
+_add("src_box_why", "Algunos chats no incluyen sus fuentes al copiar la respuesta. Con ellas podemos contar qué fuentes usa cada chat, en igualdad de condiciones.",
+     "Some chats don't include their sources when you copy the answer. With them we can count which sources each chat uses, on equal terms.",
+     "Certains chats n'incluent pas leurs sources quand on copie la réponse. Avec elles, nous comptons les sources de chaque chat à égalité.",
+     "חלק מהצ'אטים לא כוללים את המקורות כשמעתיקים את התשובה. איתם נוכל לספור באילו מקורות כל צ'אט משתמש, בתנאים שווים.")
+_add("src_ph", "Pega aquí la lista de fuentes…", "Paste the list of sources here…", "Collez ici la liste des sources…", "הדביקו כאן את רשימת המקורות…")
+T["src_how"] = {
+    "default": {"es": "Si tu chat muestra una lista de fuentes aparte de la respuesta, ábrela, selecciona la lista y pégala aquí. Si las fuentes ya venían dentro del texto pegado, no hace falta.",
+                "en": "If your chat shows a list of sources apart from the answer, open it, select the list and paste it here. If the sources were already in the pasted text, you can skip this.",
+                "fr": "Si votre chat affiche une liste de sources à part, ouvrez-la, sélectionnez la liste et collez-la ici. Si les sources étaient déjà dans le texte collé, inutile.",
+                "he": "אם הצ'אט מציג רשימת מקורות בנפרד מהתשובה, פתחו אותה, סמנו את הרשימה והדביקו כאן. אם המקורות כבר הופיעו בטקסט שהודבק, אין צורך."},
+    "gemini": {"es": "En Gemini: toca ⋯ debajo de la respuesta → «Ver fuentes» (View sources). Se abre la lista: selecciónala entera, cópiala y pégala aquí.",
+               "en": "In Gemini: tap ⋯ under the answer → “View sources”. The list opens: select all of it, copy it and paste it here.",
+               "fr": "Dans Gemini : touchez ⋯ sous la réponse → « Afficher les sources » (View sources). La liste s'ouvre : sélectionnez-la entièrement, copiez-la et collez-la ici.",
+               "he": "ב-Gemini: לחצו על ⋯ מתחת לתשובה ← „הצגת מקורות” (View sources). הרשימה תיפתח: סמנו את כולה, העתיקו והדביקו כאן."},
+    "chatgpt": {"es": "ChatGPT suele incluir las fuentes al copiar la respuesta. Si no aparecieron, toca «Fuentes» debajo de la respuesta, copia la lista y pégala aquí.",
+                "en": "ChatGPT usually includes the sources when you copy the answer. If they didn't appear, tap “Sources” under the answer, copy the list and paste it here.",
+                "fr": "ChatGPT inclut généralement les sources quand on copie la réponse. Sinon, touchez « Sources » sous la réponse, copiez la liste et collez-la ici.",
+                "he": "ChatGPT בדרך כלל כולל את המקורות כשמעתיקים את התשובה. אם הם לא הופיעו, לחצו על „מקורות” מתחת לתשובה, העתיקו את הרשימה והדביקו כאן."},
+}

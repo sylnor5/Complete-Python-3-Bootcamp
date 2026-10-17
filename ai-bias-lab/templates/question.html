@@ -61,6 +61,13 @@
     <textarea id="answer1" name="answer1" rows="7" maxlength="12000" required placeholder="{{ t('paste_ph') }}">{{ form.get('answer1', '') }}</textarea>
     <p class="paste-msg" id="paste-msg" role="status" hidden></p>
 
+    <details class="link-box" id="src-box"{% if form.get('sources_text') %} open{% endif %}>
+      <summary>{{ t('src_box') }}</summary>
+      <p class="hint" id="src-how">{{ tr(T.src_how['default']) }}</p>
+      <textarea id="sources_text" name="sources_text" rows="4" maxlength="6000" placeholder="{{ t('src_ph') }}">{{ form.get('sources_text', '') }}</textarea>
+      <p class="fine">{{ t('src_box_why') }}</p>
+    </details>
+
     <details class="link-box"{% if form.get('share_url') %} open{% endif %}>
       <summary>{{ t('link_optional') }}</summary>
       <label for="share_url" class="block">{{ t('share_label') }}
@@ -202,6 +209,11 @@ document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", ()
   document.addEventListener("visibilitychange", maybeBar);
   window.addEventListener("pageshow", maybeBar);
   maybeBar();
+
+  // fuentes aparte: la instrucción cambia según el chat elegido
+  const SRC_HOW = {{ {'default': tr(T.src_how['default']), 'gemini': tr(T.src_how['gemini']), 'chatgpt': tr(T.src_how['chatgpt'])}|tojson }};
+  function srcHow() { document.getElementById("src-how").textContent = SRC_HOW[sel.value] || SRC_HOW["default"]; }
+  sel.addEventListener("change", srcHow); srcHow();
 
   // dentro de Instagram, Facebook o TikTok: sugerir abrir en el navegador (se puede cerrar)
   const ua = navigator.userAgent || "";
