@@ -63,7 +63,7 @@
 <script>
 (function () {
   var D = {{ dash|tojson }}, S = {{ {'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
-      'compareBy': t('compare_by'), 'nAnswers': t('n_answers_fmt'), 'nMissing': t('n_missing'), 'noCountries': t('no_countries')}|tojson }};
+      'compareBy': t('compare_by'), 'nAnswers': t('n_answers_fmt'), 'nAnswerOne': t('n_answers_one'), 'nMissing': t('n_missing'), 'noCountries': t('no_countries')}|tojson }};
   var byKey = {}; D.chats.forEach(function (c) { byKey[c.key] = c; });
   var cur = byKey[D.first] || D.chats[0], tab = "langs", val = S.lang;
   var regionName = (window.Intl && Intl.DisplayNames) ? new Intl.DisplayNames([S.lang], {type: "region"}) : null;
@@ -79,7 +79,7 @@
     el.removeAttribute("hidden");
   }
   function count(el, g) {
-    el.textContent = S.nAnswers.replace("{n}", g.n) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
+    el.textContent = (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
   }
   function chip(text, on, low, onClick) {
     var b = document.createElement("button");

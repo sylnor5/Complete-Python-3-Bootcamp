@@ -1028,3 +1028,4 @@ _add("srcpage_propose", "¿Crees que una fuente está en el grupo equivocado? Es
      "Think a source is in the wrong group? Write to hello@thechatradar.com.",
      "Une source vous semble mal classée ? Écrivez à hello@thechatradar.com.",
      "חושבים שמקור משויך לקבוצה הלא נכונה? כתבו לנו: hello@thechatradar.com.")
+_add("n_answers_one", "1 respuesta", "1 answer", "1 réponse", "תשובה אחת")
