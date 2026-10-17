@@ -154,6 +154,14 @@ document.getElementById("copy-link").addEventListener("click", async (e) => {
       {% endfor %}
       {% if a.share_url %}<p><a href="{{ a.share_url }}" target="_blank" rel="noopener nofollow ugc">{{ t('see_original') }}</a></p>{% endif %}
       <p class="chips small">{% for tag in a.tags %}<span class="chip">{{ tag }}</span>{% endfor %}<span class="chip muted">{{ a.lean }}</span></p>
+      {% if admin and a.claims %}
+      <div class="claims-box">
+        <strong>Lista de afirmaciones (borrador):</strong> {{ a.claims.n }} encontradas{% if a.claims.pos is not none %} · posición {{ a.claims.pos }} (0 = lado israelí, 50 = centro, 100 = lado palestino){% endif %}
+        {% for sd, title in [('israeli', 'Argumento del lado israelí'), ('palestinian', 'Argumento del lado palestino'), ('balanced', 'Presenta ambos lados')] %}
+        {% if a.claims.groups[sd] %}<h4>{{ title }} ({{ a.claims.groups[sd]|length }})</h4><ul>{% for x in a.claims.groups[sd] %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
       {% if admin %}
       <div class="actions">
         {% if not a.checked %}<form method="post" action="{{ url_for('admin_check', rid=a.id) }}"><input type="hidden" name="token" value="{{ request.args.get('token') }}"><button class="btn small">{{ t('mark_checked') }}</button></form>{% endif %}

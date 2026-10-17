@@ -13,6 +13,7 @@
     <line x1="200" y1="42" x2="200" y2="{{ 57 if a2 % 60 == 0 else (52 if a2 % 20 == 0 else 48) }}" class="{{ 'tk-major' if a2 % 60 == 0 else ('tk-mid' if a2 % 20 == 0 else 'tk-minor') }}" transform="rotate({{ 85 - 2.5 * i }} 200 200)"/>
     {% endfor %}
   </g>
+  {% if admin %}<g class="needle needle-a" id="{{ id }}-a" hidden><path class="needle-body" d="M200 62 L201.8 196 L201 212 L199 212 L198.2 196 Z"/></g>{% endif %}
   <g class="needle" id="{{ id }}" hidden><path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/></g>
   <circle class="hub" cx="200" cy="200" r="13"/>
   <circle class="needle-pin" cx="200" cy="200" r="3.5"/>
@@ -59,6 +60,7 @@
   </p>
   {% if not unlocked %}<a class="btn btn-primary dash-cta" href="{{ url_for('question', qid=q.id) }}">{{ t('dash_cta') }} <span class="dur">{{ t('dur') }}</span></a>{% endif %}
   <p class="fine">{{ t('gauge_rule') }}</p>
+  {% if admin %}<p class="fine admin-legend"><span class="sw sw-p"></span>Personas · <span class="sw sw-a"></span>Lista de afirmaciones (borrador, solo administración). <a href="?token=salir">Ocultar</a></p>{% endif %}
 </section>
 <script>
 (function () {
@@ -78,6 +80,9 @@
     el.style.setProperty("--rot", ((p - 50) * 1.7).toFixed(1) + "deg");
     el.removeAttribute("hidden");
   }
+  function adminNeedle(id, g) {  // segunda aguja: lista de afirmaciones (solo administración)
+    var el = $(id); if (el) setNeedle(el, {pos: g.apos});
+  }
   function count(el, g) {
     el.textContent = (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
   }
@@ -88,7 +93,7 @@
     return b;
   }
   function drawLeft() {
-    $("l-name").textContent = cur.name; setNeedle($("l-needle"), cur); count($("l-n"), cur);
+    $("l-name").textContent = cur.name; setNeedle($("l-needle"), cur); count($("l-n"), cur); adminNeedle("l-needle-a", cur);
     var box = $("l-chips"); box.innerHTML = "";
     D.chats.forEach(function (c) {
       box.appendChild(chip(c.name.replace(" (Mistral)", ""), c === cur, !c.n, function () { cur = c; autoPick = true; draw(); }));
@@ -107,9 +112,9 @@
     document.querySelectorAll(".seg2 button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tab === tab ? "true" : "false"); });
     var box = $("r-chips"); box.innerHTML = "";
     if (!item) {
-      $("r-name").textContent = "—"; $("r-needle").setAttribute("hidden", ""); $("r-n").textContent = S.noCountries; return;
+      $("r-name").textContent = "—"; $("r-needle").setAttribute("hidden", ""); adminNeedle("r-needle-a", {}); $("r-n").textContent = S.noCountries; return;
     }
-    $("r-name").textContent = label(item); setNeedle($("r-needle"), item); count($("r-n"), item);
+    $("r-name").textContent = label(item); setNeedle($("r-needle"), item); count($("r-n"), item); adminNeedle("r-needle-a", item);
     list.forEach(function (x) { box.appendChild(chip(label(x), x === item, !x.n, function () { val = x.code; autoPick = false; drawRight(); })); });
   }
   function draw() { drawLeft(); drawRight(); }

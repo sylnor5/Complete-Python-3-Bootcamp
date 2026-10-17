@@ -147,6 +147,60 @@ def row_lang(r):
     return (r["alang"] if "alang" in r.keys() else None) or r["lang"]
 
 
+# Lista de afirmaciones (borrador, pendiente de revisión por ambos lados). Por ahora solo la ve
+# la administración: segunda aguja en la portada y detalle por respuesta en resultados.
+CLAIMS_FILE = BASE_DIR / "borradores" / "afirmaciones" / "catalogo-afirmaciones.json"
+try:
+    with open(CLAIMS_FILE, encoding="utf-8") as fh:
+        CLAIMS = json.load(fh)["claims"]
+except (OSError, ValueError, KeyError):
+    CLAIMS = []
+# cuando aparece la versión con los dos lados, no se cuentan además sus mitades
+CLAIM_SUPERSEDES = {"disengagement_both_views": {"gaza_disengagement_2005", "occupation_context"}}
+
+
+def _norm(text):
+    text = unicodedata.normalize("NFKD", text or "")
+    text = "".join(ch for ch in text if not unicodedata.combining(ch)).lower()
+    for a, b in (("’", "'"), ("‘", "'"), ("´", "'"), ("״", '"'), ("“", '"'), ("”", '"')):
+        text = text.replace(a, b)
+    return re.sub(r"\s+", " ", text)
+
+
+_CLAIM_CACHE = {}
+
+
+def claims_in(text):
+    """Afirmaciones de la lista que aparecen en el texto: [(id, side)]."""
+    key = hashlib.sha1((text or "").encode("utf-8")).hexdigest()
+    if key in _CLAIM_CACHE:
+        return _CLAIM_CACHE[key]
+    t, found = _norm(text), []
+    for c in CLAIMS:
+        for trig in (x for ts in c["triggers"].values() for x in ts):
+            hit = re.search(_norm(trig[3:]), t) if trig.startswith("re:") else _norm(trig) in t
+            if hit:
+                found.append((c["id"], c["side"]))
+                break
+    drop = set().union(*(CLAIM_SUPERSEDES.get(i, set()) for i, _ in found)) if found else set()
+    found = [x for x in found if x[0] not in drop]
+    _CLAIM_CACHE[key] = found
+    return found
+
+
+def claims_pos(rs):
+    """Posición 0-100 según la lista: (lado palestino − lado israelí) / total de afirmaciones.
+    Media de las respuestas que tienen alguna afirmación."""
+    vals = []
+    for r in rs:
+        found = claims_in(" ".join(json.loads(r["answers"] or "[]")))
+        if found:
+            isr = sum(1 for _, sd in found if sd == "israeli")
+            pal = sum(1 for _, sd in found if sd == "palestinian")
+            vals.append((pal - isr) / len(found))
+    return round(50 + 50 * sum(vals) / len(vals), 1) if vals else None
+
+
 _URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
 
 
@@ -470,19 +524,28 @@ def index():
     # la opinión); antes solo van los contadores: ni siquiera se envían las posiciones.
     unlocked = bool(session.get("done", {}).get(q["id"]))
     tested = session.get("done", {}).get(q["id"]) or []
+    if ADMIN_TOKEN and request.args.get("token") == ADMIN_TOKEN:
+        session["admin"] = True
+    elif request.args.get("token") == "salir":
+        session.pop("admin", None)
+    admin = bool(ADMIN_TOKEN) and session.get("admin", False)
     return render_template("index.html", questions=QUESTIONS, q=q, counts=count_by_question(),
-                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested), unlocked=unlocked,
+                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, admin), unlocked=unlocked,
+                           admin=admin,
                            preview=PREVIEW_NEEDLES and not unlocked,
                            share_url=public_home_url(), total_valid=len(rows), min_metro=MIN_METRO)
 
 
-def dashboard_data(rows, show, tested):
+def dashboard_data(rows, show, tested, admin=False):
     """Reloj izquierdo: cada chat por separado. Reloj derecho: ese chat por idioma o por país.
     pos: 0 = postura israelí, 50 = ni un lado ni otro, 100 = postura palestina."""
     def gauge(rs):
         sc = lean_score(rs)
-        return {"n": sc["n"], "pos": sc["pos"] if (show and sc["ok"]) else None,
-                "missing": sc.get("missing", 0)}
+        out = {"n": sc["n"], "pos": sc["pos"] if (show and sc["ok"]) else None,
+               "missing": sc.get("missing", 0)}
+        if admin:
+            out["apos"] = claims_pos(rs)
+        return out
     by_chat = group_by_chat(rows)
     chats = []
     for key, name, _ in CHATS:
@@ -802,6 +865,7 @@ def results(qid):
         "tags": [labels[f][v] for f, v in parsed[r["id"]].items()
                  if f in choice_fields and v in labels[f]],
         "date": r["created_at"][:10],
+        "claims": claims_detail(r, lang) if admin else None,
     } for r in (rows[:30] + (flagged[:50] if admin else []))]
 
     return render_template(
@@ -813,6 +877,15 @@ def results(qid):
         metronome=metronome, min_metro=MIN_METRO,
         just_sent=session.pop("just_sent", None) == qid, share_url=public_home_url(),
         subscribed=request.args.get("sub") == "1")
+
+
+def claims_detail(r, lang):
+    found = claims_in(" ".join(json.loads(r["answers"] or "[]")))
+    text = {c["id"]: c["text"].get(lang) or c["text"]["en"] for c in CLAIMS}
+    groups = {sd: [text[i] for i, s2 in found if s2 == sd] for sd in ("israeli", "palestinian", "balanced")}
+    n = len(found)
+    score = (len(groups["palestinian"]) - len(groups["israeli"])) / n if n else None
+    return {"groups": groups, "n": n, "pos": round(50 + 50 * score) if n else None}
 
 
 @app.route("/admin/check/<int:rid>", methods=["POST"])

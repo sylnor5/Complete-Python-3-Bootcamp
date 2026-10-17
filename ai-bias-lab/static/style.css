@@ -715,3 +715,13 @@ details.ask[open] { display: grid; gap: 12px; }
 @media (min-width: 880px) { .src-chats { grid-template-columns: 1fr 1fr; } }
 .srcpage > * { grid-area: auto; justify-self: stretch; } .srcpage > .topic-chip { justify-self: start; }
 .share-foot { padding-block: 28px 8px; border-top: 1px solid var(--hair); }
+
+/* segunda aguja (lista de afirmaciones), solo administración */
+.needle-a .needle-body { fill: #E9E3D8; opacity: .9; }
+.admin-legend { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.admin-legend .sw { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
+.sw-p { background: var(--accent); }
+.sw-a { background: #E9E3D8; }
+.claims-box { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--edge); border-radius: 10px; font-size: 13px; }
+.claims-box h4 { font-size: 12px; margin: 8px 0 2px; color: var(--graphite); }
+.claims-box ul { margin: 0; padding-inline-start: 18px; }
