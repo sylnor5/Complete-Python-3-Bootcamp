@@ -743,7 +743,7 @@ _add("origin_title", "Cómo empezó", "How it started", "Comment tout a commenc�
 _METHOD_EXTRA = {
     "es": [
         ("Cómo empezó", "Le hice a ChatGPT la pregunta de la prueba. Su respuesta me pareció inclinada hacia un lado y, cuando le discutí, respondió: «Tu crítica es válida respecto de mi respuesta anterior: presenté la cuestión de forma demasiado asimétrica.» De ahí nació la idea de comprobar si les pasa a todos."),
-        ("Una pregunta cargada a propósito", "La pregunta tiene un punto de vista, tal como la hizo una persona real. Lo que medimos es si cada IA lo sigue, lo corrige o lo equilibra. Habrá otras pruebas con preguntas cargadas desde el ángulo contrario."),
+        ("Una pregunta cargada a propósito", "La pregunta tiene un punto de vista, tal como la hizo una persona real. Lo que medimos es si cada IA lo sigue, lo corrige o lo equilibra."),
         ("Izquierda y derecha", "En la escala, los lados van en orden alfabético en cada idioma («israelí» antes que «palestino»; en hebreo, que se lee de derecha a izquierda, queda a la derecha). En el formulario, el orden de las opciones cambia al azar para cada visitante."),
         ("Cada chat por separado", "Nunca mezclamos respuestas de chats distintos: cada chat tiene su propia aguja. En «Todos», cada chat pesa lo mismo, tenga más o menos respuestas."),
         ("Dos medidas", "La aguja muestra cómo valoran las respuestas quienes participan. El mapa usa algo observable: qué argumentos de cada lado menciona la respuesta (4 de cada lado en las casillas opcionales). Así no dependemos solo de impresiones."),
@@ -751,7 +751,7 @@ _METHOD_EXTRA = {
     ],
     "en": [
         ("How it started", "I asked ChatGPT the test question. Its answer seemed to lean to one side, and when I pushed back it replied: “Your criticism of my previous answer is valid: I presented the issue in a way that was too one-sided.” That's where the idea of checking whether it happens to everyone came from."),
-        ("A question loaded on purpose", "The question has a point of view, exactly as a real person asked it. What we measure is whether each AI follows it, corrects it or balances it. Other tests will use questions loaded from the opposite angle."),
+        ("A question loaded on purpose", "The question has a point of view, exactly as a real person asked it. What we measure is whether each AI follows it, corrects it or balances it."),
         ("Left and right", "On the scale, sides are in alphabetical order in each language (“Israeli” before “Palestinian”; in Hebrew, read right to left, it sits on the right). In the form, the order of the options is shuffled for each visitor."),
         ("Each chat on its own", "We never mix answers from different chats: each chat has its own needle. In “All”, every chat weighs the same, however many answers it has."),
         ("Two measures", "The needle shows how participants rate the answers. The map uses something observable: which arguments from each side the answer mentions (4 per side in the optional boxes). So we don't rely on impressions alone."),
@@ -759,7 +759,7 @@ _METHOD_EXTRA = {
     ],
     "fr": [
         ("Comment tout a commencé", "J'ai posé à ChatGPT la question du test. Sa réponse m'a semblé pencher d'un côté et, quand je l'ai contredit, il a répondu : « Votre critique de ma réponse précédente est fondée : j'ai présenté la question de manière trop asymétrique. » C'est de là qu'est née l'idée de vérifier si cela arrive à tout le monde."),
-        ("Une question orientée à dessein", "La question a un point de vue, telle qu'une vraie personne l'a posée. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre. D'autres tests utiliseront des questions orientées dans l'autre sens."),
+        ("Une question orientée à dessein", "La question a un point de vue, telle qu'une vraie personne l'a posée. Nous mesurons si chaque IA le suit, le corrige ou l'équilibre."),
         ("Gauche et droite", "Sur l'échelle, les côtés sont dans l'ordre alphabétique de chaque langue (« israélien » avant « palestinien » ; en hébreu, qui se lit de droite à gauche, il est à droite). Dans le formulaire, l'ordre des options change au hasard pour chaque visiteur."),
         ("Chaque chat séparément", "Nous ne mélangeons jamais les réponses de chats différents : chaque chat a sa propre aiguille. Dans « Tous », chaque chat pèse autant, quel que soit son nombre de réponses."),
         ("Deux mesures", "L'aiguille montre comment les participants évaluent les réponses. La carte utilise un élément observable : les arguments de chaque côté que mentionne la réponse (4 par côté dans les cases facultatives). Nous ne dépendons donc pas que des impressions."),
@@ -767,7 +767,7 @@ _METHOD_EXTRA = {
     ],
     "he": [
         ("איך זה התחיל", "שאלתי את ChatGPT את שאלת המבחן. התשובה שלו נראתה לי נוטה לצד אחד, וכשהתווכחתי איתו הוא ענה: „הביקורת שלך על התשובה הקודמת שלי מוצדקת: הצגתי את הנושא באופן חד־צדדי מדי.” משם נולד הרעיון לבדוק אם זה קורה לכולם."),
-        ("שאלה טעונה בכוונה", "לשאלה יש נקודת מבט, בדיוק כפי שאדם אמיתי שאל אותה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה. במבחנים הבאים יהיו שאלות טעונות מהכיוון ההפוך."),
+        ("שאלה טעונה בכוונה", "לשאלה יש נקודת מבט, בדיוק כפי שאדם אמיתי שאל אותה. אנחנו בודקים אם כל בינה מלאכותית הולכת אחריה, מתקנת אותה או מאזנת אותה."),
         ("שמאל וימין", "בסולם, הצדדים מסודרים לפי סדר האלף־בית בכל שפה („ישראלי” לפני „פלסטיני”; בעברית, שנקראת מימין לשמאל, הוא מופיע מימין). בטופס, סדר האפשרויות מתחלף באקראי לכל מבקר."),
         ("כל צ'אט בנפרד", "אנחנו אף פעם לא מערבבים תשובות של צ'אטים שונים: לכל צ'אט יש מחוג משלו. ב„הכול”, לכל צ'אט אותו משקל, לא משנה כמה תשובות יש לו."),
         ("שני מדדים", "המחוג מראה איך המשתתפים מדרגים את התשובות. המפה משתמשת במשהו שניתן לראות: אילו טיעונים מכל צד התשובה מזכירה (4 מכל צד בתיבות האופציונליות). כך אנחנו לא תלויים רק ברושם."),
