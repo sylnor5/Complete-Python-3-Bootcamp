@@ -1054,3 +1054,7 @@ _add("cn_note", "Aguja con círculo: cuenta qué argumentos de cada lado mencion
      "Needle with a circle: counts which arguments from each side the answer mentions, using a fixed list of claims. It's being tested.",
      "Aiguille avec un cercle : compte les arguments de chaque côté que mentionne la réponse, avec une liste fixe d'affirmations. En test.",
      "המחוג עם העיגול: סופר אילו טיעונים של כל צד התשובה מזכירה, לפי רשימה קבועה של טענות. בשלב ניסוי.")
+_add("cn_people_short", "gente", "people", "gens", "אנשים")
+_add("cn_text_short", "texto", "text", "texte", "טקסט")
+_add("cn_people_line", "Aguja = cómo lo valoró la gente", "Needle = how people rated it", "Aiguille = comment les gens l'ont évaluée", "מחוג = איך אנשים דירגו")
+_add("cn_text_line", "Muesca en el borde = argumentos que menciona el texto (en prueba)", "Notch on the edge = arguments the text mentions (in testing)", "Encoche sur le bord = arguments que mentionne le texte (en test)", "סימון בשוליים = טיעונים שהטקסט מזכיר (בניסוי)")

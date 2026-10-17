@@ -716,16 +716,15 @@ details.ask[open] { display: grid; gap: 12px; }
 .srcpage > * { grid-area: auto; justify-self: stretch; } .srcpage > .topic-chip { justify-self: start; }
 .share-foot { padding-block: 28px 8px; border-top: 1px solid var(--hair); }
 
-/* segunda aguja (lista de afirmaciones), solo administración */
-.needle-a .needle-body { fill: #E9E3D8; opacity: .9; }
-.admin-legend { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.admin-legend .sw { display: inline-block; width: 14px; height: 3px; border-radius: 2px; }
-.sw-p { background: var(--accent); }
-.sw-a { background: #E9E3D8; }
+/* segunda marca: muesca en el borde (lista de afirmaciones, en prueba), del mismo color que la aguja */
+.thick .needle-body { transform: scaleX(1.8); transform-origin: 200px 200px; transform-box: view-box; }
+.notch path { fill: var(--accent); }
+.mark-label { font: 700 20px/1 var(--f-text); fill: var(--accent); }
+.admin-legend a { color: inherit; }
+.pod-n.leg-p, .pod-n.leg-t { text-align: start; width: 100%; line-height: 1.4; }
+.pod-n.leg-p::before { content: ""; display: inline-block; width: 4px; height: 12px; border-radius: 2px; background: var(--accent); margin-inline-end: 7px; vertical-align: -1px; }
+.pod-n.leg-t { margin-top: 3px; }
+.pod-n.leg-t::before { content: "▼"; color: var(--accent); font-size: 9px; margin-inline-end: 6px; vertical-align: 1px; }
 .claims-box { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--edge); border-radius: 10px; font-size: 13px; }
 .claims-box h4 { font-size: 12px; margin: 8px 0 2px; color: var(--graphite); }
 .claims-box ul { margin: 0; padding-inline-start: 18px; }
-.needle-a .needle-ring { fill: #1F1D1B; stroke: #E9E3D8; stroke-width: 3; }
-.pod-n.with-sw::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; background: var(--accent); margin-inline-end: 6px; vertical-align: middle; }
-.pod-na { margin-top: 2px; }
-.pod-na::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; border: 2px solid #E9E3D8; margin-inline-end: 6px; vertical-align: middle; }

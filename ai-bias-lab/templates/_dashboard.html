@@ -5,7 +5,7 @@
    Antes de participar no se envían posiciones, solo cuántas respuestas hay. #}
 {% set is_rtl = dir == 'rtl' %}
 {% macro dial(id) %}
-<svg class="gauge" viewBox="0 0 400 226" aria-hidden="true" focusable="false">
+<svg class="gauge{{ ' with-notch' if claims_needle }}" viewBox="{{ '0 -14 400 240' if claims_needle else '0 0 400 226' }}" aria-hidden="true" focusable="false">
   <path class="arc-out" d="M 42.60 186.23 A 158 158 0 0 1 357.40 186.23"/>
   <path class="arc-in" d="M 66.51 188.32 A 134 134 0 0 1 333.49 188.32"/>
   <g class="ticks">
@@ -13,8 +13,10 @@
     <line x1="200" y1="42" x2="200" y2="{{ 57 if a2 % 60 == 0 else (52 if a2 % 20 == 0 else 48) }}" class="{{ 'tk-major' if a2 % 60 == 0 else ('tk-mid' if a2 % 20 == 0 else 'tk-minor') }}" transform="rotate({{ 85 - 2.5 * i }} 200 200)"/>
     {% endfor %}
   </g>
-  {% if claims_needle %}<g class="needle needle-a" id="{{ id }}-a" hidden><path class="needle-body" d="M200 70 L201.6 196 L201 212 L199 212 L198.4 196 Z"/><circle class="needle-ring" cx="200" cy="62" r="8"/></g>{% endif %}
-  <g class="needle" id="{{ id }}" hidden><path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/></g>
+  {% if claims_needle %}<g class="needle notch" id="{{ id }}-a" hidden><path d="M200 41 L192 25 L208 25 Z"/></g>
+  <text class="mark-label" id="{{ id }}-al" hidden>{{ t('cn_text_short') }}</text>{% endif %}
+  <g class="needle{{ ' thick' if claims_needle }}" id="{{ id }}" hidden><path class="needle-body" d="M200 50 L203.2 196 L202 214 L198 214 L196.8 196 Z"/></g>
+  {% if claims_needle %}<text class="mark-label" id="{{ id }}-pl" hidden>{{ t('cn_people_short') }}</text>{% endif %}
   <circle class="hub" cx="200" cy="200" r="13"/>
   <circle class="needle-pin" cx="200" cy="200" r="3.5"/>
 </svg>
@@ -30,8 +32,8 @@
         <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('l-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
-        <p class="pod-n{{ ' with-sw' if claims_needle }}" id="l-n"></p>
-        {% if claims_needle %}<p class="pod-n pod-na" id="l-na"></p>{% endif %}
+        <p class="pod-n{{ ' leg-p' if claims_needle }}" id="l-n"></p>
+        {% if claims_needle %}<p class="pod-n leg-t" id="l-na"></p>{% endif %}
       </div>
       <div class="ctrl">
         <p class="ctrl-h">{{ t('pick_chat') }}</p>
@@ -45,8 +47,8 @@
         <span class="pod-mid">{{ t('g_center') }}<span aria-hidden="true">▾</span></span>
         {{ dial('r-needle') }}
         <div class="ends"><span>{{ t('side_pal') if is_rtl else t('side_isr') }}</span><span>{{ t('side_isr') if is_rtl else t('side_pal') }}</span></div>
-        <p class="pod-n{{ ' with-sw' if claims_needle }}" id="r-n"></p>
-        {% if claims_needle %}<p class="pod-n pod-na" id="r-na"></p>{% endif %}
+        <p class="pod-n{{ ' leg-p' if claims_needle }}" id="r-n"></p>
+        {% if claims_needle %}<p class="pod-n leg-t" id="r-na"></p>{% endif %}
       </div>
       <div class="ctrl">
         <p class="ctrl-h" id="r-h"></p>
@@ -62,11 +64,11 @@
   </p>
   {% if not unlocked %}<a class="btn btn-primary dash-cta" href="{{ url_for('question', qid=q.id) }}">{{ t('dash_cta') }} <span class="dur">{{ t('dur') }}</span></a>{% endif %}
   <p class="fine">{{ t('gauge_rule') }}</p>
-  {% if claims_needle %}<p class="fine admin-legend">{{ t('cn_note') }}{% if admin %} <a href="?token=salir">Salir de administración</a>{% endif %}</p>{% endif %}
+  {% if admin %}<p class="fine admin-legend"><a href="?token=salir">Salir de administración</a></p>{% endif %}
 </section>
 <script>
 (function () {
-  var D = {{ dash|tojson }}, S = {{ {'cn': claims_needle|default(false), 'people': t('cn_people'), 'claimsN': t('cn_claims_n'), 'claimsOne': t('cn_claims_one'), 'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
+  var D = {{ dash|tojson }}, S = {{ {'cn': claims_needle|default(false), 'peopleLine': t('cn_people_line'), 'textLine': t('cn_text_line'), 'rtl': is_rtl, 'lang': lang, 'kChat': t('k_chat'), 'tabLang': t('tab_lang'), 'tabCountry': t('tab_country'),
       'compareBy': t('compare_by'), 'nAnswers': t('n_answers_fmt'), 'nAnswerOne': t('n_answers_one'), 'nMissing': t('n_missing'), 'noCountries': t('no_countries')}|tojson }};
   var byKey = {}; D.chats.forEach(function (c) { byKey[c.key] = c; });
   var cur = byKey[D.first] || D.chats[0], tab = "langs", val = S.lang, autoPick = true;
@@ -82,13 +84,31 @@
     el.style.setProperty("--rot", ((p - 50) * 1.7).toFixed(1) + "deg");
     el.removeAttribute("hidden");
   }
-  function adminNeedle(id, g) {  // segunda aguja: lista de afirmaciones (solo administración)
-    var el = $(id); if (!el) return;
-    setNeedle(el, {pos: g.apos});
-    $(id.charAt(0) + "-na").textContent = ((g.an || 0) === 1 ? S.claimsOne : S.claimsN.replace("{n}", g.an || 0));
+  // Etiqueta pegada a cada marca: «gente» junto a la aguja, «texto» sobre la muesca del borde.
+  function placeLabel(el, pos, r, side) {
+    if (!el) return;
+    if (pos === null || pos === undefined) { el.setAttribute("hidden", ""); return; }
+    var p = S.rtl ? 100 - pos : pos, a = (p - 50) * 1.7 * Math.PI / 180;
+    var x = 200 + r * Math.sin(a), y = 200 - r * Math.cos(a);
+    if (side) {  // al costado de la aguja, del lado de arriba para no pisar el borde ni los extremos
+      x += p >= 50 ? -6 : 6; y -= 14; el.setAttribute("text-anchor", p >= 50 ? "end" : "start");
+      if (Math.abs(p - 50) < 12) { x = 200 + (p >= 50 ? -10 : 10) ; y = 200 - r; }
+    }
+    else { el.setAttribute("text-anchor", "middle"); }
+    el.setAttribute("x", x.toFixed(1)); el.setAttribute("y", y.toFixed(1)); el.removeAttribute("hidden");
+  }
+  function marks(prefix, g) {
+    placeLabel($(prefix + "-pl"), g.pos, 80, true);
+    var notch = $(prefix + "-a"); if (!notch) return;
+    setNeedle(notch, {pos: g.apos});
+    var ap = g.apos === null || g.apos === undefined ? null : g.apos;
+    var al = $(prefix + "-al"); placeLabel(al, ap, 188, false);
   }
   function count(el, g) {
-    el.textContent = (S.cn ? S.people + " · " : "") + (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
+    var n = (g.n === 1 ? S.nAnswerOne : S.nAnswers.replace("{n}", g.n)) + (g.missing > 0 ? " · " + S.nMissing.replace("{missing}", g.missing) : "");
+    if (!S.cn) { el.textContent = n; return; }
+    el.textContent = S.peopleLine + " · " + n;
+    $(el.id.charAt(0) + "-na").textContent = S.textLine + " · " + (g.an || 0);
   }
   function chip(text, on, low, onClick) {
     var b = document.createElement("button");
@@ -97,7 +117,7 @@
     return b;
   }
   function drawLeft() {
-    $("l-name").textContent = cur.name; setNeedle($("l-needle"), cur); count($("l-n"), cur); adminNeedle("l-needle-a", cur);
+    $("l-name").textContent = cur.name; setNeedle($("l-needle"), cur); count($("l-n"), cur); marks("l-needle", cur);
     var box = $("l-chips"); box.innerHTML = "";
     D.chats.forEach(function (c) {
       box.appendChild(chip(c.name.replace(" (Mistral)", ""), c === cur, !c.n, function () { cur = c; autoPick = true; draw(); }));
@@ -116,9 +136,9 @@
     document.querySelectorAll(".seg2 button").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tab === tab ? "true" : "false"); });
     var box = $("r-chips"); box.innerHTML = "";
     if (!item) {
-      $("r-name").textContent = "—"; $("r-needle").setAttribute("hidden", ""); adminNeedle("r-needle-a", {}); $("r-n").textContent = S.noCountries; return;
+      $("r-name").textContent = "—"; $("r-needle").setAttribute("hidden", ""); marks("r-needle", {}); $("r-n").textContent = S.noCountries; return;
     }
-    $("r-name").textContent = label(item); setNeedle($("r-needle"), item); count($("r-n"), item); adminNeedle("r-needle-a", item);
+    $("r-name").textContent = label(item); setNeedle($("r-needle"), item); count($("r-n"), item); marks("r-needle", item);
     list.forEach(function (x) { box.appendChild(chip(label(x), x === item, !x.n, function () { val = x.code; autoPick = false; drawRight(); })); });
   }
   function draw() { drawLeft(); drawRight(); }
