@@ -1,0 +1,28 @@
+ChatRadar claims codebook v0.1 - expected matches (ids), produced by the reference matcher in cb/match.py and hand-checked.
+Matcher: NFKD + strip accents + lowercase, substring; 're:' = regex. Side letters: I=israeli P=palestinian B=balanced.
+
+## A (ChatGPT, EN, Oct 17)  ->  israeli 5 / palestinian 7 / balanced 11
+  I: figures_unverified, figures_no_combatant_distinction, hostages, idf_stated_objectives, israel_rejects_genocide
+  P: toll_higher_than_reported, missing_under_rubble, indirect_deaths, aid_restrictions_blockade, destruction_homes_infrastructure, displacement_forced, coi_genocide_finding
+  B: genocide_intent_not_numbers, genocide_convention_definition, numbers_dont_prove_either, capacity_not_intent, icj_case_pending, both_positions_presented, un_reports_with_caveat, evidence_framework, intensity_varied, international_pressure_constraint, population_share
+  Known weak/false positives: aid_restrictions_blockade ('siege' used as an operation type, not an aid claim); displacement_forced ('displaced repeatedly' - neutral mention); hostages and idf_stated_objectives are ATTRIBUTED ('Israel has publicly described its objectives'). Not expected: oct7_attack (only the date '7 October 2023' appears).
+
+## B (Gemini, ES, Oct 17)  ->  israeli 13 / palestinian 8 / balanced 5
+  I: evacuation_warnings, precision_munitions, human_shields, hamas_civilian_infrastructure, hamas_tunnels, figures_unverified, combatant_share, hostages, idf_stated_objectives, ihl_compliance_claimed, humanitarian_corridors_aid_allowed, urban_warfare_density, israel_rejects_genocide
+  P: missing_under_rubble, women_children_share, aid_restrictions_blockade, destruction_homes_infrastructure, health_system_destroyed, displacement_forced, journalists_aidworkers_killed, conditions_of_life_imposed
+  B: genocide_intent_not_numbers, genocide_convention_definition, both_positions_presented, figures_disputed, international_pressure_constraint
+  Notes: nearly all israeli hits are ATTRIBUTED ('Las FDI sostienen', 'Israel y sus defensores'); palestinian hits are attributed to 'Quienes acusan'. journalists_aidworkers_killed fires only on 'acceso restringido a la prensa' (cited as reason figures are hard to verify) - weak.
+
+## C (Gemini, ES, Oct 8)  ->  israeli 7 / palestinian 8 / balanced 3
+  I: evacuation_warnings, precision_munitions, human_shields, hamas_civilian_infrastructure, ihl_compliance_claimed, urban_warfare_density, israel_rejects_genocide
+  P: indirect_deaths, aid_restrictions_blockade, destruction_homes_infrastructure, health_system_destroyed, ngo_scholar_genocide_reports, indiscriminate_force, conditions_of_life_imposed, war_crimes_crimes_against_humanity
+  B: genocide_intent_not_numbers, genocide_convention_definition, both_positions_presented
+  Notes: symmetric two-sided structure; both sides attributed ('Desde la perspectiva de los criticos' / 'desde la perspectiva de Israel'). No figures discussed at all (no moh/unverified/toll claims).
+
+## D (Claude, ES, Oct 8)  ->  israeli 12 / palestinian 10 / balanced 9
+  I: evacuation_warnings, hamas_civilian_infrastructure, hamas_tunnels, moh_hamas_run, figures_no_combatant_distinction, combatant_share, hostages, idf_stated_objectives, humanitarian_corridors_aid_allowed, urban_warfare_density, israel_could_kill_more, israel_rejects_genocide
+  P: toll_higher_than_reported, missing_under_rubble, indirect_deaths, famine_starvation, health_system_destroyed, displacement_forced, coi_genocide_finding, ngo_scholar_genocide_reports, conditions_of_life_imposed, injured_count
+  B: genocide_intent_not_numbers, genocide_convention_definition, icj_case_pending, both_positions_presented, intensity_varied, international_pressure_constraint, question_premise_challenged, population_share, precedent_srebrenica
+  Notes: moh_hamas_run and figures_no_combatant_distinction are ASSERTED by the model; combatant_share ATTRIBUTED ('Israel sostiene'). oct7_attack correctly NOT expected (date only). israel_could_kill_more is the user's premise restated and attributed ('quienes rechazan').
+
+Expected NOT to match in any of the four: oct7_attack, precision_munitions(A,D), icc_warrants, intent_statements, moh_figures_reliable, collective_punishment, occupation_context, hamas_threat_rockets, misattributed_deaths, hamas_diverts_aid, moh_figures_revised_inflated, suffering_both_sides, not_for_us_to_decide.
