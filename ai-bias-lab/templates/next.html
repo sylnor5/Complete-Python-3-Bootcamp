@@ -17,9 +17,15 @@
   <p><a class="btn big" href="{{ url_for('mine', qid=q.id) }}#thanks">{{ t('next_no') }}</a></p>
 </section>
 <script>
-// abre el chat en otra pestaña y, en esta, vuelve a la pregunta con ese chat ya elegido
-document.querySelectorAll(".try").forEach((a) => a.addEventListener("click", () => {
+// Copia la pregunta (el portapapeles aún tiene la respuesta del chat anterior), abre el chat en otra
+// pestaña y, en esta, vuelve a la pregunta con ese chat elegido y el aviso «Pregunta copiada».
+const PROMPT = {{ tr(prompt)|tojson }};
+document.querySelectorAll(".try").forEach((a) => a.addEventListener("click", (e) => {
+  e.preventDefault();
+  const go = (copied) => { location.href = a.href + (copied ? "&copied=1" : ""); };
   window.open(a.dataset.open, "_blank", "noopener");
+  if (navigator.clipboard) navigator.clipboard.writeText(PROMPT).then(() => go(true), () => go(false));
+  else go(false);
 }));
 </script>
 {% endblock %}

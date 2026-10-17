@@ -912,3 +912,9 @@ _ORIG_ITEM = {
 }
 for _lang, _item in _ORIG_ITEM.items():
     T["method"][_lang].insert(1, _item)
+# aviso al abrir un chat: la pregunta ya está copiada (el portapapeles podía tener la respuesta anterior)
+_add("q_copied_to",
+     "✓ Pregunta copiada. Pégala en {chat} y vuelve aquí con la respuesta.",
+     "✓ Question copied. Paste it into {chat} and come back here with the answer.",
+     "✓ Question copiée. Collez-la dans {chat} et revenez ici avec la réponse.",
+     "✓ השאלה הועתקה. הדביקו אותה ב-{chat} וחזרו לכאן עם התשובה.")

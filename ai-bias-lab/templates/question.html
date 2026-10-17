@@ -16,6 +16,7 @@
 {% block content %}
 <h1>{{ tr(q.title) }}</h1>
 <p class="count">{{ count }} {{ t('so_far') }}</p>
+{% if copied_to %}<p class="copied-banner" role="status">{{ t('q_copied_to').format(chat=copied_to) }}</p>{% endif %}
 <p class="rules">{{ t('rules') }}</p>
 <p class="loaded">{{ t('loaded_note') }}</p>
 
@@ -32,9 +33,10 @@
       <span class="hint">{{ t('open_chat') }}</span>
       <div class="chips">
         {% for key, name, link in chats if link %}
-        <a class="chip open" href="{{ link }}" target="_blank" rel="noopener" data-chat="{{ key }}">{{ name }}</a>
+        <a class="chip open" href="{{ link }}" target="_blank" rel="noopener" data-chat="{{ key }}" data-name="{{ name }}">{{ name }}</a>
         {% endfor %}
       </div>
+      <p class="copied-banner" id="open-copied" role="status" hidden></p>
     </div>
   </section>
 
@@ -121,9 +123,14 @@ document.querySelectorAll(".copy").forEach((btn) => btn.addEventListener("click"
   setTimeout(() => (btn.textContent = label), 2000);
 }));
 
-// al abrir un chat, se marca solo en «¿Qué chat usaste?»
+// al abrir un chat: se copia la pregunta (el portapapeles podía tener otra cosa, por ejemplo la
+// respuesta anterior), se avisa y se marca ese chat en «¿Qué chat usaste?»
 document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", () => {
   document.getElementById("chat").value = a.dataset.chat;
+  const note = document.getElementById("open-copied");
+  const msg = {{ t('q_copied_to')|tojson }}.replace("{chat}", a.dataset.name);
+  if (navigator.clipboard) navigator.clipboard.writeText(document.getElementById("prompt1").textContent)
+    .then(() => { note.textContent = msg; note.hidden = false; }).catch(() => {});
 }));
 
 </script>

@@ -487,8 +487,11 @@ def question(qid):
         for e in errors:
             flash(e, "error")
 
+    copied_to = None
     if request.method == "GET" and request.args.get("chat") in CHAT_NAMES:
         form = {"chat": request.args["chat"]}
+        if request.args.get("copied"):  # viene de «Probar otro chat»: la pregunta ya se copió
+            copied_to = CHAT_NAMES[request.args["chat"]]
     # orden de las dos posturas al azar por visitante (fijo durante su visita), para que
     # el orden no influya; «equilibrada» y «no estoy seguro» siempre al final
     if "flip" not in session:
@@ -498,7 +501,7 @@ def question(qid):
                     else ["isr_clear", "isr_lean", "neither", "pal_lean", "pal_clear"]) + ["skip"]
     return render_template("question.html", q=q, chats=CHATS, form=form,
                            lean_order=sides + ["balanced", "unsure"], stance_order=stance_order,
-                           field_options=field_options,
+                           field_options=field_options, copied_to=copied_to,
                            count=count_by_question().get(qid, 0))
 
 
@@ -509,7 +512,7 @@ def next_chat(qid):
     done = session.get("done", {}).get(qid, [])
     last = request.args.get("chat", "")
     others = [(k, n, l) for k, n, l in CHATS if l and k not in done and k != last]
-    return render_template("next.html", q=q, others=others,
+    return render_template("next.html", q=q, others=others, prompt=q["steps"][0]["prompt"],
                            done=[CHAT_NAMES[c] for c in done if c in CHAT_NAMES],
                            last=CHAT_NAMES.get(last, ""))
 
