@@ -198,7 +198,7 @@ def claims_pos(rs):
             isr = sum(1 for _, sd in found if sd == "israeli")
             pal = sum(1 for _, sd in found if sd == "palestinian")
             vals.append((pal - isr) / len(found))
-    return round(50 + 50 * sum(vals) / len(vals), 1) if vals else None
+    return (round(50 + 50 * sum(vals) / len(vals), 1) if vals else None), len(vals)
 
 
 _URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
@@ -544,7 +544,7 @@ def dashboard_data(rows, show, tested, admin=False):
         out = {"n": sc["n"], "pos": sc["pos"] if (show and sc["ok"]) else None,
                "missing": sc.get("missing", 0)}
         if admin:
-            out["apos"] = claims_pos(rs)
+            out["apos"], out["an"] = claims_pos(rs)
         return out
     by_chat = group_by_chat(rows)
     chats = []

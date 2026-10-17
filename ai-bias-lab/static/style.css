@@ -725,3 +725,7 @@ details.ask[open] { display: grid; gap: 12px; }
 .claims-box { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--edge); border-radius: 10px; font-size: 13px; }
 .claims-box h4 { font-size: 12px; margin: 8px 0 2px; color: var(--graphite); }
 .claims-box ul { margin: 0; padding-inline-start: 18px; }
+.needle-a .needle-ring { fill: #1F1D1B; stroke: #E9E3D8; stroke-width: 3; }
+.pod-n.with-sw::before { content: ""; display: inline-block; width: 14px; height: 3px; border-radius: 2px; background: var(--accent); margin-inline-end: 6px; vertical-align: middle; }
+.pod-na { margin-top: 2px; }
+.pod-na::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; border: 2px solid #E9E3D8; margin-inline-end: 6px; vertical-align: middle; }
