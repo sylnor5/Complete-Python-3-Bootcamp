@@ -106,7 +106,10 @@
   "arabnews.com",
   "presstv.ir",
   "thenationalnews.com",
-  "trtworld.com"
+  "trtworld.com",
+  "middleeasteye.net",
+  "middleeastmonitor.com",
+  "newarab.com"
  ],
  "un_courts": [
   "emro.who.int",
@@ -198,10 +201,7 @@
   "lavanguardia.com",
   "lefigaro.fr",
   "lemonde.fr",
-  "middleeasteye.net",
-  "middleeastmonitor.com",
   "nbcnews.com",
-  "newarab.com",
   "newsweek.com",
   "newyorker.com",
   "npr.org",
@@ -261,9 +261,9 @@
   "trtworld.com": "TRT, radiodifusora estatal turca.",
   "presstv.ir": "Estatal iraní -> international por regla (medio extranjero); posible tratamiento aparte.",
   "rt.com": "Estatal rusa -> international por regla.",
-  "middleeasteye.net": "Sede en Londres. Sede en Londres: occidental por país de edición (verificar si se prefiere otro grupo).",
-  "middleeastmonitor.com": "Sede en Londres (MEMO).",
-  "newarab.com": "The New Arab, Londres, propiedad catarí.",
+  "middleeasteye.net": "Editado en Londres; propiedad o financiación atribuida a Catar → grupo 3 (regla: país que posee o financia principalmente).",
+  "middleeastmonitor.com": "Editado en Londres; propiedad o financiación atribuida a Catar → grupo 3 (regla: país que posee o financia principalmente).",
+  "newarab.com": "Editado en Londres; propiedad o financiación atribuida a Catar → grupo 3 (regla: país que posee o financia principalmente).",
   "al-monitor.com": "Sede en Washington.",
   "972mag.com": "+972 Magazine: publicado en Israel por ONG israelí, redacción israelí-palestina -> israeli por editor.",
   "localcall.org": "Sicha Mekomit, versión hebrea de +972 (Israel).",
@@ -338,5 +338,6 @@
   "statista.com": "other: agregador de datos.",
   "zeteo.com": "other: medio digital EE.UU.",
   "dropsitenews.com": "other: medio digital EE.UU. Verificar."
- }
+ },
+ "rule": "Cada fuente va al grupo del país que la posee o la financia principalmente; si no se sabe, al país donde se edita. Las organizaciones internacionales (ONU, tribunales, ONG) van en sus grupos propios."
 }

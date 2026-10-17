@@ -57,6 +57,53 @@
   </section>
   {% endif %}
 
+  {% if in_data %}
+  <section class="in-data" id="in-data">
+    <h2>{{ t('data_title') }}</h2>
+    <p class="hint">{{ t('data_intro') }}</p>
+    <p class="data-caveat">{{ t('data_caveat') }}</p>
+    {% for d in in_data %}
+    <article class="data-card">
+      <h3>{{ d.name }}</h3>
+      <div class="data-block">
+        <p class="data-h">{{ t('src_title') }}{% if d.sources %} · {{ d.sources|length }}{% endif %}</p>
+        {% if d.sources %}
+        <ul class="src-groups">
+          {% for g in origin_groups %}
+          <li><span class="src-n">{{ d.groups[g]|length }}</span><span class="src-g">{{ tr(T.origin[g]) }}</span>
+            {% if d.groups[g] %}<span class="src-doms" dir="ltr">{{ d.groups[g]|join(', ') }}</span>{% endif %}</li>
+          {% endfor %}
+        </ul>
+        <p class="fine">{{ t('src_rule') }}</p>
+        {% else %}
+        <p class="hint">{{ t('src_none') }}</p>
+        {% endif %}
+      </div>
+      <div class="data-block">
+        <p class="data-h">{{ t('args_title') }}</p>
+        {% if d.marked %}
+        <ul class="args">
+          <li><span>{{ t('args_isr') }}</span><b>{{ t('args_of').format(n=d.args.israeli[0], m=d.args.israeli[1]) }}</b></li>
+          <li><span>{{ t('args_pal') }}</span><b>{{ t('args_of').format(n=d.args.palestinian[0], m=d.args.palestinian[1]) }}</b></li>
+          <li><span>{{ t('args_neutral') }}</span><b>{{ t('args_of').format(n=d.args.neutral[0], m=d.args.neutral[1]) }}</b></li>
+        </ul>
+        {% else %}
+        <p class="hint">{{ t('args_none') }}</p>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+    <a class="method-link" href="{{ url_for('sources', qid=q.id) }}">{{ t('srcpage_link') }} →</a>
+    <details class="ask">
+      <summary>{{ t('ask_title') }}</summary>
+      <p class="hint">{{ t('ask_hint') }}</p>
+      {% for p in t('ask_prompts') %}
+      <div class="ask-item"><p id="ask-{{ loop.index }}">{{ p }}</p><button type="button" class="btn small ghost ask-copy" data-target="ask-{{ loop.index }}">{{ t('copy_short') }}</button></div>
+      {% endfor %}
+    </details>
+  </section>
+  {% endif %}
+
   <section>
     {{ sh.share_strip(t('share_result'), share_text, share_url, show_text=True) }}
   </section>
@@ -147,10 +194,31 @@
   <p><a class="btn btn-ghost detail-link" href="{{ url_for('results', qid=q.id) }}">{{ t('detailed_results') }}</a></p>
 </div>
 <script>
-// «Prueba otro chat»: abre el chat en otra pestaña y, en esta, vuelve a la pregunta con ese chat elegido
-document.querySelectorAll(".try").forEach(function (a) {
-  a.addEventListener("click", function () { if (a.dataset.open) window.open(a.dataset.open, "_blank", "noopener"); });
-});
+// «Prueba otro chat»: copia la pregunta (el portapapeles aún tiene la respuesta anterior), abre el chat
+// en otra pestaña y, en esta, vuelve a la pregunta con ese chat elegido y el aviso «Pregunta copiada».
+(function () {
+  var PROMPT = {{ tr(q.steps[0].prompt)|tojson }};
+  document.querySelectorAll(".try").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      if (!a.dataset.open) return;
+      e.preventDefault();
+      var go = function (ok) { location.href = a.href + (ok ? "&copied=1" : ""); };
+      window.open(a.dataset.open, "_blank", "noopener");
+      if (navigator.clipboard) navigator.clipboard.writeText(PROMPT).then(function () { go(true); }, function () { go(false); });
+      else go(false);
+    });
+  });
+  // «Pídesela así»: copiar cada frase
+  document.querySelectorAll(".ask-copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var txt = document.getElementById(b.dataset.target).textContent, label = b.textContent;
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(txt).then(function () {
+        b.textContent = {{ t('copied')|tojson }}; setTimeout(function () { b.textContent = label; }, 1800);
+      });
+    });
+  });
+})();
 </script>
 {{ sh.share_script() }}
 {% endblock %}

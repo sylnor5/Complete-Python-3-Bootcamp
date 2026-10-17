@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ t('srcpage_title') }} · ChatRadar{% endblock %}
+{# Fuentes por origen: solo números, mismas barras y mismo color para todos los grupos. #}
+{% macro groups_list(data, show_domains) %}
+{% set biggest = [data.groups.values()|map(attribute='total')|max, 1]|max %}
+<ul class="src-agg">
+  {% for g in origin_groups %}{% set grp = data.groups[g] %}
+  <li>
+    <div class="agg-row"><span class="src-g">{{ tr(T.origin[g]) }}</span><b>{{ t('srcpage_mentions').format(n=grp.total) }}</b></div>
+    <div class="agg-bar"><span style="width: {{ (100 * grp.total / biggest)|round(1) }}%"></span></div>
+    {% if show_domains and grp.top %}
+    <p class="src-doms" dir="ltr">{% for d, n in grp.top %}{{ d }} ({{ n }}){% if not loop.last %}, {% endif %}{% endfor %}</p>
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
+{% endmacro %}
+{% block content %}
+<section class="srcpage">
+  <p class="topic-chip"><i aria-hidden="true"></i>{{ t('topic_chip') }}</p>
+  <h1>{{ t('srcpage_title') }}</h1>
+  <p class="hint">{{ t('srcpage_intro') }}</p>
+  <p class="data-caveat">{{ t('data_caveat') }} {{ t('srcpage_base').format(with_src=overall.with_src, total=overall.n) }}</p>
+
+  <h2>{{ t('srcpage_all') }}</h2>
+  {{ groups_list(overall, true) }}
+  <p class="fine">{{ t('src_rule') }}</p>
+
+  {% if chats %}
+  <h2>{{ t('srcpage_by_chat') }}</h2>
+  <div class="src-chats">
+    {% for c in chats %}
+    <article class="data-card">
+      <h3>{{ c.name }}</h3>
+      <p class="fine">{{ t('srcpage_chat_base').format(n=c.n, with_src=c.with_src) }}</p>
+      {{ groups_list(c, false) }}
+    </article>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <p class="fine">{{ t('srcpage_propose') }}</p>
+</section>
+{% endblock %}

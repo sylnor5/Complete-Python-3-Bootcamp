@@ -125,6 +125,23 @@ def inject_helpers():
 _URL_RE = re.compile(r"https?://[^\s)\]>\"'<]+", re.I)
 
 
+ORIGIN_GROUPS = ["israeli", "palestinian", "muslim_countries", "un_courts", "intl_ngos", "western", "other"]
+with open(BASE_DIR / "source_origins.json", encoding="utf-8") as fh:
+    _origins = json.load(fh)
+ORIGIN_OF = {dom: grp for grp in ORIGIN_GROUPS if grp != "other" for dom in _origins.get(grp, [])}
+
+
+def source_origin(domain):
+    """Grupo de origen de una fuente (por el país que la posee o financia, o por organización
+    internacional). Se busca el dominio y, si no está, sus dominios padres. Sin clasificar: «other»."""
+    parts = domain.split(".")
+    for i in range(len(parts) - 1):
+        grp = ORIGIN_OF.get(".".join(parts[i:]))
+        if grp:
+            return grp
+    return "other"
+
+
 def source_domains(text):
     """Dominios de las fuentes que el chat incluyó en su respuesta, sin repetir y en orden.
     ChatGPT copia cada fuente como icono de Google (…/s2/favicons?domain=https://www.reuters.com…):
@@ -494,7 +511,7 @@ def question(qid):
             answers_hash = hashlib.sha256(
                 "\n".join(normalize(a) for a in answers).encode()).hexdigest()
             flags = quality_flags(q, answers, answers_hash, share_url, db)
-            db.execute(
+            cur = db.execute(
                 """INSERT INTO submissions (question_id, lang, country, chat, model,
                    answers, fields, lean, ip_hash, created_at,
                    share_url, flags, answers_hash, checked, stance, order_flip, qversion, sources)
@@ -513,6 +530,9 @@ def question(qid):
             mine = session.get("mine", {})
             mine.setdefault(qid, {})[chat] = lean  # para «Tus chats»: lo que dijo esta persona
             session["mine"] = mine
+            subs = session.get("subs", {})  # para «Tu respuesta, en datos»: qué envío es de esta persona
+            subs.setdefault(qid, {})[chat] = cur.lastrowid
+            session["subs"] = subs
             session["just_sent"] = qid
             return redirect(url_for("next_chat", qid=qid, chat=chat))
 
@@ -571,11 +591,57 @@ def mine(qid):
               for k, n, _ in CHATS]
     names = [CHAT_NAMES[c] for c in done if c in CHAT_NAMES]
     share_text = T["mine_share_msg"][lang].format(chats=" & ".join(names))
+    in_data = answer_data(q, session.get("subs", {}).get(qid, {}))
     return render_template("mine.html", q=q, cards=cards, untested=untested, compare=compare,
                            points=points, overall=overall_score(scores), min_metro=MIN_METRO,
                            share_text=share_text, share_url=public_home_url(),
-                           just_sent=session.pop("just_sent", None) == qid,
-                           subscribed=request.args.get("sub") == "1")
+                           just_sent=session.pop("just_sent", None) == qid, in_data=in_data,
+                           origin_groups=ORIGIN_GROUPS, subscribed=request.args.get("sub") == "1")
+
+
+def answer_data(q, subs):
+    """«Tu respuesta, en datos»: solo cosas contables de cada respuesta de esta persona.
+    Fuentes por origen (las que llegaron al texto pegado) y argumentos de cada lado según sus casillas."""
+    sides = {s: [f["id"] for f in all_fields(q) if f.get("side") == s] for s in ("israeli", "palestinian", "neutral")}
+    out = []
+    for chat, sid in subs.items():
+        r = get_db().execute("SELECT * FROM submissions WHERE id = ?", (sid,)).fetchone()
+        if not r or chat not in CHAT_NAMES:
+            continue
+        doms = [d for d in (r["sources"] or "").split(",") if d]
+        groups = {g: [d for d in doms if source_origin(d) == g] for g in ORIGIN_GROUPS}
+        vals = json.loads(r["fields"] or "{}")
+        args = {s: (sum(vals.get(f) == "yes" for f in ids), len(ids)) for s, ids in sides.items()}
+        out.append(dict(chat=chat, name=CHAT_NAMES[chat], sources=doms, groups=groups, args=args,
+                        marked=any(vals.get(f) in ("yes", "no") for ids in sides.values() for f in ids)))
+    return out
+
+
+@app.route("/<lang>/q/<qid>/sources")
+def sources(qid):
+    """Fuentes citadas en todas las respuestas válidas, agrupadas por origen, en total y chat por chat.
+    Solo para quienes participaron (como los resultados)."""
+    q = QUESTIONS_BY_ID.get(qid) or abort(404)
+    is_admin = bool(ADMIN_TOKEN) and request.args.get("token") == ADMIN_TOKEN
+    if not is_admin and not session.get("done", {}).get(qid):
+        flash(T["results_locked"][g.lang])
+        return redirect(url_for("question", qid=qid))
+    rows = valid_rows(qid)
+
+    def tally(rs):
+        per_group = {grp: Counter() for grp in ORIGIN_GROUPS}
+        with_src = 0
+        for r in rs:
+            doms = [d for d in (r["sources"] or "").split(",") if d]
+            with_src += bool(doms)
+            for d in doms:
+                per_group[source_origin(d)][d] += 1
+        return dict(n=len(rs), with_src=with_src,
+                    groups={grp: dict(total=sum(c.values()), top=c.most_common(12)) for grp, c in per_group.items()})
+
+    by_chat = group_by_chat(rows)
+    chats = [dict(key=k, name=n, **tally(by_chat.get(k, []))) for k, n, _ in CHATS if by_chat.get(k)]
+    return render_template("sources.html", q=q, overall=tally(rows), chats=chats, origin_groups=ORIGIN_GROUPS)
 
 
 @app.route("/<lang>/share/<net>", methods=["POST"])

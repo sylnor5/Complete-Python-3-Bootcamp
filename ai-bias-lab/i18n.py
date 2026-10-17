@@ -885,7 +885,7 @@ _add("pick_chat", "Elige el chat", "Pick the chat", "Choisissez le chat", "בח�
 _add("compare_by", "Compara {chat} por", "Compare {chat} by", "Comparer {chat} par", "השוו את {chat} לפי")
 _add("tab_lang", "Idioma", "Language", "Langue", "שפה")
 _add("tab_country", "País", "Country", "Pays", "מדינה")
-_add("n_answers", "{n} respuestas", "{n} answers", "{n} réponses", "{n} תשובות")
+_add("n_answers_fmt", "{n} respuestas", "{n} answers", "{n} réponses", "{n} תשובות")
 _add("n_missing", "Faltan {missing}", "{missing} more needed", "Encore {missing}", "חסרות עוד {missing}")
 _add("no_countries", "Aún no hay respuestas por país.", "No answers by country yet.", "Pas encore de réponses par pays.", "עדיין אין תשובות לפי מדינה.")
 _add("dash_locked",
@@ -947,3 +947,84 @@ _add("inapp_android",
      "Vous êtes dans {app}. Pour utiliser l'app de votre chat, ouvrez cette page dans Chrome : touchez ⋮ en haut et choisissez « Ouvrir dans Chrome ». Ce que vous écrivez ici est enregistré.",
      "אתם בתוך {app}. כדי להשתמש באפליקציית הצ'אט, פתחו את העמוד ב-Chrome: לחצו על ⋮ למעלה ובחרו „פתיחה ב-Chrome”. מה שתכתבו כאן נשמר.")
 _add("dismiss", "Entendido", "Got it", "Compris", "הבנתי")
+# «Tu respuesta, en datos» (al final, en «Tus chats»)
+_add("data_title", "Tu respuesta, en datos", "Your answer, in data", "Votre réponse, en données", "התשובה שלכם, בנתונים")
+_add("data_intro", "Qué fuentes usó cada chat que probaste y qué argumentos de cada parte mencionó. Tú decides qué significa.",
+     "Which sources each chat you tested used, and which arguments from each side it mentioned. You decide what it means.",
+     "Les sources utilisées par chaque chat testé et les arguments de chaque partie mentionnés. À vous d'en juger.",
+     "באילו מקורות השתמש כל צ'אט שבדקתם, ואילו טיעונים של כל צד הוא הזכיר. אתם מחליטים מה זה אומר.")
+_add("data_caveat", "Una respuesta no prueba nada; miles juntas, sí. Solo contamos las fuentes que llegaron al texto pegado.",
+     "One answer proves nothing; thousands together can. We only count the sources that came through in the pasted text.",
+     "Une réponse ne prouve rien ; des milliers ensemble, si. Nous ne comptons que les sources présentes dans le texte collé.",
+     "תשובה אחת לא מוכיחה כלום; אלפים יחד כן. אנחנו סופרים רק את המקורות שהגיעו בטקסט שהודבק.")
+_add("src_title", "Fuentes que citó", "Sources it cited", "Sources citées", "מקורות שציטט")
+_add("src_none", "No llegaron fuentes al texto pegado. Muchos chats solo las muestran si se las pides.",
+     "No sources came through in the pasted text. Many chats only show them if you ask.",
+     "Aucune source dans le texte collé. Beaucoup de chats ne les montrent que si on les demande.",
+     "לא הגיעו מקורות בטקסט שהודבק. צ'אטים רבים מציגים אותם רק אם מבקשים.")
+_add("src_rule", "Cada fuente va en el grupo del país que la posee o la financia; la ONU, los tribunales y las ONG, en sus propios grupos.",
+     "Each source goes in the group of the country that owns or funds it; the UN, courts and NGOs have their own groups.",
+     "Chaque source va dans le groupe du pays qui la possède ou la finance ; l'ONU, les tribunaux et les ONG ont leurs propres groupes.",
+     "כל מקור משויך לקבוצה של המדינה שבבעלותה או במימונה; לאו״ם, לבתי הדין ולארגונים יש קבוצות משלהם.")
+T["origin"] = {
+    "israeli": {"es": "Israelíes", "en": "Israeli", "fr": "Israéliennes", "he": "ישראליים"},
+    "palestinian": {"es": "Palestinas", "en": "Palestinian", "fr": "Palestiniennes", "he": "פלסטיניים"},
+    "muslim_countries": {"es": "De países musulmanes", "en": "From Muslim countries", "fr": "De pays musulmans", "he": "ממדינות מוסלמיות"},
+    "un_courts": {"es": "ONU y tribunales internacionales", "en": "UN and international courts", "fr": "ONU et tribunaux internationaux", "he": "האו״ם ובתי דין בינלאומיים"},
+    "intl_ngos": {"es": "ONG internacionales", "en": "International NGOs", "fr": "ONG internationales", "he": "ארגונים בינלאומיים"},
+    "western": {"es": "Occidentales", "en": "Western", "fr": "Occidentales", "he": "מערביים"},
+    "other": {"es": "Otras", "en": "Other", "fr": "Autres", "he": "אחרים"},
+}
+_add("args_title", "Argumentos que mencionó, según marcaste", "Arguments it mentioned, as you marked them",
+     "Arguments mentionnés, selon vos réponses", "טיעונים שהוזכרו, לפי מה שסימנתם")
+_add("args_isr", "Del lado israelí", "Israeli side", "Côté israélien", "מהצד הישראלי")
+_add("args_pal", "Del lado palestino", "Palestinian side", "Côté palestinien", "מהצד הפלסטיני")
+_add("args_neutral", "Neutral", "Neutral", "Neutre", "ניטרלי")
+_add("args_of", "{n} de {m}", "{n} of {m}", "{n} sur {m}", "{n} מתוך {m}")
+_add("args_none", "No marcaste argumentos (eran opcionales).", "You didn't mark arguments (they were optional).",
+     "Vous n'avez pas coché d'arguments (c'était facultatif).", "לא סימנתם טיעונים (זה היה רשות).")
+_add("ask_title", "¿Quieres una respuesta más completa? Pídesela así", "Want a fuller answer? Ask it like this",
+     "Vous voulez une réponse plus complète ? Demandez-la ainsi", "רוצים תשובה מלאה יותר? בקשו אותה כך")
+_add("ask_hint", "Copia una y pégala en el mismo chat. Sirven igual sea cual sea el resultado.",
+     "Copy one and paste it into the same chat. They work whatever the result.",
+     "Copiez-en une et collez-la dans le même chat. Elles valent quel que soit le résultat.",
+     "העתיקו אחת והדביקו באותו צ'אט. הן מתאימות בלי קשר לתוצאה.")
+_add("copy_short", "Copiar", "Copy", "Copier", "העתקה")
+T["ask_prompts"] = {
+    "es": ["Para la misma pregunta, expón por separado la postura de cada parte implicada, en orden alfabético. Para cada afirmación indica la fuente, preferiblemente fuentes oficiales de esa parte y además fuentes independientes. Si una afirmación no tiene fuente, márcala como «sin fuente».",
+           "Separa tu respuesta en tres listas: hechos en los que coinciden fuentes de ambas partes, hechos que una parte discute (indica cuál y con qué fuente) y afirmaciones tuyas sin fuente.",
+           "Revisa tu respuesta anterior. ¿Qué afirmaciones se apoyan en fuentes de una sola parte? Para cada una, añade si existe una fuente de la otra parte o una independiente que la confirme o la discuta. No cambies tus conclusiones solo porque te lo pida; cámbialas únicamente si las fuentes lo justifican.",
+           "¿Qué datos de tu respuesta son verificables de forma independiente y cuáles dependen de la fuente de una de las partes? Indica la fuente en cada caso."],
+    "en": ["For the same question, set out each party's position separately, in alphabetical order. For each claim, give the source, preferably official sources of that party plus independent sources. If a claim has no source, mark it as \"no source\".",
+           "Split your answer into three lists: facts on which sources from both parties agree, facts one party disputes (say which one and with what source), and claims of yours with no source.",
+           "Review your previous answer. Which claims rely on sources from only one party? For each, add whether there is a source from the other party or an independent one that confirms or disputes it. Don't change your conclusions just because I ask; change them only if the sources justify it.",
+           "Which facts in your answer can be independently verified, and which depend on one party's source? Give the source in each case."],
+    "fr": ["Pour la même question, exposez séparément la position de chaque partie, par ordre alphabétique. Pour chaque affirmation, indiquez la source, de préférence des sources officielles de cette partie ainsi que des sources indépendantes. Si une affirmation n'a pas de source, marquez-la « sans source ».",
+           "Séparez votre réponse en trois listes : les faits sur lesquels les sources des deux parties concordent, les faits qu'une partie conteste (précisez laquelle et avec quelle source) et vos affirmations sans source.",
+           "Relisez votre réponse précédente. Quelles affirmations reposent sur des sources d'une seule partie ? Pour chacune, indiquez s'il existe une source de l'autre partie ou une source indépendante qui la confirme ou la conteste. Ne changez pas vos conclusions simplement parce que je le demande ; changez-les uniquement si les sources le justifient.",
+           "Quelles données de votre réponse sont vérifiables de façon indépendante, et lesquelles dépendent de la source d'une des parties ? Indiquez la source dans chaque cas."],
+    "he": ["לגבי אותה שאלה, הציגו בנפרד את עמדת כל צד, לפי סדר האלף־בית. לכל טענה ציינו את המקור, עדיף מקורות רשמיים של אותו צד וגם מקורות בלתי תלויים. אם לטענה אין מקור, סמנו אותה „ללא מקור”.",
+           "חלקו את התשובה לשלוש רשימות: עובדות שמקורות משני הצדדים מסכימים עליהן, עובדות שצד אחד חולק עליהן (ציינו איזה צד ובאיזה מקור), וטענות שלכם ללא מקור.",
+           "עברו על התשובה הקודמת. אילו טענות נשענות על מקורות של צד אחד בלבד? לכל אחת, ציינו אם יש מקור של הצד השני או מקור בלתי תלוי שמאשר או חולק עליה. אל תשנו את המסקנות רק כי ביקשתי; שנו אותן רק אם המקורות מצדיקים זאת.",
+           "אילו נתונים בתשובה ניתנים לאימות באופן בלתי תלוי, ואילו תלויים במקור של אחד הצדדים? ציינו את המקור בכל מקרה."],
+}
+# página «Fuentes» (solo para quienes participaron)
+_add("srcpage_title", "Qué fuentes citan los chats", "Which sources the chats cite", "Quelles sources citent les chats", "באילו מקורות הצ'אטים מצטטים")
+_add("srcpage_intro",
+     "Todas las fuentes que aparecieron en las respuestas pegadas, agrupadas por origen. Contamos, no juzgamos: tú decides qué significa.",
+     "Every source that appeared in the pasted answers, grouped by origin. We count, we don't judge: you decide what it means.",
+     "Toutes les sources apparues dans les réponses collées, regroupées par origine. Nous comptons, nous ne jugeons pas : à vous d'en juger.",
+     "כל המקורות שהופיעו בתשובות שהודבקו, מקובצים לפי מקור. אנחנו סופרים, לא שופטים: אתם מחליטים מה זה אומר.")
+_add("srcpage_base", "{with_src} de {total} respuestas traían fuentes visibles.", "{with_src} of {total} answers came with visible sources.",
+     "{with_src} réponses sur {total} contenaient des sources visibles.", "{with_src} מתוך {total} תשובות הגיעו עם מקורות גלויים.")
+_add("srcpage_all", "Todos los chats", "All chats", "Tous les chats", "כל הצ'אטים")
+_add("srcpage_mentions", "{n} menciones", "{n} mentions", "{n} mentions", "{n} אזכורים")
+_add("srcpage_by_chat", "Chat por chat", "Chat by chat", "Chat par chat", "צ'אט אחר צ'אט")
+_add("srcpage_chat_base", "{n} respuestas · {with_src} con fuentes", "{n} answers · {with_src} with sources",
+     "{n} réponses · {with_src} avec sources", "{n} תשובות · {with_src} עם מקורות")
+_add("srcpage_link", "Ver qué fuentes citan todos los chats", "See which sources all the chats cite",
+     "Voir quelles sources citent tous les chats", "לראות באילו מקורות מצטטים כל הצ'אטים")
+_add("srcpage_propose", "¿Crees que una fuente está en el grupo equivocado? Escríbenos a hello@thechatradar.com.",
+     "Think a source is in the wrong group? Write to hello@thechatradar.com.",
+     "Une source vous semble mal classée ? Écrivez à hello@thechatradar.com.",
+     "חושבים שמקור משויך לקבוצה הלא נכונה? כתבו לנו: hello@thechatradar.com.")
