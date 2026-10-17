@@ -57,7 +57,7 @@ CHAT_NAMES = {key: name for key, name, _ in CHATS}
 # Dominios desde los que los chats publican conversaciones compartidas.
 SHARE_HOSTS = {
     "chatgpt.com", "chat.openai.com", "claude.ai", "g.co", "gemini.google.com", "share.gemini.google",
-    "copilot.microsoft.com", "grok.com", "x.com", "www.meta.ai", "meta.ai",
+    "copilot.microsoft.com", "copilot.cloud.microsoft", "m365.cloud.microsoft", "grok.com", "x.com", "www.meta.ai", "meta.ai",
     "chat.deepseek.com", "chat.mistral.ai", "www.perplexity.ai", "perplexity.ai",
 }
 MIN_ANSWER = 150  # una respuesta real a estas preguntas es mucho más larga
