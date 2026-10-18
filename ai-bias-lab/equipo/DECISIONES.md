@@ -32,6 +32,10 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
 - El texto de la respuesta es obligatorio; el enlace para compartir es opcional
   (no se puede verificar). Si el enlace no se reconoce, la respuesta se guarda igual.
 - Al abrir otro chat, la web copia la pregunta antes de abrir la pestaña.
+- Sin límite de una respuesta por chat: la fundadora quiere poder mandar el mismo chat en varios
+  idiomas. Límite solo por conexión: 10 por hora. Se rechaza el mismo texto exacto dos veces.
+- Sospechosas (no cuentan): menos de 150 caracteres, fuera de tema (sin palabras clave), duplicadas.
+- Si el chat se niega a contestar, no se descarta: se cuenta aparte («se negó a responder»), sin mover agujas.
 - «Tu respuesta, en datos» va al final, después de «Prueba otro chat».
 - Franja «¿Conoces a alguien que probaría su chat?» en todas las páginas.
 
