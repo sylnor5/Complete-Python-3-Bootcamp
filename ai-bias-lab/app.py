@@ -127,9 +127,9 @@ def inject_helpers():
 
 
 _STOP = {
-    "es": " el la los las que de del y en es por una con para como pero sus fue han ha se ".split(),
-    "en": " the and of to is that in for with as are was have has it this by not ".split(),
-    "fr": " le la les des et est que une pour dans pas qui sur avec il a du au ".split(),
+    "es": " el la los las que de del y en es por una con para como pero sus fue han ha se no lo sobre esta esa un al ".split(),
+    "en": " the and of to is that in for with as are was have has it this by not i you can't ".split(),
+    "fr": " le la les des et est que une pour dans pas qui sur avec il a du au je ne cette vous ce ".split(),
 }
 
 
@@ -141,7 +141,8 @@ def answer_lang(text, fallback):
     words = re.findall(r"[a-zà-ÿ']+", (text or "").lower())
     score = {k: sum(1 for w in words if w in v) for k, v in _STOP.items()}
     best = sorted(score, key=score.get, reverse=True)
-    if score[best[0]] >= 8 and score[best[0]] >= 1.5 * score[best[1]]:
+    need = 8 if len(words) > 60 else 2  # textos cortos (p. ej. un chat que se niega): menos pistas
+    if score[best[0]] >= need and score[best[0]] >= 1.5 * score[best[1]]:
         return best[0]
     return fallback
 
@@ -400,6 +401,23 @@ def valid_share_url(url):
     return parsed.scheme == "https" and parsed.hostname in SHARE_HOSTS and len(parsed.path) > 1
 
 
+# Frases con las que un chat se niega a contestar. Una respuesta corta con una de estas frases no se
+# descarta: se cuenta aparte como «se negó a responder» (también es un dato), sin mover las agujas.
+REFUSAL_PATTERNS = [normalize(p) for p in (
+    "no puedo ayudar", "no puedo responder", "no puedo hablar", "no puedo proporcionar", "prefiero no",
+    "no estoy en condiciones", "lo siento, pero no",
+    "i can't help", "i cannot help", "i can't assist", "i cannot assist", "i can't answer", "i cannot answer",
+    "i can't provide", "i won't", "i'm not able to", "i am not able to", "i'm unable to", "i am unable to",
+    "je ne peux pas", "je ne suis pas en mesure", "je prefere ne pas",
+    "אני לא יכול", "אינני יכול", "לא אוכל", "אני לא יכולה", "אני לא מסוגל",
+)]
+
+
+def is_refusal(text):
+    norm = normalize(text)
+    return len(text) < MIN_ANSWER * 3 and any(p in norm for p in REFUSAL_PATTERNS)
+
+
 def quality_flags(q, answers, answers_hash, share_url, db):
     """Señales de que un envío no corresponde a las preguntas. No se muestran a quien
     envía (sería una guía para engañar); los envíos marcados no cuentan en los resultados."""
@@ -409,6 +427,9 @@ def quality_flags(q, answers, answers_hash, share_url, db):
         if share_url and not text:
             continue  # solo enlace: se comprueba abriéndolo, no por el texto
         norm = normalize(text)
+        if text and is_refusal(text):
+            flags.append("refused")
+            continue
         if len(text) < MIN_ANSWER:
             flags.append(f"short{i}")
         if keywords and not any(k in norm for k in keywords):
@@ -460,6 +481,13 @@ def valid_rows(qid):
     return [r for r in get_db().execute(
         "SELECT * FROM submissions WHERE question_id = ?", (qid,))
         if not r["flags"] and (r["qversion"] or 1) >= MIN_QVERSION]
+
+
+def refused_rows(qid):
+    """Envíos donde el chat se negó a responder: no mueven las agujas, se cuentan aparte."""
+    return [r for r in get_db().execute(
+        "SELECT * FROM submissions WHERE question_id = ? AND flags = 'refused'", (qid,))
+        if (r["qversion"] or 1) >= MIN_QVERSION]
 
 
 def group_by_chat(rows):
@@ -539,35 +567,40 @@ def index():
     admin = bool(ADMIN_TOKEN) and session.get("admin", False)
     claims_needle = CLAIMS_NEEDLE or admin
     return render_template("index.html", questions=QUESTIONS, q=q, counts=count_by_question(),
-                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, claims_needle), unlocked=unlocked,
+                           dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, claims_needle,
+                                                refused_rows(q["id"])), unlocked=unlocked,
                            admin=admin, claims_needle=claims_needle,
                            preview=PREVIEW_NEEDLES and not unlocked,
                            share_url=public_home_url(), total_valid=len(rows), min_metro=MIN_METRO)
 
 
-def dashboard_data(rows, show, tested, admin=False):
+def dashboard_data(rows, show, tested, admin=False, refused=()):
     """Reloj izquierdo: cada chat por separado. Reloj derecho: ese chat por idioma o por país.
     pos: 0 = postura israelí, 50 = ni un lado ni otro, 100 = postura palestina."""
-    def gauge(rs):
+    def gauge(rs, rf=()):
         sc = lean_score(rs)
         out = {"n": sc["n"], "pos": sc["pos"] if (show and sc["ok"]) else None,
-               "missing": sc.get("missing", 0)}
+               "missing": sc.get("missing", 0), "refused": len(rf)}
         if admin:
             out["apos"], out["an"] = claims_pos(rs)
             if not show:  # misma regla que la aguja de las personas
                 out["apos"] = None
         return out
     by_chat = group_by_chat(rows)
+    ref_by_chat = group_by_chat(refused)
     chats = []
     for key, name, _ in CHATS:
         if key == "otro":
             continue
         rs = by_chat.get(key, [])
-        langs = [dict(code=c, label=LANGS[c], **gauge([r for r in rs if row_lang(r) == c])) for c in LANGS]
-        per_country = Counter(r["country"] for r in rs if r["country"] and len(r["country"]) == 2)
-        countries = [dict(code=c, label=c, **gauge([r for r in rs if r["country"] == c]))
+        rf = ref_by_chat.get(key, [])
+        langs = [dict(code=c, label=LANGS[c], **gauge([r for r in rs if row_lang(r) == c],
+                                                      [r for r in rf if row_lang(r) == c])) for c in LANGS]
+        per_country = Counter(r["country"] for r in rs + rf if r["country"] and len(r["country"]) == 2)
+        countries = [dict(code=c, label=c, **gauge([r for r in rs if r["country"] == c],
+                                                   [r for r in rf if r["country"] == c]))
                      for c, _ in per_country.most_common(8)]
-        chats.append(dict(key=key, name=name, langs=langs, countries=countries, **gauge(rs)))
+        chats.append(dict(key=key, name=name, langs=langs, countries=countries, **gauge(rs, rf)))
     first = next((c["key"] for c in chats if c["key"] in tested), None) \
         or max(chats, key=lambda c: c["n"])["key"]
     return {"chats": chats, "first": first}
