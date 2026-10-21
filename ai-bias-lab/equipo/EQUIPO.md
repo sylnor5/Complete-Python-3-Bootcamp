@@ -11,6 +11,7 @@ el resultado y la fundadora aprueba.
 | Psicólogo | agente `chatradar-psicologo` | Cómo lo vive cada lado; anclaje y sensibilidad | Editar archivos |
 | Verificador | agente `chatradar-verificador` | Comprueba hechos; revisa listas desde los dos lados | Editar archivos |
 | QA | agente `chatradar-qa` | Prueba la web en navegador (móvil, 4 idiomas) con capturas | Editar el código |
+| Redes | agente `chatradar-redes` (sesión aparte desde el lanzamiento) | Calendario, publicaciones y respuestas propuestas en 4 idiomas | Publicar o responder solo |
 | Diseño | skills `impeccable` y `emil-design-eng` | Claridad visual, maquetas | — |
 
 Las definiciones de los agentes están en `.claude/agents/` (raíz del repositorio).

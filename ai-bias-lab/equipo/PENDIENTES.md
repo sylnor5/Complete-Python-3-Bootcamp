@@ -6,7 +6,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 ## Ahora
 | Tarea | Quién | Estado |
 |---|---|---|
-| Mandar el mensaje de WhatsApp a los testers | fundadora | listo para enviar |
+| Mandar el mensaje de WhatsApp a los testers (con el enlace https://thechatradar.com) | fundadora | después de conectar el dominio |
 | Revisar la planilla de línea editorial (borradores/fuentes-postura-revision.csv) | fundadora | pendiente |
 | Conectar la línea editorial a la web (datos y página de fuentes) | coordinador | después de la revisión |
 | Aprobar la lista de 15 reglas de ChatRadar (ver abajo) y escribir las pruebas automáticas (REGLAS.md + /goal con tope) | fundadora, luego coordinador | lista propuesta |
@@ -18,7 +18,8 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 | Revisión de la lista de afirmaciones desde el lado palestino | verificador + revisor humano | pendiente |
 | Revisar los disparadores en hebreo de la lista y los textos nuevos | hablante nativo | pendiente |
 | Revisar source_origins.json desde los dos lados | verificador | pendiente |
-| Pasar al plan de pago y conectar thechatradar.com | fundadora + coordinador | cuando ella decida |
+| Pasar al plan de pago (Developer, 10 USD/mes) y conectar thechatradar.com; guardar antes una copia del archivo WSGI | fundadora + coordinador | antes de los testers |
+| Al salir en vivo: abrir la sesión «ChatRadar Redes» con el agente chatradar-redes (Instagram primero; propone y la fundadora aprueba; sin respuestas automáticas) | fundadora + coordinador | el día del lanzamiento |
 | Página de diagnóstico para probar en teléfonos reales | coordinador + QA | planificado |
 | Instrucciones para copiar fuentes en otros chats (además de Gemini) | coordinador | tras feedback de testers |
 
