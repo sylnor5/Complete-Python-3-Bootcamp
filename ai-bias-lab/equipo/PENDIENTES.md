@@ -6,8 +6,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 ## Ahora
 | Tarea | Quién | Estado |
 |---|---|---|
-| Dominio: plan Developer pagado (7-11), web renombrada a www.thechatradar.com, CNAME www y reenvío 301 en GoDaddy hechos. Falta: comprobar que abre, certificado Let's Encrypt, Force HTTPS y revisar PUBLIC_URL en el WSGI | fundadora + coordinador | en curso (esperando DNS) |
-| Mandar el mensaje de WhatsApp a los testers (con el enlace https://thechatradar.com) | fundadora | después de conectar el dominio |
+| Mandar el mensaje de WhatsApp a los testers (con el enlace https://thechatradar.com) | fundadora | listo para enviar (dominio en vivo desde el 7-11) |
 | Revisar la planilla de línea editorial (borradores/fuentes-postura-revision.csv) | fundadora | pendiente |
 | Conectar la línea editorial a la web (datos y página de fuentes) | coordinador | después de la revisión |
 | Aprobar la lista de 15 reglas de ChatRadar (ver abajo) y escribir las pruebas automáticas (REGLAS.md + /goal con tope) | fundadora, luego coordinador | lista propuesta |
@@ -22,6 +21,9 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 | Al salir en vivo: abrir la sesión «ChatRadar Redes» con el agente chatradar-redes (Instagram primero; propone y la fundadora aprueba; sin respuestas automáticas) | fundadora + coordinador | el día del lanzamiento |
 | Página de diagnóstico para probar en teléfonos reales | coordinador + QA | planificado |
 | Instrucciones para copiar fuentes en otros chats (además de Gemini) | coordinador | tras feedback de testers |
+
+## Hecho
+- 7-11-2026: thechatradar.com en vivo (plan Developer, CNAME, reenvío 301, Let's Encrypt, Force HTTPS). Los datos se conservaron.
 
 ## Fechas
 - 27-11-2026, 14:00 (Israel): preguntar si se dejan de contar las respuestas a la versión 1 de la pregunta.
