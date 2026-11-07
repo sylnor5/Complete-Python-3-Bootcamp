@@ -19,6 +19,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 | Revisión de la lista de afirmaciones desde el lado palestino | verificador + revisor humano | pendiente |
 | Revisar los disparadores en hebreo de la lista y los textos nuevos | hablante nativo | pendiente |
 | Revisar source_origins.json desde los dos lados | verificador | pendiente |
+| Estrategia de redes: borrador en borradores/redes/estrategia-borrador.md (sin aprobar; falta psicólogo y hebreo nativo) | fundadora + sesión de redes | borrador |
 | Al salir en vivo: abrir la sesión «ChatRadar Redes» con el agente chatradar-redes (Instagram primero; propone y la fundadora aprueba; sin respuestas automáticas) | fundadora + coordinador | el día del lanzamiento |
 | Página de diagnóstico para probar en teléfonos reales | coordinador + QA | planificado |
 | Instrucciones para copiar fuentes en otros chats (además de Gemini) | coordinador | tras feedback de testers |
