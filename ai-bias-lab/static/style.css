@@ -729,3 +729,10 @@ details.ask[open] { display: grid; gap: 12px; }
 .claims-box { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--edge); border-radius: 10px; font-size: 13px; }
 .claims-box h4 { font-size: 12px; margin: 8px 0 2px; color: var(--graphite); }
 .claims-box ul { margin: 0; padding-inline-start: 18px; }
+
+/* estadísticas: recorrido de la prueba */
+.funnel { width: 100%; }
+.funnel .bar-cell { width: 45%; }
+.fbar { display: block; height: 14px; min-width: 2px; background: var(--accent); border-radius: 3px; }
+.funnel .drop { color: var(--pencil); font-size: 13px; white-space: nowrap; }
+.period a { color: inherit; }

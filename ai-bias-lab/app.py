@@ -469,6 +469,20 @@ def bump(kind, name):
     db.commit()
 
 
+# Recorrido de la prueba (solo para la página de estadísticas): cuántos navegadores llegan a cada paso.
+# Anónimo: solo números por día. Cada navegador cuenta una vez por paso (se recuerda en su sesión).
+FUNNEL = ["home", "question", "copy", "open_chat", "try_send", "sent"]
+
+
+def funnel_step(name):
+    if name not in FUNNEL or session.get("admin"):
+        return
+    seen = session.get("steps", [])
+    if name not in seen:
+        session["steps"] = seen + [name]
+        bump("funnel", name)
+
+
 # Desde qué versión de la pregunta cuentan las respuestas. Decisión del proyecto: la v2 cambió muy poco,
 # así que las pocas respuestas de prueba con la v1 también cuentan. Para dejarlas fuera: MIN_QVERSION=2
 # (no se borran, solo dejan de contar).
@@ -565,6 +579,7 @@ def index():
     elif request.args.get("token") == "salir":
         session.pop("admin", None)
     admin = bool(ADMIN_TOKEN) and session.get("admin", False)
+    funnel_step("home")
     claims_needle = CLAIMS_NEEDLE or admin
     return render_template("index.html", questions=QUESTIONS, q=q, counts=count_by_question(),
                            dash=dashboard_data(rows, unlocked or PREVIEW_NEEDLES, tested, claims_needle,
@@ -618,10 +633,13 @@ def question(qid):
 
         if form.get("website"):  # honeypot: solo lo rellenan los bots
             return redirect(url_for("results", qid=qid))
+        funnel_step("try_send")
+        err_keys = []  # qué faltó, para el recuento anónimo de errores
 
         chat = form.get("chat", "")
         if chat not in CHAT_NAMES:
             errors.append(T["err_chat"][lang])
+            err_keys.append("chat")
 
         share_url = form.get("share_url", "").strip()[:500]
         sources_text = form.get("sources_text", "").strip()[:6000]  # fuentes que el chat mostró aparte (opcional)
@@ -637,9 +655,11 @@ def question(qid):
             text = form.get(f"answer{i}", "").strip()
             if len(text) > MAX_ANSWER:
                 errors.append(T["err_long"][lang])
+                err_keys.append("long")
             answers.append(text)
         if any(len(a) < 2 for a in answers):  # el texto es obligatorio; el enlace, opcional
             errors.append(T["err_answer"][lang])
+            err_keys.append("answer")
 
         values, missing = {}, []
         for field in all_fields(q):
@@ -649,6 +669,8 @@ def question(qid):
                 if field.get("required"):
                     missing.append(field["label"][lang])
             values[field["id"]] = value
+        if missing:
+            err_keys.append("fields")
         if len(missing) == 1:
             errors.append(f"{T['err_field'][lang]} {missing[0]}")
         elif missing:
@@ -657,6 +679,7 @@ def question(qid):
         lean = form.get("lean", "")
         if lean not in LEAN_KEYS:
             errors.append(T["err_lean"][lang])
+            err_keys.append("lean")
         stance = form.get("stance", "")
         stance = stance if stance in STANCE_KEYS else None
 
@@ -667,6 +690,7 @@ def question(qid):
             (ip_hash(), since)).fetchone()[0]
         if recent >= MAX_PER_HOUR:
             errors.append(T["err_rate"][lang])
+            err_keys.append("rate")
 
         if not errors:
             answers_hash = hashlib.sha256(
@@ -686,6 +710,8 @@ def question(qid):
                  ",".join(source_domains(" ".join(answers), sources_text)), sources_text or None,
                  answer_lang(" ".join(answers), lang)))
             db.commit()
+            funnel_step("sent")
+            bump("sent_kind", "refused" if flags == ["refused"] else "flagged" if flags else "ok")
             done = session.get("done", {})
             done[qid] = sorted(set(done.get(qid, [])) | {chat})
             session["done"] = done
@@ -698,10 +724,14 @@ def question(qid):
             session["just_sent"] = qid
             return redirect(url_for("next_chat", qid=qid, chat=chat))
 
+        for k in dict.fromkeys(err_keys):
+            bump("form_error", k)
         for e in errors:
             flash(e, "error")
 
     copied_to = None
+    if request.method == "GET":
+        funnel_step("question")
     if request.method == "GET" and request.args.get("chat") in CHAT_NAMES:
         form = {"chat": request.args["chat"]}
         if request.args.get("copied"):  # viene de «Probar otro chat»: la pregunta ya se copió
@@ -813,17 +843,36 @@ def share_click(net):
     return ("", 204)
 
 
+@app.route("/<lang>/step/<name>", methods=["POST"])
+def step_beacon(name):
+    """Pasos que solo ve el navegador (copiar la pregunta, abrir un chat)."""
+    if name in ("copy", "open_chat"):
+        funnel_step(name)
+    return ("", 204)
+
+
 @app.route("/admin/stats")
 def admin_stats():
     if not ADMIN_TOKEN or request.args.get("token") != ADMIN_TOKEN:
         abort(403)
+    period = request.args.get("p", "all")
+    days = {"today": 0, "week": 6, "month": 29}.get(period)
+    since = ((datetime.now(timezone.utc).date() - timedelta(days=days)).isoformat()
+             if days is not None else "0000")
     rows = get_db().execute(
-        "SELECT kind, name, SUM(n) AS n FROM counters GROUP BY kind, name ORDER BY kind, n DESC").fetchall()
+        "SELECT kind, name, SUM(n) AS n FROM counters WHERE day >= ? GROUP BY kind, name "
+        "ORDER BY kind, n DESC", (since,)).fetchall()
+    counts = defaultdict(dict)
+    for r in rows:
+        counts[r["kind"]][r["name"]] = r["n"]
+    funnel = [(name, counts["funnel"].get(name, 0)) for name in FUNNEL]
     stances = get_db().execute(
         "SELECT COALESCE(stance, '—') AS stance, lean, COUNT(*) AS n FROM submissions "
         "WHERE flags = '' OR flags IS NULL GROUP BY stance, lean ORDER BY stance").fetchall()
     g.lang = "es"
-    return render_template("admin_stats.html", rows=rows, stances=stances, token=ADMIN_TOKEN)
+    return render_template("admin_stats.html", rows=rows, stances=stances, token=ADMIN_TOKEN,
+                           period=period, funnel=funnel, sent_kind=counts["sent_kind"],
+                           form_errors=counts["form_error"])
 
 
 @app.route("/<lang>/q/<qid>/results")

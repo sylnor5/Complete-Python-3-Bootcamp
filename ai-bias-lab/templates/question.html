@@ -133,6 +133,10 @@
 </aside>
 
 <script>
+// recuento anónimo de pasos (solo números, para la página de estadísticas)
+const step = (name) => { try { navigator.sendBeacon && navigator.sendBeacon({{ url_for('step_beacon', name='NAME')|tojson }}.replace("NAME", name)); } catch (e) {} };
+document.querySelectorAll(".copy").forEach((btn) => btn.addEventListener("click", () => step("copy")));
+document.querySelectorAll(".open").forEach((a) => a.addEventListener("click", () => { step("copy"); step("open_chat"); }));
 document.querySelectorAll(".copy").forEach((btn) => btn.addEventListener("click", async () => {
   const el = document.getElementById(btn.dataset.target);
   const label = btn.textContent;

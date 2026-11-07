@@ -4,6 +4,37 @@
 {% block content %}
 <h1>Estadísticas</h1>
 <p class="hint">Solo tú ves esta página. Contadores anónimos: no se sabe quién comparte, solo cuántas veces y por qué red.</p>
+<p class="period">Periodo:
+{% for key, label in [('today', 'Hoy'), ('week', 'Esta semana (7 días)'), ('month', 'Este mes (30 días)'), ('all', 'Todo')] %}
+  {% if period == key %}<b>{{ label }}</b>{% else %}<a href="?token={{ token }}&p={{ key }}">{{ label }}</a>{% endif %}{% if not loop.last %} · {% endif %}
+{% endfor %}</p>
+
+<h2>Recorrido de la prueba</h2>
+<p class="hint">Cada navegador cuenta una vez por paso. Anónimo: no se sabe quién es. Empezó a contar el 7-11-2026.
+El paso 4 solo cuenta a quien abre el chat con los botones de la web.</p>
+{% set labels = {'home': 'Abrió la portada', 'question': 'Abrió la prueba', 'copy': 'Copió la pregunta',
+                 'open_chat': 'Abrió un chat desde la web', 'try_send': 'Intentó enviar', 'sent': 'Envió al menos una respuesta'} %}
+{% set top = (funnel|map(attribute=1)|max) or 1 %}
+<table class="funnel"><tbody>
+{% for name, n in funnel %}
+<tr><td>{{ loop.index }}. {{ labels[name] }}</td>
+  <td class="bar-cell"><span class="fbar" style="width: {{ (100 * n / top)|round|int }}%"></span></td>
+  <td class="n">{{ n }}</td>
+  <td class="drop">{% if not loop.first %}{% set prev = funnel[loop.index0 - 1][1] %}{% if prev > n %}−{{ prev - n }} ({{ (100 * (prev - n) / prev)|round|int }} %){% endif %}{% endif %}</td></tr>
+{% endfor %}
+</tbody></table>
+<p class="hint">Respuestas enviadas: {{ sent_kind.get('ok', 0) + sent_kind.get('flagged', 0) + sent_kind.get('refused', 0) }}
+· cuentan {{ sent_kind.get('ok', 0) }} · sospechosas {{ sent_kind.get('flagged', 0) }} · «se negó a responder» {{ sent_kind.get('refused', 0) }}</p>
+
+<h2>Errores al enviar</h2>
+<p class="hint">Qué faltó cuando alguien intentó enviar y la web no lo aceptó (una vez por intento).</p>
+{% set err_labels = {'chat': 'No eligió el chat', 'answer': 'No pegó la respuesta', 'fields': 'Faltaron casillas por marcar',
+                     'lean': 'No marcó hacia dónde se inclina', 'long': 'Respuesta demasiado larga', 'rate': 'Demasiados envíos en una hora'} %}
+<table><tbody>
+{% for k, n in form_errors|dictsort(by='value', reverse=true) %}<tr><td>{{ err_labels.get(k, k) }}</td><td class="n">{{ n }}</td></tr>
+{% else %}<tr><td colspan="2">Todavía nada.</td></tr>{% endfor %}
+</tbody></table>
+
 <h2>De dónde llegan las visitas</h2>
 <table><thead><tr><th>Red</th><th class="n">Visitas</th></tr></thead><tbody>
 {% for r in rows if r.kind == 'visit_from' %}<tr><td>{{ r.name }}</td><td class="n">{{ r.n }}</td></tr>{% else %}<tr><td colspan="2">Todavía nada.</td></tr>{% endfor %}
