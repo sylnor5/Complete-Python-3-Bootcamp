@@ -74,6 +74,8 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
   medios con líneas distintas (Canal 14 ≠ Ynet; Fox ≠ CNN).
 
 ## Forma de trabajar
+- Dos sesiones: «ChatRadar Live» lleva la web en vivo y el código; «TheChatRadar Redes» lleva
+  redes sociales y solo escribe en borradores/redes/ (7-11-2026).
 - Maqueta antes de cambios grandes. La fundadora decide.
 - Consultar a marketing y al psicólogo para textos y decisiones sensibles.
 - Verificar los hechos antes de publicarlos.
