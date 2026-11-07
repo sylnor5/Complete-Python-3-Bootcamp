@@ -473,9 +473,19 @@ def bump(kind, name):
 # Anónimo: solo números por día. Cada navegador cuenta una vez por paso (se recuerda en su sesión).
 FUNNEL = ["home", "question", "copy", "open_chat", "try_send", "sent"]
 
+# Robots que abren los enlaces para crear la vista previa (WhatsApp, Telegram, Facebook…) o para
+# indexar: no son personas, así que no cuentan en las estadísticas.
+BOT_UA = re.compile(r"bot|crawl|spider|preview|whatsapp|facebookexternalhit|facebookcatalog|telegram|"
+                    r"slack|discord|skype|linkedin|embedly|headless|python-requests|curl|wget", re.I)
+
+
+def is_bot():
+    ua = request.headers.get("User-Agent", "")
+    return not ua or bool(BOT_UA.search(ua))
+
 
 def funnel_step(name):
-    if name not in FUNNEL or session.get("admin"):
+    if name not in FUNNEL or session.get("admin") or is_bot():
         return
     seen = session.get("steps", [])
     if name not in seen:
@@ -566,7 +576,10 @@ def landing():
 def index():
     q = QUESTIONS[0]
     src = request.args.get("from", "")
-    if src in SHARE_NETS:
+    # una vez por navegador y red; sin robots de vista previa ni tus visitas con la clave
+    if src in SHARE_NETS and not is_bot() and not session.get("admin") \
+            and src not in session.get("from_seen", []):
+        session["from_seen"] = session.get("from_seen", []) + [src]
         bump("visit_from", src)
     rows = valid_rows(q["id"])
     scores = chats_scores(rows)
