@@ -37,3 +37,22 @@ https://thechatradar.com
 תודה ענקית!! ❤️
 
 תזכורת: היי [שם]! רק תזכורת קטנה 😊 אם יש 10 דקות פנויות ל-ChatRadar, ממש אשמח: https://thechatradar.com — מתי נוח לדבר השבוע?
+
+## Hebreo, versión revisada por el psicólogo (7-11-2026)
+
+Más corta y sin nombre. Explica que la pregunta es cargada a propósito, pide sinceridad y pide no
+compartir resultados en el grupo antes de tiempo. Enlace directo a la versión en hebreo.
+
+היי! 👋
+בניתי אתר קטן בשם ChatRadar ואשמח מאוד שתנסו אותו לפני ההשקה.
+
+הרעיון פשוט: שאלה אחת על המלחמה בעזה, מילה במילה. מדביקים אותה בצ'אט הבינה המלאכותית שלכם (ChatGPT, ‏Gemini, ‏Claude או כל צ'אט אחר), מדביקים את התשובה באתר ומסמנים איך התשובה נראית לכם. ככה נוכל לבדוק אם ואיך הצ'אטים עונים אחרת בשפות ובמדינות שונות.
+
+השאלה מנוסחת בכוונה בצורה טעונה, והיא לא משקפת עמדה. אין תשובות נכונות או לא נכונות, וממש חשוב לי לקבל את הרושם הכן שלכם. הנושא רגיש, ואפשר לעצור בכל שלב.
+
+לוקח כשלוש דקות. אנונימי, בלי הרשמה.
+👈 https://thechatradar.com/he/
+
+ובבקשה, לא לשתף בקבוצה מה יצא לכם לפני שאחרים ניסו.
+ואם משהו לא ברור, לא עובד או נראה מוזר, תכתבו לי. כל הערה עוזרת 🙏
+תודה!
