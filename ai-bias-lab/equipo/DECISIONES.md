@@ -73,6 +73,14 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
   borradores/fuentes-postura.json, pendiente de revisión de la fundadora). Dentro de un país hay
   medios con líneas distintas (Canal 14 ≠ Ynet; Fox ≠ CNN).
 
+## Redes sociales (borradores/redes/)
+- Instagram: nombre visible «TheChatRadar»; usuario @thechatradar (Instagram lo muestra en
+  minúsculas). Falta comprobar que esté libre (7-11-2026).
+- Pie de los posts: un solo idioma por post, rotando entre es/en/fr/he. Más adelante, elegir
+  según los países del público (7-11-2026).
+- La historia de la portada (la conversación con ChatGPT) puede usarse en redes como gancho
+  narrativo. Los posts deben atraer y dar curiosidad, sin tomar partido ni dar veredicto (7-11-2026).
+
 ## Forma de trabajar
 - Dos sesiones: «ChatRadar Live» lleva la web en vivo y el código; «TheChatRadar Redes» lleva
   redes sociales y solo escribe en borradores/redes/ (7-11-2026).
