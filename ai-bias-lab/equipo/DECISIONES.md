@@ -75,6 +75,9 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
 
 ## Redes sociales (borradores/redes/)
 - Instagram: nombre visible «TheChatRadar»; usuario @thechatradar. Cuenta creada (7-11-2026).
+- Acceso (7-11-2026, cambia la regla anterior): Claude puede entrar en la cuenta para preparar
+  perfil y borradores, siempre desde el navegador de la fundadora (sin compartir la contraseña).
+  Publicar, programar o responder solo con su autorización explícita, cada vez.
 - Pie de los posts: un solo idioma por post, rotando entre es/en/fr/he. Más adelante, elegir
   según los países del público (7-11-2026).
 - La historia de la portada (la conversación con ChatGPT) puede usarse en redes como gancho
