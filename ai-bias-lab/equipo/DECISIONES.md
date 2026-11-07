@@ -9,6 +9,10 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
   pega la respuesta y la valora. Comparamos chats por idioma y país.
 - Título principal: «Does your AI take sides? Let's find out.»
 - Título del tablero: «¿Tu chat de IA te responde lo mismo en otro idioma? ¿Y en otro país?»
+- Portada: encima del botón «Empezar» va la frase «Queremos saber si los chats de IA responden
+  igual a todo el mundo. Tú lo compruebas.» (7-11-2026). Explica el porqué sin anclar. La historia
+  completa sigue más abajo. «My question» sin «(translated from Spanish)».
+- Las respuestas de los testers se quedan: no se borra nada (con 500 respuestas no pesan).
 - La web no se firma por ahora. No inventar nombres, equipo ni testimonios.
 - Los textos para compartir nunca incluyen el veredicto ni la postura del participante.
 

@@ -17,7 +17,7 @@
     <p class="topic-chip"><i aria-hidden="true"></i>{{ t('topic_chip') }}</p>
     <h1>{{ t('hero_title') }} <span>{{ t('hero_title2') }}</span></h1>
     {% set sub = t('hero_sub').split('{q}') %}
-    <p class="hero-sub">{{ sub[0] }}<a href="{{ start_url }}">{{ t('hero_sub_q') }}</a>{{ sub[1] }}</p>
+    <p class="hero-sub">{{ sub[0] }}<a href="{{ start_url }}">{{ t('hero_sub_q') }}</a>{{ sub[1] }}<span class="hero-why">{{ t('hero_why') }}</span></p>
     <p class="loaded-note">{{ t('loaded_note') }}</p>
     {% include '_dashboard.html' %}
     <div class="hero-cta" id="heroCta">{{ start_btn('btn-block') }}</div>

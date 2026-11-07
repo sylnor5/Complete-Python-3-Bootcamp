@@ -15,6 +15,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 ## Próximo
 | Tarea | Quién | Estado |
 |---|---|---|
+| Decidir si se suaviza la historia de la portada (quitar «de un solo lado» y la cita) o se muestra después de participar (propuesta del psicólogo) | fundadora | sin prisa |
 | Revisión de la lista de afirmaciones desde el lado palestino | verificador + revisor humano | pendiente |
 | Revisar los disparadores en hebreo de la lista y los textos nuevos | hablante nativo | pendiente |
 | Revisar source_origins.json desde los dos lados | verificador | pendiente |
@@ -24,6 +25,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 
 ## Hecho
 - 7-11-2026: thechatradar.com en vivo (plan Developer, CNAME, reenvío 301, Let's Encrypt, Force HTTPS). Los datos se conservaron.
+- 7-11-2026: frase nueva en la portada (porqué sin anclar), en los 4 idiomas. Mensaje de WhatsApp en hebreo revisado por el psicólogo.
 
 ## Fechas
 - 27-11-2026, 14:00 (Israel): preguntar si se dejan de contar las respuestas a la versión 1 de la pregunta.
