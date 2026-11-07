@@ -13,4 +13,4 @@ Forma de trabajar:
 - Verificar los hechos antes de publicarlos. Probar en navegador antes de subir.
 - Nunca pedir ni mostrar claves (ADMIN_TOKEN, SECRET_KEY, el archivo WSGI).
 - Rama de trabajo: `claude/stoic-thompson-i6esto`. Después de subir, dar el comando:
-  `cd ~/Complete-Python-3-Bootcamp && git pull && touch /var/www/biaschecker_pythonanywhere_com_wsgi.py`
+  `cd ~/Complete-Python-3-Bootcamp && git pull && touch /var/www/www_thechatradar_com_wsgi.py`

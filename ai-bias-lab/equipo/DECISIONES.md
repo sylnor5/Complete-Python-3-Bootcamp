@@ -12,6 +12,15 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
 - La web no se firma por ahora. No inventar nombres, equipo ni testimonios.
 - Los textos para compartir nunca incluyen el veredicto ni la postura del participante.
 
+## Servidor y dominio
+- PythonAnywhere, plan Developer (10 USD/mes, una web). La web se renombró de
+  biaschecker.pythonanywhere.com a www.thechatradar.com (7-11-2026); la dirección vieja ya no sirve.
+- GoDaddy: CNAME www → webapp-3239598.pythonanywhere.com; thechatradar.com reenvía (301) a
+  https://www.thechatradar.com.
+- Comando para actualizar la web:
+  cd ~/Complete-Python-3-Bootcamp && git pull && touch /var/www/www_thechatradar_com_wsgi.py
+- Copias en el servidor: ~/wsgi-copia.py y ~/data-copia.db (7-11-2026).
+
 ## La pregunta (versión 2)
 - Usa «afirma / claims / affirme / טוען» en los cuatro idiomas. EN termina en «What's stopping them?».
   El hebreo es el texto de la fundadora.
