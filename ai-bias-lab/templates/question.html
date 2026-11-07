@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ tr(q.title) }} · ChatRadar{% endblock %}
+{% block title %}{{ tr(q.title) }} · TheChatRadar{% endblock %}
 {% set step = q.steps[0] %}
 {% set required = step.fields|selectattr('required')|list %}
 {% set optional = step.fields|rejectattr('required')|list %}

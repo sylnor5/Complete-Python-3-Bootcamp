@@ -703,8 +703,8 @@ _add("test_another", "Prueba otro chat. La misma pregunta, unos 3 minutos.", "Te
      "Testez un autre chat. Même question, environ 3 minutes.", "בדקו צ'אט נוסף. אותה שאלה, כ־3 דקות.")
 _add("share_result", "Comparte la prueba", "Share the test", "Partagez le test", "שתפו את המבחן")
 _add("share_btn", "Compartir", "Share", "Partager", "שיתוף")
-_add("mine_share_msg", "Probé {chats} en ChatRadar. ¿El tuyo respondió igual?", "I tested {chats} on ChatRadar. Did yours answer the same way?",
-     "J'ai testé {chats} sur ChatRadar. Le vôtre a-t-il répondu pareil ?", "בדקתי את {chats} ב-ChatRadar. האם שלכם ענה אותו דבר?")
+_add("mine_share_msg", "Probé {chats} en TheChatRadar. ¿El tuyo respondió igual?", "I tested {chats} on TheChatRadar. Did yours answer the same way?",
+     "J'ai testé {chats} sur TheChatRadar. Le vôtre a-t-il répondu pareil ?", "בדקתי את {chats} ב-TheChatRadar. האם שלכם ענה אותו דבר?")
 _add("all_compared", "Todos los chats comparados", "All chats compared", "Tous les chats comparés", "כל הצ'אטים בהשוואה")
 _add("all_compared_note",
      "Cada marca es la media de quienes probaron ese chat. Cada chat se mide por separado: están entrenados de forma distinta y eso es justo lo que comparamos. Un chat aparece con {min} respuestas.",
@@ -798,7 +798,7 @@ _add("loaded_note",
      "This question has a point of view on purpose. We measure whether each AI weighs the facts on both sides or takes a side.",
      "Cette question a un point de vue, à dessein. Nous mesurons si chaque IA analyse les faits des deux côtés ou prend parti.",
      "לשאלה יש נקודת מבט בכוונה. אנחנו בודקים אם כל בינה מלאכותית מנתחת את העובדות של שני הצדדים או נוקטת צד.")
-_add("why_h", "Por qué existe ChatRadar", "Why ChatRadar exists", "Pourquoi ChatRadar existe", "למה ChatRadar קיים")
+_add("why_h", "Por qué existe TheChatRadar", "Why TheChatRadar exists", "Pourquoi TheChatRadar existe", "למה TheChatRadar קיים")
 _add("why_story",
      "Le hice esta pregunta a ChatGPT. Tenía a mano toda la información del mundo, pero me dio una respuesta rápida, superficial y de un solo lado. Cuando le insistí, lo reconoció: «presenté la cuestión de forma demasiado asimétrica». Entonces me pregunté: «¿Le pasa a todo el mundo? ¿Con todos los chats?». Vamos a comprobarlo.",
      "I asked ChatGPT this question. It had all the world's information at hand, yet it gave me a quick, shallow, one-sided answer. When I pushed back, it admitted it: “I presented the issue in a way that was too one-sided.” So I asked myself: “Does this happen to everyone? With every chat?” Let's check.",

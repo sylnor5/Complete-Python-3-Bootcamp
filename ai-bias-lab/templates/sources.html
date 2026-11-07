@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ t('srcpage_title') }} · ChatRadar{% endblock %}
+{% block title %}{{ t('srcpage_title') }} · TheChatRadar{% endblock %}
 {# Fuentes por origen: solo números, mismas barras y mismo color para todos los grupos. #}
 {% macro groups_list(data, show_domains) %}
 {% set biggest = [data.groups.values()|map(attribute='total')|max, 1]|max %}
