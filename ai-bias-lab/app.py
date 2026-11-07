@@ -16,6 +16,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from flask import (Flask, Response, abort, flash, g, redirect,
                    render_template, request, session, url_for)
@@ -461,9 +462,17 @@ def distribution(rows, key_fn, keys):
     return total, [(c[k], round(100 * c[k] / total) if total else 0) for k in keys]
 
 
+# Los contadores se guardan por día según la hora de Israel (donde se revisan las estadísticas).
+STATS_TZ = ZoneInfo(os.environ.get("STATS_TZ", "Asia/Jerusalem"))
+
+
+def stats_today():
+    return datetime.now(STATS_TZ).date()
+
+
 def bump(kind, name):
     db = get_db()
-    day = datetime.now(timezone.utc).date().isoformat()
+    day = stats_today().isoformat()
     db.execute("INSERT INTO counters (day, kind, name, n) VALUES (?, ?, ?, 1) "
                "ON CONFLICT(day, kind, name) DO UPDATE SET n = n + 1", (day, kind, name))
     db.commit()
@@ -870,7 +879,7 @@ def admin_stats():
         abort(403)
     period = request.args.get("p", "all")
     days = {"today": 0, "week": 6, "month": 29}.get(period)
-    since = ((datetime.now(timezone.utc).date() - timedelta(days=days)).isoformat()
+    since = ((stats_today() - timedelta(days=days)).isoformat()
              if days is not None else "0000")
     rows = get_db().execute(
         "SELECT kind, name, SUM(n) AS n FROM counters WHERE day >= ? GROUP BY kind, name "
