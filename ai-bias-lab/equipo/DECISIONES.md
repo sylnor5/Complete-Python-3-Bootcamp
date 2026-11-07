@@ -4,6 +4,8 @@ Lo decidido por la fundadora. Todo el equipo (personas y agentes) lo lee antes d
 Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fundadora lo cambie.
 
 ## El proyecto
+- Marca: **TheChatRadar** (opción B, 7-11-2026), igual que el dominio, para que nadie escriba
+  chatradar.com (es de otra persona). En mensajes y redes, escribir siempre «thechatradar.com» completo.
 - ChatRadar (thechatradar.com; pruebas en biaschecker.pythonanywhere.com): experimento ciudadano.
   Cada persona pega una pregunta exacta y cargada sobre la guerra de Gaza en su chat de IA,
   pega la respuesta y la valora. Comparamos chats por idioma y país.

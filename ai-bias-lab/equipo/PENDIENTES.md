@@ -26,6 +26,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 ## Hecho
 - 7-11-2026: thechatradar.com en vivo (plan Developer, CNAME, reenvío 301, Let's Encrypt, Force HTTPS). Los datos se conservaron.
 - 7-11-2026: frase nueva en la portada (porqué sin anclar), en los 4 idiomas. Mensaje de WhatsApp en hebreo revisado por el psicólogo.
+- 7-11-2026: marca TheChatRadar en la web (logo, títulos, textos, imagen para compartir). Mensaje corto para testers en es/en/he en borradores/mensajes-testers.md.
 
 ## Fechas
 - 27-11-2026, 14:00 (Israel): preguntar si se dejan de contar las respuestas a la versión 1 de la pregunta.
