@@ -21,8 +21,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 | Revisar source_origins.json desde los dos lados | verificador | pendiente |
 | Estrategia de redes: borrador en borradores/redes/estrategia-borrador.md (sin aprobar; falta psicólogo y hebreo nativo) | fundadora + sesión «TheChatRadar Redes» (creada el 7-11) | borrador |
 | Pasar @thechatradar a cuenta profesional (para ver países del público) | fundadora | cuenta creada el 7-11 |
-| Perfil de Instagram (foto, bio, enlace): borradores/redes/perfil/perfil-instagram.md, revisado por el psicólogo | fundadora elige y lo sube a mano | propuesta |
-| ¿Añadir árabe a la rotación de idiomas de los posts? (propuesta del psicólogo) | fundadora | pendiente |
+| Perfil de Instagram: foto B y biografía puestas (7-11). Falta el enlace con título, desde la app del móvil | fundadora | casi listo |
 | Ganchos de storytelling con la historia de ChatGPT para el primer post (marketing propone, psicólogo revisa, verificador comprueba la cita) | sesión «TheChatRadar Redes» | por empezar |
 | Enlaces con origen (por ejemplo ?src=ig) para saber qué post trae gente a la web | fundadora lo pide en «ChatRadar Live» | propuesta |
 | Página de diagnóstico para probar en teléfonos reales | coordinador + QA | planificado |
