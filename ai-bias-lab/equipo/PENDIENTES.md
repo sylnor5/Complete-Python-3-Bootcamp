@@ -22,7 +22,7 @@ Actualizar al cerrar cada tarea. «Quién» = fundadora, coordinador (Claude) o 
 | Estrategia de redes: borrador en borradores/redes/estrategia-borrador.md (sin aprobar; falta psicólogo y hebreo nativo) | fundadora + sesión «TheChatRadar Redes» (creada el 7-11) | borrador |
 | Pasar @thechatradar a cuenta profesional (para ver países del público) | fundadora | cuenta creada el 7-11 |
 | Perfil de Instagram: foto B y biografía puestas (7-11). Falta el enlace con título, desde la app del móvil | fundadora | casi listo |
-| Ganchos de storytelling con la historia de ChatGPT para el primer post (marketing propone, psicólogo revisa, verificador comprueba la cita) | sesión «TheChatRadar Redes» | por empezar |
+| Carrusel 1 (versión A, inglés) aprobado: borradores/redes/carrusel-1/A-historia/. Publicar cuando esté el enlace del perfil | fundadora | listo para publicar |
 | Enlaces con origen (por ejemplo ?src=ig) para saber qué post trae gente a la web | fundadora lo pide en «ChatRadar Live» | propuesta |
 | Página de diagnóstico para probar en teléfonos reales | coordinador + QA | planificado |
 | Instrucciones para copiar fuentes en otros chats (además de Gemini) | coordinador | tras feedback de testers |
