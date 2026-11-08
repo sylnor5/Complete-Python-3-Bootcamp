@@ -80,6 +80,8 @@ Si algo aquí choca con una propuesta, manda lo que está aquí, salvo que la fu
   Publicar, programar o responder solo con su autorización explícita, cada vez.
 - Pie de los posts: un solo idioma por post, rotando entre es/en/fr/he. Más adelante, elegir
   según los países del público (7-11-2026).
+- La cita de ChatGPT, cuando se use, va en el idioma del post (8-11-2026). Propuesta: marcarla
+  «(translated)» y traducir «demasiado asimétrica» de forma fiel (no «one-sided»).
 - Árabe: por ahora no (ni en posts ni en la web). La biografía va solo en inglés (7-11-2026).
 - La historia de la portada (la conversación con ChatGPT) puede usarse en redes como gancho
   narrativo. Los posts deben atraer y dar curiosidad, sin tomar partido ni dar veredicto (7-11-2026).
